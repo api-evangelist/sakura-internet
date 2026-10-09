@@ -1,0 +1,750 @@
+openapi: 3.2.0
+info:
+  title: Sakura Internet Project API
+  version: 2.1.0
+  contact:
+    name: SAKURA internet Inc.
+  description: 'Operations tagged project across 2 of this provider''s published API definitions: iam-api.yaml, sakura-internet-iam-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
+security:
+- ServicePrincipalAuth: []
+tags:
+- name: Project
+  x-displayName: プロジェクト
+  description: プロジェクトに関する機能
+paths:
+  /projects:
+    get:
+      operationId: listProjects
+      tags:
+      - Project
+      summary: プロジェクト一覧を取得する
+      parameters:
+      - $ref: '#/components/parameters/PaginationPage'
+      - $ref: '#/components/parameters/PaginationPerPage'
+      - name: ordering
+        in: query
+        description: '並び替えキー
+
+
+          * `code` - プロジェクトコード昇順
+
+          * `-code` - プロジェクトコード降順
+
+          '
+        schema:
+          type: string
+          enum:
+          - code
+          - -code
+      - name: iam_role
+        in: query
+        description: IAMロールでの絞り込み。カンマ区切りで複数指定可能
+        schema:
+          type: string
+          example: resource-creator,billing-viewer
+      - name: parent_folder_id
+        in: query
+        description: 親のフォルダIDでの絞り込み。
+        schema:
+          type: integer
+          example: 1
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                allOf:
+                - type: object
+                  required:
+                  - items
+                  properties:
+                    items:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Project'
+                - $ref: '#/components/schemas/Pagination'
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+    post:
+      operationId: createProject
+      tags:
+      - Project
+      summary: プロジェクトを作成する
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - code
+              - name
+              - description
+              properties:
+                code:
+                  type: string
+                  example: my-sakura-project-code
+                  description: プロジェクトコード
+                parent_folder_id:
+                  type: integer
+                  example: 112000000000
+                  description: プロジェクトのフォルダID
+                name:
+                  type: string
+                  example: My Sakura Project
+                  description: プロジェクトの名前
+                description:
+                  type: string
+                  example: My Sakura Project details
+                  description: プロジェクトの説明
+      responses:
+        '201':
+          description: プロジェクトの作成に成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '400':
+          description: 不正なリクエスト
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http400BadRequest'
+              examples:
+                ParentIdNotFound:
+                  summary: 親フォルダが見つからない
+                  value:
+                    type: about:blank
+                    status: 400
+                    title: parant_not_found
+                    detail: 親フォルダが見つかりません。
+                    errors: {}
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '409':
+          description: プロジェクトコードの重複
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http409Conflict'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+        '503':
+          description: 一時的な処理エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http503ServiceUnavailable'
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
+  /move-projects:
+    post:
+      operationId: moveProjects
+      tags:
+      - Project
+      summary: プロジェクトを一括で移動する
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MoveProjects'
+      responses:
+        '204':
+          description: 成功
+        '400':
+          description: 不正なリクエスト
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http400BadRequest'
+              examples:
+                ProjectIdNotFound:
+                  summary: 指定されたプロジェクトが見つからない
+                  value:
+                    type: about:blank
+                    status: 400
+                    title: project_not_found
+                    detail: 指定されたプロジェクトが見つかりません。
+                    errors: {}
+                ParentIdNotFound:
+                  summary: 親フォルダが見つからない
+                  value:
+                    type: about:blank
+                    status: 400
+                    title: parant_not_found
+                    detail: 親フォルダが見つかりません。
+                    errors: {}
+                DuplicateProjectNames:
+                  summary: 同じ階層に同じ名前のプロジェクトを登録できない
+                  value:
+                    type: about:blank
+                    status: 400
+                    title: duplicate_project_names
+                    detail: 同じ階層に同じ名前のプロジェクトを登録できません。
+                    errors: {}
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '404':
+          description: フォルダが存在しない。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http404NotFound'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
+  /projects/{project_id}:
+    parameters:
+    - $ref: '#/components/parameters/ProjectID'
+    get:
+      operationId: readProject
+      tags:
+      - Project
+      summary: 指定したプロジェクトを取得する
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '404':
+          description: 指定したプロジェクトが存在しない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http404NotFound'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+    put:
+      operationId: updateProject
+      tags:
+      - Project
+      summary: 指定したプロジェクトを更新する
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - name
+              - description
+              properties:
+                name:
+                  type: string
+                  description: プロジェクトの名前
+                  example: My Sakura Project
+                description:
+                  type: string
+                  description: プロジェクトの説明
+                  example: My Sakura Project details
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '400':
+          description: 不正なリクエスト
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http400BadRequest'
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '404':
+          description: 指定したプロジェクトが存在しない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http404NotFound'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+        '503':
+          description: 一時的な処理エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http503ServiceUnavailable'
+    delete:
+      operationId: deleteProject
+      tags:
+      - Project
+      summary: 指定したプロジェクトを削除する
+      responses:
+        '204':
+          description: プロジェクトの削除に成功しました
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '404':
+          description: 指定したプロジェクトが存在しない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http404NotFound'
+        '409':
+          description: プロジェクト配下にリソースが存在する
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http409Conflict'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+        '503':
+          description: 一時的な処理エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http503ServiceUnavailable'
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
+components:
+  schemas:
+    Http404NotFound:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 404
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: not_found
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 見つかりませんでした。
+    Http429TooManyRequests:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 429
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: throttled
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: リクエストの処理は絞られました。 60秒後に利用可能になります。
+    Http503ServiceUnavailable:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 503
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: temporary_unavailable
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 一時的にエラーが発生しました。
+    Http409Conflict:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 409
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: conflict
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 状態の競合によりリクエストを処理できません。
+    MoveProjects:
+      type: object
+      required:
+      - project_ids
+      - parent_folder_id
+      properties:
+        project_ids:
+          type: array
+          items:
+            type: integer
+          description: 移動するプロジェクトID
+          example:
+          - 1
+          - 2
+          - 3
+        parent_folder_id:
+          type:
+          - integer
+          - 'null'
+          description: 移動先のフォルダID
+          example: 1
+    Project:
+      type: object
+      required:
+      - id
+      - code
+      - name
+      - description
+      - status
+      - created_at
+      - updated_at
+      - parent_folder_id
+      properties:
+        id:
+          type: integer
+          description: プロジェクトID
+          readOnly: true
+          example: 111111111111
+        code:
+          type: string
+          description: プロジェクトコード
+          maxLength: 64
+          example: my-sakura-project-code
+        name:
+          type: string
+          description: プロジェクトの名前
+          example: My Sakura Project
+        description:
+          type: string
+          description: プロジェクトの説明
+          example: My Sakura Project description
+        status:
+          type: string
+          description: プロジェクトのステータス
+          enum:
+          - available
+          readOnly: true
+          example: available
+        parent_folder_id:
+          type:
+          - integer
+          - 'null'
+          description: 親フォルダID
+          readOnly: true
+          example: 1
+        created_at:
+          type: string
+          description: 作成日時
+          example: 2024-05-01 14:30:00+00:00
+        updated_at:
+          type: string
+          description: 更新日時
+          example: 2024-05-02 16:32:23+00:00
+    Http403Forbidden:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 403
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: permission_denied
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: このアクションを実行する権限がありません。
+    Http400BadRequest:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      - errors
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 400
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: invalid
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 不正な入力です。
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: object
+              required:
+              - message
+              - code
+              properties:
+                message:
+                  type: string
+                  description: エラー内容を説明した文字列
+                code:
+                  type: string
+                  description: エラーの内容を表す文字列
+            description: リクエストボディの特定キーに関するエラー
+          properties:
+            non_field_errors:
+              type: array
+              items:
+                type: object
+                required:
+                - message
+                - code
+                properties:
+                  message:
+                    type: string
+                    description: エラー内容を説明した文字列
+                  code:
+                    type: string
+                    description: エラーの内容を表す文字列
+              description: リクエストボディの特定キーに関係しないエラー
+          example:
+            key1:
+            - message: この項目は必須です。
+              code: required
+            key2:
+            - message: 有効な値ではありません。
+              code: invalid
+            key3:
+            - message: この項目は少なくとも*文字以上にしてください。
+              code: min_length
+            key4:
+            - message: この項目が*文字より長くならないようにしてください。
+              code: max_length
+    Pagination:
+      type: object
+      required:
+      - count
+      - next
+      - previous
+      properties:
+        count:
+          type: integer
+          description: データ総数
+          example: 100
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          description: 次のページへのURL
+          example: https://api.example.com/?page=3&per_page=10
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          description: 前のページへのURL
+          example: https://api.example.com/?per_page=10
+    Http401Unauthorized:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 401
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: authentication_failed
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 認証情報が含まれていません。
+  parameters:
+    PaginationPage:
+      in: query
+      name: page
+      schema:
+        type: integer
+    ProjectID:
+      in: path
+      name: project_id
+      description: プロジェクトID
+      required: true
+      schema:
+        type: integer
+    PaginationPerPage:
+      in: query
+      name: per_page
+      schema:
+        type: integer
+  securitySchemes:
+    ServicePrincipalAuth:
+      description: 'サービスプリンシパル認証
+
+        - サービスプリンシパルのアクセストークンを指定
+
+        '
+      type: http
+      scheme: bearer
+    ProjectApiKeyAuth:
+      description: 'APIキー認証
+
+        - ユーザー名に発行したAPIキーのアクセストークンを指定
+
+        - パスワードに発行したAPIキーのアクセストークンシークレットを指定
+
+        '
+      type: http
+      scheme: basic
+x-refined-from:
+- iam-api.yaml
+- sakura-internet-iam-openapi.yml

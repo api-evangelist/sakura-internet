@@ -1,0 +1,712 @@
+openapi: 3.2.0
+info:
+  title: Sakura Internet Folder API
+  version: 2.1.0
+  contact:
+    name: SAKURA internet Inc.
+  description: 'Operations tagged folder across 2 of this provider''s published API definitions: iam-api.yaml, sakura-internet-iam-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
+security:
+- ServicePrincipalAuth: []
+tags:
+- name: Folder
+  x-displayName: フォルダ
+  description: フォルダに関する機能
+paths:
+  /folders:
+    post:
+      operationId: createFolder
+      tags:
+      - Folder
+      summary: フォルダを作成する
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - name
+              properties:
+                name:
+                  type: string
+                  description: フォルダ名
+                  example: 本番環境用
+                description:
+                  type: string
+                  description: フォルダの説明
+                  example: My Sakura Folder description
+                parent_id:
+                  type:
+                  - integer
+                  - 'null'
+                  description: 親フォルダID
+                  default: null
+                  example: 1
+      responses:
+        '201':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Folder'
+        '400':
+          description: 不正なリクエスト
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http400BadRequest'
+              examples:
+                ParentIdNotFound:
+                  summary: 親フォルダが見つからない
+                  value:
+                    type: about:blank
+                    status: 400
+                    title: parant_not_found
+                    detail: 親フォルダが見つかりません。
+                    errors: {}
+                DuplicateFolderNames:
+                  summary: 同じ階層に同じ名前のフォルダを登録できない
+                  value:
+                    type: about:blank
+                    status: 400
+                    title: duplicate_folder_names
+                    detail: 同じ階層に同じ名前のフォルダを登録できません。
+                    errors: {}
+                FolderRegistrationLimitOver:
+                  summary: フォルダの登録数上限◯◯を超えている
+                  value:
+                    type: about:blank
+                    status: 400
+                    title: folder_registration_limit_over
+                    detail: フォルダの登録数上限◯◯を超えています。
+                    errors: {}
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+    get:
+      operationId: listFolders
+      tags:
+      - Folder
+      summary: フォルダ一覧を取得する
+      parameters:
+      - $ref: '#/components/parameters/PaginationPage'
+      - $ref: '#/components/parameters/PaginationPerPage'
+      - name: folder_name
+        in: query
+        description: フォルダ名での絞り込み。
+        schema:
+          type: string
+          example: フォルダ名
+      - name: parent_id
+        in: query
+        description: 親のフォルダIDでの絞り込み。
+        schema:
+          type: integer
+          example: 1
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                allOf:
+                - type: object
+                  required:
+                  - items
+                  properties:
+                    items:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Folder'
+                - $ref: '#/components/schemas/Pagination'
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
+  /folders/{folder_id}:
+    parameters:
+    - $ref: '#/components/parameters/FolderID'
+    put:
+      operationId: updateFolder
+      tags:
+      - Folder
+      summary: 特定のフォルダの情報を更新する
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - name
+              properties:
+                name:
+                  type: string
+                  description: フォルダ名
+                  example: フォルダ名
+                description:
+                  type: string
+                  description: フォルダの説明
+                  example: My Sakura Folder description
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Folder'
+        '400':
+          description: 不正なリクエスト
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http400BadRequest'
+              examples:
+                DuplicateFolderNames:
+                  summary: 同じ階層に同じ名前のフォルダを登録できない
+                  value:
+                    type: about:blank
+                    status: 400
+                    title: duplicate_folder_names
+                    detail: '同じ階層に同じ名前のフォルダを登録できません。
+
+                      フォルダ名を変更してください。
+
+                      '
+                    errors: {}
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '404':
+          description: フォルダが存在しない。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http404NotFound'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+    delete:
+      operationId: deleteFolder
+      tags:
+      - Folder
+      summary: フォルダを削除する
+      responses:
+        '204':
+          description: 成功
+        '400':
+          description: 不正なリクエスト
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http400BadRequest'
+              examples:
+                FolderIsNotEmpty:
+                  summary: 削除前に下の階層にフォルダかプロジェクトがあれば削除できない。
+                  value:
+                    type: about:blank
+                    status: 400
+                    title: exist_dependency_folders_or_projects
+                    detail: 下の階層にフォルダまたはプロジェクトがあります。
+                    errors: {}
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '404':
+          description: フォルダが存在しない。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http404NotFound'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+        '503':
+          description: 一時的な処理エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http503ServiceUnavailable'
+    get:
+      operationId: readFolder
+      tags:
+      - Folder
+      summary: 特定のフォルダの情報を取得する
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Folder'
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
+  /move-folders:
+    post:
+      operationId: moveFolders
+      tags:
+      - Folder
+      summary: フォルダを移動する
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MoveFolders'
+      responses:
+        '204':
+          description: 成功
+        '400':
+          description: 不正なリクエスト
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http400BadRequest'
+              examples:
+                FolderIdNotFount:
+                  summary: 指定されたフォルダが見つからない
+                  value:
+                    type: about:blank
+                    status: 400
+                    title: folder_not_found
+                    detail: 指定されたフォルダが見つかりません
+                    errors: {}
+                ParentIdNotFound:
+                  summary: 親フォルダが見つからない
+                  value:
+                    type: about:blank
+                    status: 400
+                    title: parant_not_found
+                    detail: 親フォルダが見つかりません。
+                    errors: {}
+                DuplicateFolderNames:
+                  summary: 同じ階層に同じ名前のフォルダを登録できない
+                  value:
+                    type: about:blank
+                    status: 400
+                    title: duplicate_folder_names
+                    detail: 同じ階層に同じ名前のフォルダを登録できません。
+                    errors: {}
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '404':
+          description: フォルダが存在しない。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http404NotFound'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
+components:
+  schemas:
+    Http404NotFound:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 404
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: not_found
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 見つかりませんでした。
+    Http429TooManyRequests:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 429
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: throttled
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: リクエストの処理は絞られました。 60秒後に利用可能になります。
+    MoveFolders:
+      type: object
+      required:
+      - folder_ids
+      - parent_id
+      properties:
+        folder_ids:
+          type: array
+          items:
+            type: integer
+          description: 移動するフォルダID
+          example:
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+        parent_id:
+          type:
+          - integer
+          - 'null'
+          description: 移動先のフォルダID
+          example: 1
+    Http503ServiceUnavailable:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 503
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: temporary_unavailable
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 一時的にエラーが発生しました。
+    Http403Forbidden:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 403
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: permission_denied
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: このアクションを実行する権限がありません。
+    Folder:
+      type: object
+      required:
+      - id
+      - type
+      - name
+      - parent_id
+      - description
+      - created_at
+      - updated_at
+      properties:
+        id:
+          type: integer
+          description: フォルダID
+          readOnly: true
+          example: 1
+        name:
+          type: string
+          description: フォルダ名
+          example: フォルダ名
+        parent_id:
+          type:
+          - integer
+          - 'null'
+          description: 親フォルダID
+          default: null
+          example: 1
+        description:
+          type: string
+          description: フォルダの説明
+          example: My Sakura Folder description
+        created_at:
+          type: string
+          description: 作成日時
+          readOnly: true
+          example: 2024-05-01 14:30:00+00:00
+        updated_at:
+          type: string
+          description: 更新日時
+          readOnly: true
+          example: 2024-05-02 14:30:00+00:00
+    Http400BadRequest:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      - errors
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 400
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: invalid
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 不正な入力です。
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: object
+              required:
+              - message
+              - code
+              properties:
+                message:
+                  type: string
+                  description: エラー内容を説明した文字列
+                code:
+                  type: string
+                  description: エラーの内容を表す文字列
+            description: リクエストボディの特定キーに関するエラー
+          properties:
+            non_field_errors:
+              type: array
+              items:
+                type: object
+                required:
+                - message
+                - code
+                properties:
+                  message:
+                    type: string
+                    description: エラー内容を説明した文字列
+                  code:
+                    type: string
+                    description: エラーの内容を表す文字列
+              description: リクエストボディの特定キーに関係しないエラー
+          example:
+            key1:
+            - message: この項目は必須です。
+              code: required
+            key2:
+            - message: 有効な値ではありません。
+              code: invalid
+            key3:
+            - message: この項目は少なくとも*文字以上にしてください。
+              code: min_length
+            key4:
+            - message: この項目が*文字より長くならないようにしてください。
+              code: max_length
+    Pagination:
+      type: object
+      required:
+      - count
+      - next
+      - previous
+      properties:
+        count:
+          type: integer
+          description: データ総数
+          example: 100
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          description: 次のページへのURL
+          example: https://api.example.com/?page=3&per_page=10
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          description: 前のページへのURL
+          example: https://api.example.com/?per_page=10
+    Http401Unauthorized:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 401
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: authentication_failed
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 認証情報が含まれていません。
+  parameters:
+    FolderID:
+      in: path
+      name: folder_id
+      description: フォルダID
+      required: true
+      schema:
+        type: integer
+    PaginationPage:
+      in: query
+      name: page
+      schema:
+        type: integer
+    PaginationPerPage:
+      in: query
+      name: per_page
+      schema:
+        type: integer
+  securitySchemes:
+    ServicePrincipalAuth:
+      description: 'サービスプリンシパル認証
+
+        - サービスプリンシパルのアクセストークンを指定
+
+        '
+      type: http
+      scheme: bearer
+    ProjectApiKeyAuth:
+      description: 'APIキー認証
+
+        - ユーザー名に発行したAPIキーのアクセストークンを指定
+
+        - パスワードに発行したAPIキーのアクセストークンシークレットを指定
+
+        '
+      type: http
+      scheme: basic
+x-refined-from:
+- iam-api.yaml
+- sakura-internet-iam-openapi.yml

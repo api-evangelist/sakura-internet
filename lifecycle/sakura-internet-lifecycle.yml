@@ -1,0 +1,28 @@
+generated: '2026-10-09'
+method: searched
+source: https://manual.sakura.ad.jp/cloud-api/1.1/
+versioning:
+  scheme: url-path
+  example: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1/
+  notes: Portal APIs (manual.sakura.ad.jp/api/cloud/portal/) publish separate OpenAPI contracts each with its own info.version; no general API versioning or deprecation policy page was found.
+  docs: https://manual.sakura.ad.jp/api/cloud/portal/
+deprecation:
+  policy_url: null
+  sunset_header: false
+  notes: No API deprecation policy or Sunset/Deprecation headers documented. No operation is marked deprecated in the 20 saved OpenAPI contracts.
+  tooling:
+  - item: Terraform Provider v2 (sacloud/sakuracloud)
+    announced: '2026-06-23'
+    end_of_maintenance: 2026年12月末
+    statement: Terraform Provider v2 は、2026年12月末をもってメンテナンスを終了いたします。
+    url: https://cloud.sakura.ad.jp/news/2026/06/23/terraform-provider-v2-end-of-maintenance/
+  - item: sacloud/usacloud DockerHub image
+    statement: v0との互換性維持のためにDockerHubで sacloud/usacloud イメージを配布していますが、将来的に廃止予定です。
+    url: https://manual.sakura.ad.jp/cloud/tool/usacloud/installation/index.html
+sla:
+  url: https://cloud.sakura.ad.jp/sla/
+  public_uptime_target: 月間のサーバー稼働率が、99.95%以上であること。
+  notes: SLA covers server availability (fee reduction on server + disk charges), not API availability.
+maintenance_notice_policy: https://manual.sakura.ad.jp/cloud/support/notice-policy.html
+status_page: https://status.cloud.sakura.ad.jp/
+deprecated_operations: []

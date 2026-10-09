@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-create-subnet-schema.json",
+  "title": "CreateSubnet",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-networking-suite-openapi.yml#/components/schemas/CreateSubnet",
+  "type": "object",
+  "required": [
+    "Name",
+    "Description",
+    "IPv4AddressRangeCIDR",
+    "Zone",
+    "SubnetGroup"
+  ],
+  "properties": {
+    "Name": {
+      "type": "string",
+      "description": "名前"
+    },
+    "Description": {
+      "type": "string",
+      "description": "説明"
+    },
+    "IPv4AddressRangeCIDR": {
+      "type": "string",
+      "description": "IPv4アドレス範囲 (CIDR形式)\n\n[マニュアル](https://manual.sakura.ad.jp/cloud/network/networking-suite/index.html)内「仕様」に記載の条件を満たすIPアドレス範囲をCIDR形式で表現します。\nIPv4アドレス範囲は、親サブネットグループのIPv4アドレス範囲に含まれ、かつ、同一親サブネットグループ下の他サブネットと重複しない範囲である必要があります。"
+    },
+    "Zone": {
+      "$ref": "#/$defs/Zone",
+      "description": "ゾーン"
+    },
+    "SubnetGroup": {
+      "$ref": "#/$defs/SakuraResourceNameRef",
+      "description": "親サブネットグループ"
+    }
+  },
+  "$defs": {
+    "SakuraResourceNameRef": {
+      "type": "object",
+      "required": [
+        "SRN"
+      ],
+      "properties": {
+        "SRN": {
+          "type": "string",
+          "description": "さくらのリソース名 (SRN)"
+        }
+      }
+    },
+    "Zone": {
+      "type": "object",
+      "required": [
+        "Code"
+      ],
+      "properties": {
+        "Code": {
+          "type": "string",
+          "description": "ゾーンコード (\"is1c\")"
+        }
+      }
+    }
+  }
+}

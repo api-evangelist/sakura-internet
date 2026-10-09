@@ -1,0 +1,15 @@
+generated: '2026-10-09'
+method: searched
+source: https://manual.sakura.ad.jp/cloud-api/1.1/
+name: SAKURA Cloud API rate limits
+published: false
+limit_count: 0
+note: No numeric rate limits are published. The IaaS API notes only ask clients to avoid bursts; several portal contracts (IAM, PHY, AI Engine, security-control) declare 429 responses, and PHY/security-control declare a Retry-After header.
+limits:
+- name: Avoid concentrated access (IaaS API 1.1)
+  limit_text: 短期間に集中したアクセスはしないでください。
+  scope: account
+headers:
+- name: Retry-After
+  source: openapi/sakura-internet-phy-openapi.yml, openapi/sakura-internet-security-control-openapi.yml
+exceeded_status: 429

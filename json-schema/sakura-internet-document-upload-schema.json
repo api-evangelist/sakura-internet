@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-document-upload-schema.json",
+  "title": "DocumentUpload",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-ai-engine-rag-openapi.yml#/components/schemas/DocumentUpload",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "readOnly": true
+    },
+    "status": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/StatusEnum"
+        }
+      ],
+      "readOnly": true,
+      "title": "ステータス"
+    },
+    "content": {
+      "type": "string",
+      "readOnly": true
+    },
+    "file": {
+      "type": "string",
+      "format": "uri",
+      "writeOnly": true
+    },
+    "name": {
+      "type": "string",
+      "description": "未指定の場合はアップロードされたファイル名が使用されます。",
+      "maxLength": 255
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "model": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ModelEnum"
+        }
+      ],
+      "description": "ベクトル化に利用するモデル。\n\n* `multilingual-e5-large` - multilingual-e5-large\n* `preview/Qwen3-Embedding-4B-FP16` - preview/Qwen3-Embedding-4B-FP16"
+    },
+    "chunk_size": {
+      "type": "integer",
+      "description": "モデルによって最大値が異なります。未指定の場合はモデルのデフォルト値が設定されます。"
+    }
+  },
+  "required": [
+    "content",
+    "file",
+    "id",
+    "status"
+  ],
+  "$defs": {
+    "ModelEnum": {
+      "enum": [
+        "multilingual-e5-large",
+        "preview/Qwen3-Embedding-4B-FP16"
+      ],
+      "type": "string",
+      "description": "* `multilingual-e5-large` - multilingual-e5-large\n* `preview/Qwen3-Embedding-4B-FP16` - preview/Qwen3-Embedding-4B-FP16"
+    },
+    "StatusEnum": {
+      "enum": [
+        "pending",
+        "processing",
+        "available",
+        "deleted",
+        "error"
+      ],
+      "type": "string",
+      "description": "* `pending` - Pending\n* `processing` - Processing\n* `available` - Available\n* `deleted` - Deleted\n* `error` - Error"
+    }
+  }
+}

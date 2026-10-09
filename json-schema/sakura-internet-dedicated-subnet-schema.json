@@ -1,0 +1,260 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-dedicated-subnet-schema.json",
+  "title": "dedicated_subnet",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-phy-openapi.yml#/components/schemas/dedicated_subnet",
+  "type": "object",
+  "properties": {
+    "dedicated_subnet_id": {
+      "type": "string",
+      "description": "専用グローバルネットワークのサービスコード"
+    },
+    "service": {
+      "$ref": "#/$defs/service_quiet"
+    },
+    "zone": {
+      "type": "object",
+      "properties": {
+        "zone_id": {
+          "type": "integer",
+          "description": "ネットワークゾーンID"
+        },
+        "region": {
+          "type": "string",
+          "description": "地域名"
+        }
+      }
+    },
+    "ipv4": {
+      "type": "object",
+      "properties": {
+        "network_address": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "ネットワークアドレス"
+        },
+        "prefix_length": {
+          "type": "integer",
+          "description": "ネットワーク長"
+        },
+        "gateway_address": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "ゲートウェイアドレス"
+        },
+        "broadcast_address": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "ブロードキャストアドレス"
+        },
+        "special_use_addresses": {
+          "type": "array",
+          "description": "特別な用途で割り当て済みのIPアドレスのリスト",
+          "items": {
+            "$ref": "#/$defs/ipam"
+          }
+        }
+      }
+    },
+    "ipv6": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "IPv6が有効になっているか"
+        },
+        "network_address": {
+          "type": "string",
+          "format": "ipv6",
+          "description": "ネットワークIPアドレス"
+        },
+        "prefix_length": {
+          "type": "integer",
+          "description": "ネットワーク長"
+        },
+        "gateway_address": {
+          "type": "string",
+          "format": "ipv6",
+          "description": "ゲートウェイアドレス"
+        },
+        "broadcast_address": {
+          "type": "string",
+          "format": "ipv6",
+          "description": "ブロードキャストアドレス"
+        },
+        "special_use_addresses": {
+          "type": "array",
+          "description": "特別な用途で割り当て済みのIPアドレスのリスト",
+          "items": {
+            "type": "object",
+            "properties": {
+              "ip_address": {
+                "type": "string",
+                "format": "ipv6"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "gateway",
+                  "gateway_real"
+                ],
+                "description": "割り当て用途分類\n\n* `gateway` - ゲートウェイアドレス\n* `gateway_real` - ゲートウェイ機器実機"
+              }
+            }
+          }
+        }
+      }
+    },
+    "server_count": {
+      "type": "integer",
+      "description": "割り当て済みサーバー数"
+    },
+    "firewall": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "割り当て済みファイアウォール(利用していない場合は`null`)",
+      "properties": {
+        "firewall_id": {
+          "type": "string",
+          "description": "ファイアウォールのサービスコード"
+        },
+        "nickname": {
+          "type": "string",
+          "description": "ファイアウォールの名称"
+        }
+      }
+    },
+    "load_balancer": {
+      "description": "割り当て済みロードバランサー(利用していない場合は`null`)",
+      "nullable": true,
+      "properties": {
+        "load_balancer_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ロードバランサーのサービスコード"
+        },
+        "nickname": {
+          "type": "string",
+          "description": "ロードバランサーの名称"
+        }
+      }
+    },
+    "config_status": {
+      "type": "string",
+      "enum": [
+        "operational",
+        "configure_lb",
+        "configure_fw",
+        "enable_ipv6",
+        "administrative_lock"
+      ],
+      "description": "設定変更によるロック状態\n`operational` 以外の状態では各種設定変更は不可\n\n* `operational` - 操作可能\n* `configure_lb` - LBを設定中\n* `configure_fw` - FWを設定中\n* `enable_ipv6` - IPv6設定中\n* `administrative_lock` - 機器交換などの作業を行っている"
+    }
+  },
+  "$defs": {
+    "ipam": {
+      "type": "object",
+      "properties": {
+        "ip_address": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "専用グローバルネットワークのIPアドレス"
+        },
+        "description": {
+          "type": "string",
+          "description": "IPアドレスに対しての説明文"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "gateway",
+            "gateway_real",
+            "load_balancer",
+            "server",
+            "void"
+          ],
+          "description": "割り当て用途分類\n\n* `gateway` - ゲートウェイアドレス\n* `gateway_real` - ゲートウェイ機器実機\n* `load_balancer` - ロードバランサー\n* `server` - サーバー\n* `void` - 用途登録なし"
+        },
+        "server": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "server_id": {
+              "type": "string",
+              "description": "サーバーのサービスコード(用途分類が`server`の場合のみ)"
+            },
+            "nickname": {
+              "type": "string",
+              "description": "サーバーの名称"
+            }
+          }
+        },
+        "use_rdns": {
+          "type": "boolean",
+          "description": "逆引きDNSを設定しているか否か(設定済みの場合 `true`)"
+        }
+      }
+    },
+    "service_quiet": {
+      "type": "object",
+      "description": "サービス情報",
+      "properties": {
+        "service_id": {
+          "type": "string",
+          "description": "サービスコード"
+        },
+        "nickname": {
+          "type": "string",
+          "description": "名称：サーバーやネットワークなどの表示名"
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "メモ：サーバーやネットワークなどの説明"
+        },
+        "activated": {
+          "type": "string",
+          "format": "date-time",
+          "description": "利用開始日時"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/tag"
+          }
+        }
+      }
+    },
+    "tag": {
+      "type": "object",
+      "properties": {
+        "tag_id": {
+          "type": "integer",
+          "description": "タグID"
+        },
+        "label": {
+          "type": "string",
+          "description": "タグの名称"
+        },
+        "color": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "タグの色"
+        }
+      }
+    }
+  }
+}

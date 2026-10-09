@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-create-auto-scaling-group-request-schema.json",
+  "title": "CreateAutoScalingGroupRequest",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-apprun-dedicated-openapi.yml#/components/schemas/CreateAutoScalingGroupRequest",
+  "type": "object",
+  "required": [
+    "name",
+    "zone",
+    "workerServiceClassPath",
+    "minNodes",
+    "maxNodes",
+    "interfaces"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 20,
+      "pattern": "^[a-zA-Z0-9_-]+$",
+      "description": "オートスケーリンググループの名前。クラスタ内でユニーク。英数字、アンダースコア、ハイフンのみ使用可能"
+    },
+    "zone": {
+      "type": "string",
+      "description": "オートスケーリンググループのゾーン"
+    },
+    "nameServers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Ipv4"
+      },
+      "minItems": 1,
+      "maxItems": 3,
+      "description": "ネームサーバ設定"
+    },
+    "workerServiceClassPath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255,
+      "description": "ワーカノードのサービスクラスパス"
+    },
+    "minNodes": {
+      "type": "integer",
+      "format": "int32",
+      "minimum": 1,
+      "maximum": 10,
+      "description": "オートスケーリンググループの最小ノード数"
+    },
+    "maxNodes": {
+      "type": "integer",
+      "format": "int32",
+      "minimum": 1,
+      "maximum": 10,
+      "description": "オートスケーリンググループの最大ノード数"
+    },
+    "interfaces": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/AutoScalingGroupNodeInterface"
+      },
+      "minItems": 1,
+      "maxItems": 5,
+      "title": "ネットワークインターフェース定義"
+    }
+  },
+  "$defs": {
+    "AutoScalingGroupNodeInterface": {
+      "type": "object",
+      "required": [
+        "interfaceIndex",
+        "upstream",
+        "connectsToLB"
+      ],
+      "properties": {
+        "interfaceIndex": {
+          "type": "integer",
+          "format": "int16",
+          "description": "インターフェース番号。例：eth0→0、eth1→1、eth2→2。0は必須。重複不可。"
+        },
+        "upstream": {
+          "type": "string",
+          "description": "'shared' にすると共有セグメントに繋がります。ルータ+スイッチ、および共有セグメントにつなげられるのは eth0 のみです。",
+          "title": "接続先スイッチ"
+        },
+        "ipPool": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/IpRange"
+          },
+          "maxItems": 20,
+          "description": "IPプールは最大20個まで指定可能。アップストリームが 'shared' の場合は指定できません。それ以外の場合は指定必須です。",
+          "title": "IPアドレスの割り当て範囲"
+        },
+        "netmaskLen": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 8,
+          "maximum": 29,
+          "description": "アップストリームが 'shared' の場合、指定できません。それ以外の場合は指定必須です。",
+          "title": "ネットマスク長"
+        },
+        "defaultGateway": {
+          "type": "string",
+          "description": "アップストリームが 'shared' の場合、指定できません。",
+          "title": "デフォルトゲートウェイ"
+        },
+        "packetFilterID": {
+          "type": "string",
+          "description": "パケットフィルターID"
+        },
+        "connectsToLB": {
+          "type": "boolean",
+          "description": "一つのオートスケーリンググループにつき、一つのインターフェースのみがロードバランサ接続対象となる。接続対象になった場合、そのインターフェースに割り当てられた IP アドレスがロードバランサのバックエンドとして登録される。クラスタにロードバランサポートが設定されている場合、一つのインターフェースが true である必要がある。",
+          "title": "ロードバランサ接続対象インターフェースかどうか"
+        }
+      }
+    },
+    "IpRange": {
+      "type": "object",
+      "required": [
+        "start",
+        "end"
+      ],
+      "properties": {
+        "start": {
+          "$ref": "#/$defs/Ipv4"
+        },
+        "end": {
+          "$ref": "#/$defs/Ipv4"
+        }
+      }
+    },
+    "Ipv4": {
+      "type": "string",
+      "pattern": "^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$"
+    }
+  }
+}

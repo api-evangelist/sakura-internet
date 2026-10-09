@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-query-request-schema.json",
+  "title": "QueryRequest",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-ai-engine-rag-openapi.yml#/components/schemas/QueryRequest",
+  "type": "object",
+  "properties": {
+    "model": {
+      "type": "string",
+      "default": "multilingual-e5-large",
+      "description": "クエリのベクトル化に利用するモデル。",
+      "maxLength": 255
+    },
+    "query": {
+      "type": "string",
+      "maxLength": 1000
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 255
+      },
+      "description": "すべてのタグを持つドキュメントのみ対象。"
+    },
+    "top_k": {
+      "type": "integer",
+      "maximum": 100,
+      "minimum": 1,
+      "default": 3,
+      "description": "返す検索結果の最大件数。"
+    },
+    "threshold": {
+      "type": "number",
+      "format": "double",
+      "maximum": 2.0,
+      "minimum": 0.0,
+      "default": 0.3,
+      "description": "ベクトル距離のしきい値。この值よりも距離が大きいドキュメントは検索結果から除外されます。"
+    },
+    "distance_type": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/DistanceTypeEnum"
+        }
+      ],
+      "default": "cosine",
+      "description": "類似度計算に使用する距離メトリクスです。\n* `cosine`: コサイン距離。テキストの類似度測定に適しており、値の範囲は0〜2（0が完全に一致）です。\n* `l2`: L2距離（ユークリッド距離）。ベクトル空間での直線距離で、数値データの類似度測定に適しています。値の範囲は0〜2（0が完全に一致）です。\n\n* `cosine` - cosine\n* `l2` - l2"
+    }
+  },
+  "required": [
+    "query"
+  ],
+  "$defs": {
+    "DistanceTypeEnum": {
+      "enum": [
+        "cosine",
+        "l2"
+      ],
+      "type": "string",
+      "description": "* `cosine` - cosine\n* `l2` - l2"
+    }
+  }
+}

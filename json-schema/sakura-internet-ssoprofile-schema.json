@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-ssoprofile-schema.json",
+  "title": "SSOProfile",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-iam-openapi.yml#/components/schemas/SSOProfile",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "description",
+    "sp_entity_id",
+    "sp_acs_url",
+    "idp_entity_id",
+    "idp_login_url",
+    "idp_logout_url",
+    "idp_certificate",
+    "assigned",
+    "created_at",
+    "updated_at"
+  ],
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "SSOプロファイルID",
+      "readOnly": true
+    },
+    "name": {
+      "type": "string",
+      "description": "SSOプロファイル名"
+    },
+    "description": {
+      "type": "string",
+      "description": "SSOプロファイルの説明"
+    },
+    "sp_entity_id": {
+      "type": "string",
+      "description": "SPのエンティティID",
+      "readOnly": true
+    },
+    "sp_acs_url": {
+      "type": "string",
+      "description": "SPのAssertion Consumer Service URL",
+      "readOnly": true
+    },
+    "idp_entity_id": {
+      "type": "string",
+      "description": "IdPのエンティティID"
+    },
+    "idp_login_url": {
+      "type": "string",
+      "description": "IdPのログインURL"
+    },
+    "idp_logout_url": {
+      "type": "string",
+      "description": "IdPのログアウトURL"
+    },
+    "idp_certificate": {
+      "type": "string",
+      "description": "IdPのX.509証明書"
+    },
+    "assigned": {
+      "type": "boolean",
+      "description": "このプロファイルを割り当ているかどうか",
+      "readOnly": true
+    },
+    "created_at": {
+      "type": "string",
+      "description": "作成日時",
+      "readOnly": true
+    },
+    "updated_at": {
+      "type": "string",
+      "description": "更新日時",
+      "readOnly": true
+    }
+  }
+}

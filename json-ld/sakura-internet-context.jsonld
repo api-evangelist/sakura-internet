@@ -1,0 +1,886 @@
+{
+  "@context": {
+    "@vocab": "https://ad.jp/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "sakura": "https://ad.jp/schema#",
+    "AiRequestBody": "sakura:AiRequestBody",
+    "location": {
+      "@id": "sakura:location",
+      "@type": "xsd:string"
+    },
+    "sku": {
+      "@id": "sakura:sku",
+      "@type": "@id"
+    },
+    "AiServiceSku": "sakura:AiServiceSku",
+    "AzureLocation": "sakura:AzureLocation",
+    "name": {
+      "@id": "sakura:name",
+      "@type": "xsd:string"
+    },
+    "displayName": {
+      "@id": "sakura:displayName",
+      "@type": "xsd:string"
+    },
+    "DataLakePerformance": "sakura:DataLakePerformance",
+    "DataLakeRedundancy": "sakura:DataLakeRedundancy",
+    "DatalakePostRequestBody": "sakura:DatalakePostRequestBody",
+    "performance": {
+      "@id": "sakura:performance",
+      "@type": "@id"
+    },
+    "redundancy": {
+      "@id": "sakura:redundancy",
+      "@type": "@id"
+    },
+    "accountType": {
+      "@id": "sakura:accountType",
+      "@type": "xsd:string"
+    },
+    "DatawarehousePostRequestBody": "sakura:DatawarehousePostRequestBody",
+    "DdosRequestBody": "sakura:DdosRequestBody",
+    "profile": {
+      "@id": "sakura:profile",
+      "@type": "@id"
+    },
+    "endpoint": {
+      "@id": "sakura:endpoint",
+      "@type": "@id"
+    },
+    "DeploymentStatus": "sakura:DeploymentStatus",
+    "id": {
+      "@id": "sakura:id",
+      "@type": "xsd:string"
+    },
+    "type": {
+      "@id": "sakura:type",
+      "@type": "xsd:string"
+    },
+    "properties": {
+      "@id": "sakura:properties",
+      "@type": "@id"
+    },
+    "DeploymentStatusProperties": "sakura:DeploymentStatusProperties",
+    "provisioningState": {
+      "@id": "sakura:provisioningState",
+      "@type": "xsd:string"
+    },
+    "timestamp": {
+      "@id": "sakura:timestamp",
+      "@type": "xsd:dateTime"
+    },
+    "ErrorInfo": "sakura:ErrorInfo",
+    "code": {
+      "@id": "sakura:code",
+      "@type": "xsd:string"
+    },
+    "message": {
+      "@id": "sakura:message",
+      "@type": "xsd:string"
+    },
+    "ErrorResponse": "sakura:ErrorResponse",
+    "errors": {
+      "@id": "sakura:errors",
+      "@container": "@list"
+    },
+    "EtlPostRequestBody": "sakura:EtlPostRequestBody",
+    "FrontDoorEndpoint": "sakura:FrontDoorEndpoint",
+    "route": {
+      "@id": "sakura:route",
+      "@type": "@id"
+    },
+    "FrontDoorOrigin": "sakura:FrontDoorOrigin",
+    "hostName": {
+      "@id": "sakura:hostName",
+      "@type": "xsd:string"
+    },
+    "hostHeader": {
+      "@id": "sakura:hostHeader",
+      "@type": "xsd:string"
+    },
+    "FrontDoorOriginGroup": "sakura:FrontDoorOriginGroup",
+    "origin": {
+      "@id": "sakura:origin",
+      "@type": "@id"
+    },
+    "FrontDoorProfile": "sakura:FrontDoorProfile",
+    "level": {
+      "@id": "sakura:level",
+      "@type": "@id"
+    },
+    "levelNameOfBicepParameter": {
+      "@id": "sakura:levelNameOfBicepParameter",
+      "@type": "xsd:string"
+    },
+    "FrontDoorRoute": "sakura:FrontDoorRoute",
+    "patterns": {
+      "@id": "sakura:patterns",
+      "@container": "@list"
+    },
+    "originGroup": {
+      "@id": "sakura:originGroup",
+      "@type": "@id"
+    },
+    "GetResourceResponse": "sakura:GetResourceResponse",
+    "data": {
+      "@id": "sakura:data"
+    },
+    "url": {
+      "@id": "sakura:url",
+      "@type": "xsd:string"
+    },
+    "ListResourcesResponse": "sakura:ListResourcesResponse",
+    "resources": {
+      "@id": "sakura:resources",
+      "@container": "@list"
+    },
+    "NetworkRequestBody": "sakura:NetworkRequestBody",
+    "PostDeploymentResponse": "sakura:PostDeploymentResponse",
+    "resourceGroupName": {
+      "@id": "sakura:resourceGroupName",
+      "@type": "xsd:string"
+    },
+    "deploymentName": {
+      "@id": "sakura:deploymentName",
+      "@type": "xsd:string"
+    },
+    "PricingLevel": "sakura:PricingLevel",
+    "QueryPostRequestBody": "sakura:QueryPostRequestBody",
+    "ResourceGroupData": "sakura:ResourceGroupData",
+    "resourceType": {
+      "@id": "sakura:resourceType",
+      "@type": "@id"
+    },
+    "systemData": {
+      "@id": "sakura:systemData",
+      "@type": "@id"
+    },
+    "tags": {
+      "@id": "sakura:tags"
+    },
+    "resourceGroupProvisioningState": {
+      "@id": "sakura:resourceGroupProvisioningState",
+      "@type": "xsd:string"
+    },
+    "managedBy": {
+      "@id": "sakura:managedBy",
+      "@type": "xsd:string"
+    },
+    "ResourceGroupResource": "sakura:ResourceGroupResource",
+    "hasData": {
+      "@id": "sakura:hasData",
+      "@type": "xsd:boolean"
+    },
+    "ResourceIdentifier": "sakura:ResourceIdentifier",
+    "parent": {
+      "@id": "sakura:parent",
+      "@type": "@id"
+    },
+    "subscriptionId": {
+      "@id": "sakura:subscriptionId",
+      "@type": "xsd:string"
+    },
+    "provider": {
+      "@id": "sakura:provider",
+      "@type": "xsd:string"
+    },
+    "ResourceType": "sakura:ResourceType",
+    "namespace": {
+      "@id": "sakura:namespace",
+      "@type": "xsd:string"
+    },
+    "SearchPostRequestBody": "sakura:SearchPostRequestBody",
+    "skuString": {
+      "@id": "sakura:skuString",
+      "@type": "xsd:string"
+    },
+    "replicaCount": {
+      "@id": "sakura:replicaCount",
+      "@type": "xsd:integer"
+    },
+    "partitionCount": {
+      "@id": "sakura:partitionCount",
+      "@type": "xsd:integer"
+    },
+    "SearchSku": "sakura:SearchSku",
+    "ServerOsType": "sakura:ServerOsType",
+    "StreamingRequestBody": "sakura:StreamingRequestBody",
+    "unitCount": {
+      "@id": "sakura:unitCount",
+      "@type": "xsd:string"
+    },
+    "SystemData": "sakura:SystemData",
+    "createdBy": {
+      "@id": "sakura:createdBy",
+      "@type": "xsd:string"
+    },
+    "createdByType": {
+      "@id": "sakura:createdByType",
+      "@type": "@id"
+    },
+    "createdOn": {
+      "@id": "sakura:createdOn",
+      "@type": "xsd:dateTime"
+    },
+    "lastModifiedBy": {
+      "@id": "sakura:lastModifiedBy",
+      "@type": "xsd:string"
+    },
+    "lastModifiedByType": {
+      "@id": "sakura:lastModifiedByType",
+      "@type": "@id"
+    },
+    "lastModifiedOn": {
+      "@id": "sakura:lastModifiedOn",
+      "@type": "xsd:dateTime"
+    },
+    "VulnerabilityRequestBody": "sakura:VulnerabilityRequestBody",
+    "os": {
+      "@id": "sakura:os",
+      "@type": "@id"
+    },
+    "VulnerabilityResponseBody": "sakura:VulnerabilityResponseBody",
+    "installScript": {
+      "@id": "sakura:installScript",
+      "@type": "xsd:string"
+    },
+    "WafRequestBody": "sakura:WafRequestBody",
+    "EmbeddingResponse": "sakura:EmbeddingResponse",
+    "model": {
+      "@id": "sakura:model",
+      "@type": "xsd:string"
+    },
+    "TranscriptionResponse": "sakura:TranscriptionResponse",
+    "text": {
+      "@id": "sakura:text",
+      "@type": "xsd:string"
+    },
+    "ChatCompletionRequestAssistantMessage": "sakura:ChatCompletionRequestAssistantMessage",
+    "content": {
+      "@id": "sakura:content"
+    },
+    "role": {
+      "@id": "sakura:role",
+      "@type": "xsd:string"
+    },
+    "ChatCompletionRequestDeveloperMessage": "sakura:ChatCompletionRequestDeveloperMessage",
+    "ChatCompletionRequestMessageContentPartImage": "sakura:ChatCompletionRequestMessageContentPartImage",
+    "image_url": {
+      "@id": "sakura:image_url"
+    },
+    "ChatCompletionRequestMessageContentPartText": "sakura:ChatCompletionRequestMessageContentPartText",
+    "ChatCompletionRequestSystemMessage": "sakura:ChatCompletionRequestSystemMessage",
+    "ChatCompletionRequestToolMessage": "sakura:ChatCompletionRequestToolMessage",
+    "tool_call_id": {
+      "@id": "sakura:tool_call_id",
+      "@type": "xsd:string"
+    },
+    "ChatCompletionRequestUserMessage": "sakura:ChatCompletionRequestUserMessage",
+    "ChatCompletionTool": "sakura:ChatCompletionTool",
+    "function": {
+      "@id": "sakura:function",
+      "@type": "@id"
+    },
+    "ChatCompletionNamedToolChoice": "sakura:ChatCompletionNamedToolChoice",
+    "FunctionObject": "sakura:FunctionObject",
+    "description": {
+      "@id": "sakura:description",
+      "@type": "xsd:string"
+    },
+    "parameters": {
+      "@id": "sakura:parameters"
+    },
+    "SpeechRequest": "sakura:SpeechRequest",
+    "input": {
+      "@id": "sakura:input",
+      "@type": "xsd:string"
+    },
+    "voice": {
+      "@id": "sakura:voice",
+      "@type": "xsd:string"
+    },
+    "instructions": {
+      "@id": "sakura:instructions",
+      "@type": "xsd:string"
+    },
+    "response_format": {
+      "@id": "sakura:response_format",
+      "@type": "xsd:string"
+    },
+    "stream_format": {
+      "@id": "sakura:stream_format",
+      "@type": "xsd:string"
+    },
+    "TtsAudioQuery": "sakura:TtsAudioQuery",
+    "accent_phrases": {
+      "@id": "sakura:accent_phrases",
+      "@container": "@list"
+    },
+    "speedScale": {
+      "@id": "sakura:speedScale",
+      "@type": "xsd:decimal"
+    },
+    "pitchScale": {
+      "@id": "sakura:pitchScale",
+      "@type": "xsd:decimal"
+    },
+    "intonationScale": {
+      "@id": "sakura:intonationScale",
+      "@type": "xsd:decimal"
+    },
+    "volumeScale": {
+      "@id": "sakura:volumeScale",
+      "@type": "xsd:decimal"
+    },
+    "prePhonemeLength": {
+      "@id": "sakura:prePhonemeLength",
+      "@type": "xsd:decimal"
+    },
+    "postPhonemeLength": {
+      "@id": "sakura:postPhonemeLength",
+      "@type": "xsd:decimal"
+    },
+    "pauseLength": {
+      "@id": "sakura:pauseLength"
+    },
+    "pauseLengthScale": {
+      "@id": "sakura:pauseLengthScale",
+      "@type": "xsd:decimal"
+    },
+    "outputSamplingRate": {
+      "@id": "sakura:outputSamplingRate",
+      "@type": "xsd:integer"
+    },
+    "outputStereo": {
+      "@id": "sakura:outputStereo",
+      "@type": "xsd:boolean"
+    },
+    "kana": {
+      "@id": "sakura:kana",
+      "@type": "xsd:string"
+    },
+    "TtsAccentPhrase": "sakura:TtsAccentPhrase",
+    "moras": {
+      "@id": "sakura:moras",
+      "@container": "@list"
+    },
+    "accent": {
+      "@id": "sakura:accent",
+      "@type": "xsd:integer"
+    },
+    "pause_mora": {
+      "@id": "sakura:pause_mora"
+    },
+    "is_interrogative": {
+      "@id": "sakura:is_interrogative",
+      "@type": "xsd:boolean"
+    },
+    "TtsSynthesisRequest": "sakura:TtsSynthesisRequest",
+    "ChatQueryRequest": "sakura:ChatQueryRequest",
+    "distance_type": {
+      "@id": "sakura:distance_type"
+    },
+    "chat_model": {
+      "@id": "sakura:chat_model",
+      "@type": "xsd:string"
+    },
+    "query": {
+      "@id": "sakura:query",
+      "@type": "xsd:string"
+    },
+    "prompt": {
+      "@id": "sakura:prompt",
+      "@type": "xsd:string"
+    },
+    "top_k": {
+      "@id": "sakura:top_k",
+      "@type": "xsd:integer"
+    },
+    "threshold": {
+      "@id": "sakura:threshold",
+      "@type": "xsd:decimal"
+    },
+    "use_full_content": {
+      "@id": "sakura:use_full_content",
+      "@type": "xsd:boolean"
+    },
+    "ChatResult": "sakura:ChatResult",
+    "answer": {
+      "@id": "sakura:answer",
+      "@type": "xsd:string"
+    },
+    "sources": {
+      "@id": "sakura:sources",
+      "@container": "@list"
+    },
+    "DistanceTypeEnum": "sakura:DistanceTypeEnum",
+    "Document": "sakura:Document",
+    "created_at": {
+      "@id": "sakura:created_at",
+      "@type": "xsd:dateTime"
+    },
+    "status": {
+      "@id": "sakura:status"
+    },
+    "chunk_size": {
+      "@id": "sakura:chunk_size",
+      "@type": "xsd:integer"
+    },
+    "chunk_count": {
+      "@id": "sakura:chunk_count",
+      "@type": "xsd:integer"
+    },
+    "error_message": {
+      "@id": "sakura:error_message",
+      "@type": "xsd:string"
+    },
+    "DocumentChunk": "sakura:DocumentChunk",
+    "document": {
+      "@id": "sakura:document"
+    },
+    "chunk_index": {
+      "@id": "sakura:chunk_index",
+      "@type": "xsd:integer"
+    },
+    "metadata": {
+      "@id": "sakura:metadata"
+    },
+    "DocumentList": "sakura:DocumentList",
+    "DocumentUpload": "sakura:DocumentUpload",
+    "file": {
+      "@id": "sakura:file",
+      "@type": "@id"
+    },
+    "ModelEnum": "sakura:ModelEnum",
+    "PaginatedDocumentChunkList": "sakura:PaginatedDocumentChunkList",
+    "meta": {
+      "@id": "sakura:meta"
+    },
+    "results": {
+      "@id": "sakura:results",
+      "@container": "@list"
+    },
+    "PaginatedDocumentListList": "sakura:PaginatedDocumentListList",
+    "PaginatedQueryResultChunkList": "sakura:PaginatedQueryResultChunkList",
+    "QueryRequest": "sakura:QueryRequest",
+    "QueryResultChunk": "sakura:QueryResultChunk",
+    "distance": {
+      "@id": "sakura:distance",
+      "@type": "xsd:decimal"
+    },
+    "QueryResultDocument": "sakura:QueryResultDocument",
+    "StatusEnum": "sakura:StatusEnum",
+    "Model": "sakura:Model",
+    "createdAt": {
+      "@id": "sakura:createdAt",
+      "@type": "xsd:dateTime"
+    },
+    "updatedAt": {
+      "@id": "sakura:updatedAt",
+      "@type": "xsd:dateTime"
+    },
+    "ServiceSubscriptionResponse": "sakura:ServiceSubscriptionResponse",
+    "ServiceSubscriptionRequest": "sakura:ServiceSubscriptionRequest",
+    "RouteAuthorization": "sakura:RouteAuthorization",
+    "enabled": {
+      "@id": "sakura:enabled",
+      "@type": "xsd:boolean"
+    },
+    "DomainPUT": "sakura:DomainPUT",
+    "certificateId": {
+      "@id": "sakura:certificateId",
+      "@type": "xsd:string"
+    },
+    "CertificateAutoIssueLimit": "sakura:CertificateAutoIssueLimit",
+    "autoIssueLimit": {
+      "@id": "sakura:autoIssueLimit",
+      "@type": "xsd:integer"
+    },
+    "CertificateDetails": "sakura:CertificateDetails",
+    "cert": {
+      "@id": "sakura:cert",
+      "@type": "xsd:string"
+    },
+    "key": {
+      "@id": "sakura:key",
+      "@type": "xsd:string"
+    },
+    "expiredAt": {
+      "@id": "sakura:expiredAt",
+      "@type": "xsd:dateTime"
+    },
+    "CertificatesAcme": "sakura:CertificatesAcme",
+    "sans": {
+      "@id": "sakura:sans",
+      "@container": "@list"
+    },
+    "DomainDTO": "sakura:DomainDTO",
+    "domains": {
+      "@id": "sakura:domains",
+      "@container": "@list"
+    },
+    "CertificateDTO": "sakura:CertificateDTO",
+    "certificates": {
+      "@id": "sakura:certificates",
+      "@container": "@list"
+    },
+    "UserGroupDetail": "sakura:UserGroupDetail",
+    "isAssigned": {
+      "@id": "sakura:isAssigned",
+      "@type": "xsd:boolean"
+    },
+    "RouteAuthorizationDetailResponse": "sakura:RouteAuthorizationDetailResponse",
+    "isACLEnabled": {
+      "@id": "sakura:isACLEnabled",
+      "@type": "xsd:boolean"
+    },
+    "groups": {
+      "@id": "sakura:groups",
+      "@container": "@list"
+    },
+    "UserAuthentication": "sakura:UserAuthentication",
+    "basicAuth": {
+      "@id": "sakura:basicAuth",
+      "@type": "@id"
+    },
+    "jwt": {
+      "@id": "sakura:jwt",
+      "@type": "@id"
+    },
+    "hmacAuth": {
+      "@id": "sakura:hmacAuth",
+      "@type": "@id"
+    },
+    "RequestTransformation": "sakura:RequestTransformation",
+    "httpMethod": {
+      "@id": "sakura:httpMethod",
+      "@type": "@id"
+    },
+    "allow": {
+      "@id": "sakura:allow",
+      "@type": "@id"
+    },
+    "remove": {
+      "@id": "sakura:remove",
+      "@type": "@id"
+    },
+    "rename": {
+      "@id": "sakura:rename",
+      "@type": "@id"
+    },
+    "replace": {
+      "@id": "sakura:replace",
+      "@type": "@id"
+    },
+    "add": {
+      "@id": "sakura:add",
+      "@type": "@id"
+    },
+    "append": {
+      "@id": "sakura:append",
+      "@type": "@id"
+    },
+    "RequestAllowDetail": "sakura:RequestAllowDetail",
+    "body": {
+      "@id": "sakura:body",
+      "@container": "@list"
+    },
+    "RequestRemoveDetail": "sakura:RequestRemoveDetail",
+    "headerKeys": {
+      "@id": "sakura:headerKeys",
+      "@container": "@list"
+    },
+    "queryParams": {
+      "@id": "sakura:queryParams",
+      "@container": "@list"
+    },
+    "RequestRenameDetail": "sakura:RequestRenameDetail",
+    "headers": {
+      "@id": "sakura:headers",
+      "@container": "@list"
+    },
+    "RequestModificationDetail": "sakura:RequestModificationDetail",
+    "ResponseTransformation": "sakura:ResponseTransformation",
+    "ResponseAllowDetail": "sakura:ResponseAllowDetail",
+    "jsonKeys": {
+      "@id": "sakura:jsonKeys",
+      "@container": "@list"
+    },
+    "ResponseRemoveDetail": "sakura:ResponseRemoveDetail",
+    "ifStatusCode": {
+      "@id": "sakura:ifStatusCode",
+      "@container": "@list"
+    },
+    "ResponseRenameDetail": "sakura:ResponseRenameDetail",
+    "json": {
+      "@id": "sakura:json",
+      "@container": "@list"
+    },
+    "ResponseReplaceDetail": "sakura:ResponseReplaceDetail",
+    "ResponseModificationDetail": "sakura:ResponseModificationDetail",
+    "Overage": "sakura:Overage",
+    "unitRequests": {
+      "@id": "sakura:unitRequests",
+      "@type": "xsd:integer"
+    },
+    "unitPrice": {
+      "@id": "sakura:unitPrice",
+      "@type": "xsd:string"
+    },
+    "SubscriptionList": "sakura:SubscriptionList",
+    "subscriptions": {
+      "@id": "sakura:subscriptions",
+      "@container": "@list"
+    },
+    "maxSubscription": {
+      "@id": "sakura:maxSubscription",
+      "@type": "xsd:integer"
+    },
+    "SubscriptionService": "sakura:SubscriptionService",
+    "SubscriptionUpdate": "sakura:SubscriptionUpdate",
+    "SubscriptionCreate": "sakura:SubscriptionCreate",
+    "planId": {
+      "@id": "sakura:planId",
+      "@type": "xsd:string"
+    },
+    "ErrorSchema": "sakura:ErrorSchema",
+    "HTTPMethod": "sakura:HTTPMethod",
+    "ApplicationCurrentContainer": "sakura:ApplicationCurrentContainer",
+    "image": {
+      "@id": "sakura:image",
+      "@type": "xsd:string"
+    },
+    "state": {
+      "@id": "sakura:state",
+      "@type": "xsd:string"
+    },
+    "cpuUsagePercent": {
+      "@id": "sakura:cpuUsagePercent",
+      "@type": "xsd:decimal"
+    },
+    "applicationID": {
+      "@id": "sakura:applicationID"
+    },
+    "applicationVersion": {
+      "@id": "sakura:applicationVersion"
+    },
+    "ApplicationCurrentContainers": "sakura:ApplicationCurrentContainers",
+    "collectedAtSec": {
+      "@id": "sakura:collectedAtSec",
+      "@type": "xsd:integer"
+    },
+    "containers": {
+      "@id": "sakura:containers",
+      "@container": "@list"
+    },
+    "ApplicationDesiredContainer": "sakura:ApplicationDesiredContainer",
+    "cpuMillis": {
+      "@id": "sakura:cpuMillis",
+      "@type": "xsd:integer"
+    },
+    "memoryMB": {
+      "@id": "sakura:memoryMB",
+      "@type": "xsd:integer"
+    },
+    "ApplicationDesiredContainers": "sakura:ApplicationDesiredContainers",
+    "ApplicationIdentifier": "sakura:ApplicationIdentifier",
+    "ApplicationVersionIdentifier": "sakura:ApplicationVersionIdentifier",
+    "version": {
+      "@id": "sakura:version"
+    },
+    "ApplicationVersionSummary": "sakura:ApplicationVersionSummary",
+    "activeNodeCount": {
+      "@id": "sakura:activeNodeCount",
+      "@type": "xsd:integer"
+    },
+    "created": {
+      "@id": "sakura:created",
+      "@type": "xsd:integer"
+    },
+    "AutoScalingGroupIdentifier": "sakura:AutoScalingGroupIdentifier",
+    "autoScalingGroupID": {
+      "@id": "sakura:autoScalingGroupID"
+    },
+    "AutoScalingGroupNodeInterface": "sakura:AutoScalingGroupNodeInterface",
+    "interfaceIndex": {
+      "@id": "sakura:interfaceIndex",
+      "@type": "xsd:integer"
+    },
+    "upstream": {
+      "@id": "sakura:upstream",
+      "@type": "xsd:string"
+    },
+    "ipPool": {
+      "@id": "sakura:ipPool",
+      "@container": "@list"
+    },
+    "netmaskLen": {
+      "@id": "sakura:netmaskLen",
+      "@type": "xsd:integer"
+    },
+    "defaultGateway": {
+      "@id": "sakura:defaultGateway",
+      "@type": "xsd:string"
+    },
+    "packetFilterID": {
+      "@id": "sakura:packetFilterID",
+      "@type": "xsd:string"
+    },
+    "connectsToLB": {
+      "@id": "sakura:connectsToLB",
+      "@type": "xsd:boolean"
+    },
+    "CertificateIdentifier": "sakura:CertificateIdentifier",
+    "certificateID": {
+      "@id": "sakura:certificateID"
+    },
+    "ClusterIdentifier": "sakura:ClusterIdentifier",
+    "clusterID": {
+      "@id": "sakura:clusterID"
+    },
+    "ClusterLoadBalancerPort": "sakura:ClusterLoadBalancerPort",
+    "port": {
+      "@id": "sakura:port",
+      "@type": "xsd:integer"
+    },
+    "protocol": {
+      "@id": "sakura:protocol",
+      "@type": "xsd:string"
+    },
+    "ClusterLoadBalancerPortMergePatchCreateOrUpdateReplaceOnly": "sakura:ClusterLoadBalancerPortMergePatchCreateOrUpdateReplaceOnly",
+    "CreateApplicationRequest": "sakura:CreateApplicationRequest",
+    "CreateApplicationResponse": "sakura:CreateApplicationResponse",
+    "application": {
+      "@id": "sakura:application"
+    },
+    "CreateApplicationVersionRequest": "sakura:CreateApplicationVersionRequest",
+    "cpu": {
+      "@id": "sakura:cpu",
+      "@type": "xsd:integer"
+    },
+    "memory": {
+      "@id": "sakura:memory",
+      "@type": "xsd:integer"
+    },
+    "scalingMode": {
+      "@id": "sakura:scalingMode",
+      "@type": "@id"
+    },
+    "fixedScale": {
+      "@id": "sakura:fixedScale",
+      "@type": "xsd:integer"
+    },
+    "minScale": {
+      "@id": "sakura:minScale",
+      "@type": "xsd:integer"
+    },
+    "maxScale": {
+      "@id": "sakura:maxScale",
+      "@type": "xsd:integer"
+    },
+    "scaleInThreshold": {
+      "@id": "sakura:scaleInThreshold",
+      "@type": "xsd:integer"
+    },
+    "scaleOutThreshold": {
+      "@id": "sakura:scaleOutThreshold",
+      "@type": "xsd:integer"
+    },
+    "cmd": {
+      "@id": "sakura:cmd",
+      "@container": "@list"
+    },
+    "registryUsername": {
+      "@id": "sakura:registryUsername",
+      "@type": "xsd:string"
+    },
+    "registryPassword": {
+      "@id": "sakura:registryPassword",
+      "@type": "xsd:string"
+    },
+    "registryPasswordAction": {
+      "@id": "sakura:registryPasswordAction"
+    },
+    "exposedPorts": {
+      "@id": "sakura:exposedPorts",
+      "@container": "@list"
+    },
+    "env": {
+      "@id": "sakura:env",
+      "@container": "@list"
+    },
+    "CreateApplicationVersionResponse": "sakura:CreateApplicationVersionResponse",
+    "CreateAutoScalingGroupRequest": "sakura:CreateAutoScalingGroupRequest",
+    "zone": {
+      "@id": "sakura:zone",
+      "@type": "xsd:string"
+    },
+    "nameServers": {
+      "@id": "sakura:nameServers",
+      "@container": "@list"
+    },
+    "workerServiceClassPath": {
+      "@id": "sakura:workerServiceClassPath",
+      "@type": "xsd:string"
+    },
+    "minNodes": {
+      "@id": "sakura:minNodes",
+      "@type": "xsd:integer"
+    },
+    "maxNodes": {
+      "@id": "sakura:maxNodes",
+      "@type": "xsd:integer"
+    },
+    "interfaces": {
+      "@id": "sakura:interfaces",
+      "@container": "@list"
+    },
+    "CreateAutoScalingGroupResponse": "sakura:CreateAutoScalingGroupResponse",
+    "autoScalingGroup": {
+      "@id": "sakura:autoScalingGroup"
+    },
+    "CreateCertificateRequest": "sakura:CreateCertificateRequest",
+    "certificatePem": {
+      "@id": "sakura:certificatePem",
+      "@type": "xsd:string"
+    },
+    "privatekeyPem": {
+      "@id": "sakura:privatekeyPem",
+      "@type": "xsd:string"
+    },
+    "intermediateCertificatePem": {
+      "@id": "sakura:intermediateCertificatePem",
+      "@type": "xsd:string"
+    },
+    "CreateCertificateResponse": "sakura:CreateCertificateResponse",
+    "certificate": {
+      "@id": "sakura:certificate"
+    },
+    "CreateClusterRequest": "sakura:CreateClusterRequest",
+    "letsEncryptEmail": {
+      "@id": "sakura:letsEncryptEmail",
+      "@type": "xsd:string"
+    },
+    "ports": {
+      "@id": "sakura:ports",
+      "@container": "@list"
+    },
+    "servicePrincipalID": {
+      "@id": "sakura:servicePrincipalID",
+      "@type": "@id"
+    }
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "SAKURA internet API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects SAKURA internet's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-09) from openapi/sakura-internet-addon-openapi.yml, openapi/sakura-internet-ai-engine-inference-openapi.yml, openapi/sakura-internet-ai-engine-rag-openapi.yml.",
+  "dcterms:created": "2026-10-09",
+  "dcterms:source": [
+    "openapi/sakura-internet-addon-openapi.yml",
+    "openapi/sakura-internet-ai-engine-inference-openapi.yml",
+    "openapi/sakura-internet-ai-engine-rag-openapi.yml",
+    "openapi/sakura-internet-apigw-openapi.yml",
+    "openapi/sakura-internet-apprun-dedicated-openapi.yml"
+  ]
+}

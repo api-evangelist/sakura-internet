@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-create-cluster-request-schema.json",
+  "title": "CreateClusterRequest",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-apprun-dedicated-openapi.yml#/components/schemas/CreateClusterRequest",
+  "type": "object",
+  "required": [
+    "name",
+    "ports",
+    "servicePrincipalID"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 20,
+      "pattern": "^[a-zA-Z0-9_-]+$",
+      "description": "クラスタの名前。プロジェクト内でユニーク。英数字、アンダースコア、ハイフンのみ使用可能"
+    },
+    "letsEncryptEmail": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+      "description": "Let's Encrypt による証明書発行を有効にするにはここにメールアドレスを設定します。\nLet's Encrypt による証明書発行は HTTP-01 チャレンジになるため、80 番ポートを HTTPプロトコルで外向きに解放する必要があります。",
+      "title": "Let's Encrypt のメールアドレス"
+    },
+    "ports": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ClusterLoadBalancerPort"
+      },
+      "maxItems": 5,
+      "description": "ロードバランサのポート群"
+    },
+    "servicePrincipalID": {
+      "$ref": "#/$defs/ServicePrincipalID"
+    }
+  },
+  "$defs": {
+    "ClusterLoadBalancerPort": {
+      "type": "object",
+      "required": [
+        "port",
+        "protocol"
+      ],
+      "properties": {
+        "port": {
+          "type": "integer",
+          "format": "uint16",
+          "minimum": 1,
+          "maximum": 65535,
+          "description": "外部公開するポート番号。5950-5959は予約されているため指定不可"
+        },
+        "protocol": {
+          "type": "string",
+          "enum": [
+            "http",
+            "https",
+            "tcp"
+          ],
+          "description": "ポートで扱うプロトコル"
+        }
+      }
+    },
+    "ServicePrincipalID": {
+      "type": "string",
+      "minLength": 12,
+      "maxLength": 12,
+      "description": "サービスプリンシパルのID"
+    }
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-nosql-status-response-schema.json",
+  "title": "NosqlStatusResponse",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-nosql-openapi.yml#/components/schemas/NosqlStatusResponse",
+  "type": "object",
+  "properties": {
+    "Appliance": {
+      "type": "object",
+      "properties": {
+        "ID": {
+          "type": "string"
+        },
+        "SettingsResponse": {
+          "type": "object",
+          "description": "NoSQLのステータスレスポンス",
+          "properties": {
+            "Nosql": {
+              "type": "object",
+              "properties": {
+                "DatabaseVersion": {
+                  "type": "string",
+                  "description": "NoSQLの現在のバージョン"
+                },
+                "UpgradeVersion": {
+                  "type": "string",
+                  "description": "NoSQLの更新可能な最新のバージョン"
+                },
+                "Jobs": {
+                  "type": "array",
+                  "description": "ジョブ情報",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "JobType": {
+                        "type": "string",
+                        "description": "ジョブタイプ"
+                      },
+                      "JobStatus": {
+                        "type": "string",
+                        "description": "ジョブステータス"
+                      }
+                    }
+                  }
+                },
+                "PrimaryNodes": {
+                  "type": "object",
+                  "description": "プライマリノード情報",
+                  "properties": {
+                    "Appliance": {
+                      "$ref": "#/$defs/NosqlNodeAppliance"
+                    }
+                  }
+                },
+                "AddNodes": {
+                  "type": "array",
+                  "description": "追加されたノードの情報",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "Appliance"
+                    ],
+                    "properties": {
+                      "Appliance": {
+                        "$ref": "#/$defs/NosqlNodeAppliance"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "is_ok": {
+      "$ref": "#/$defs/is_ok"
+    }
+  },
+  "$defs": {
+    "Availability": {
+      "type": "string",
+      "description": "NoSQLの利用可能状態\n| 値        | 説明       |\n|-----------|------------|\n| migrating | 準備中     |\n| available | 利用可能   |\n| failed    | 利用不可   |\n",
+      "enum": [
+        "migrating",
+        "available",
+        "failed"
+      ]
+    },
+    "NosqlNodeAppliance": {
+      "type": "object",
+      "description": "ノードのアプライアンス情報",
+      "required": [
+        "ID",
+        "Availability"
+      ],
+      "properties": {
+        "ID": {
+          "type": "string",
+          "description": "アプライアンスID"
+        },
+        "Availability": {
+          "$ref": "#/$defs/Availability"
+        },
+        "Zone": {
+          "type": "object",
+          "description": "ゾーン情報",
+          "properties": {
+            "Name": {
+              "type": "string",
+              "description": "ゾーン名"
+            }
+          }
+        },
+        "Nodes": {
+          "type": "array",
+          "description": "ノードの詳細情報",
+          "items": {
+            "$ref": "#/$defs/NosqldbNodeStatus"
+          }
+        }
+      }
+    },
+    "NosqldbNodeStatus": {
+      "type": "object",
+      "properties": {
+        "Index": {
+          "type": "integer",
+          "description": "ノードの通番"
+        },
+        "UserIPAddress": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "ユーザ側スイッチに接続するIPアドレス"
+        },
+        "NodeType": {
+          "type": "string",
+          "description": "ノードタイプ\n\n| 値 | 説明         |\n|----|--------------|\n| 0  | 正常         |\n| 1  | デッドノード |\n| 2  | 予備IPサーバ |\n",
+          "enum": [
+            "0",
+            "1",
+            "2"
+          ]
+        }
+      }
+    },
+    "is_ok": {
+      "type": "boolean",
+      "description": "成功のレスポンス(true:成功)"
+    }
+  }
+}

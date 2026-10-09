@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-tts-audio-query-schema.json",
+  "title": "TtsAudioQuery",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-ai-engine-inference-openapi.yml#/components/schemas/TtsAudioQuery",
+  "type": "object",
+  "required": [
+    "accent_phrases",
+    "speedScale",
+    "pitchScale",
+    "intonationScale",
+    "volumeScale",
+    "prePhonemeLength",
+    "postPhonemeLength",
+    "outputSamplingRate",
+    "outputStereo"
+  ],
+  "properties": {
+    "accent_phrases": {
+      "type": "array",
+      "description": "アクセント句のリスト",
+      "items": {
+        "$ref": "#/$defs/TtsAccentPhrase"
+      }
+    },
+    "speedScale": {
+      "type": "number",
+      "description": "全体の話速"
+    },
+    "pitchScale": {
+      "type": "number",
+      "description": "全体の音高"
+    },
+    "intonationScale": {
+      "type": "number",
+      "description": "全体の抑揚"
+    },
+    "volumeScale": {
+      "type": "number",
+      "description": "全体の音量"
+    },
+    "prePhonemeLength": {
+      "type": "number",
+      "description": "音声の前の無音時間"
+    },
+    "postPhonemeLength": {
+      "type": "number",
+      "description": "音声の後の無音時間"
+    },
+    "pauseLength": {
+      "description": "句読点などの無音時間。\nnull のときは無視される。デフォルト値は null\n",
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "pauseLengthScale": {
+      "type": "number",
+      "description": "句読点などの無音時間（倍率）",
+      "default": 1
+    },
+    "outputSamplingRate": {
+      "type": "integer",
+      "description": "音声データの出力サンプリングレート"
+    },
+    "outputStereo": {
+      "type": "boolean",
+      "description": "音声データをステレオ出力するか否か"
+    },
+    "kana": {
+      "type": "string",
+      "description": "読み（かな）。\n[読み取り専用] AquesTalk風記法によるテキスト。\n音声合成用のクエリとしては無視される\n"
+    }
+  },
+  "$defs": {
+    "TtsAccentPhrase": {
+      "type": "object",
+      "required": [
+        "moras",
+        "accent",
+        "is_interrogative"
+      ],
+      "properties": {
+        "moras": {
+          "type": "array",
+          "description": "モーラ列",
+          "items": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "accent": {
+          "type": "integer",
+          "description": "アクセント位置"
+        },
+        "pause_mora": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "description": "無音モーラ",
+          "additionalProperties": true
+        },
+        "is_interrogative": {
+          "type": "boolean",
+          "description": "疑問形かどうか"
+        }
+      }
+    }
+  }
+}

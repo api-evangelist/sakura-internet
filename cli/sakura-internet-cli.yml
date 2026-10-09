@@ -1,0 +1,36 @@
+generated: '2026-10-09'
+method: searched
+source: https://manual.sakura.ad.jp/cloud/tool/usacloud/index.html
+description: usacloud はさくらのクラウドの公式CLIクライアントです。 Operates SAKURA Cloud resources (servers, disks, networks, ...) from the command line. Docs cover usacloud v1.
+docs: https://manual.sakura.ad.jp/cloud/tool/usacloud/index.html
+repo: https://github.com/sacloud/usacloud
+version: v1.22.8
+install:
+  script: curl -fsSL https://github.com/sacloud/usacloud/releases/latest/download/install.sh | bash
+  homebrew: "brew tap sacloud/usacloud && brew trust sacloud/usacloud && brew install --cask usacloud"
+  binary: https://github.com/sacloud/usacloud/releases/latest/
+  docker: ghcr.io/sacloud/usacloud
+  docker_legacy: sacloud/usacloud on DockerHub (kept for v0 compatibility, slated for removal)
+  docs: https://manual.sakura.ad.jp/cloud/tool/usacloud/installation/index.html
+commands:
+  syntax: usacloud <操作対象のリソース> <コマンド> [ コマンドオプション ] [ 引数 ]
+  examples:
+  - usacloud server list
+  - usacloud --zone tk1a server list
+  - usacloud --zone tk1v server ls
+  config:
+  - usacloud config
+  - usacloud config list
+  - usacloud config create
+  completion:
+  - usacloud completion bash
+  - usacloud completion zsh
+  - usacloud completion fish
+  rest: "restコマンド（上級者向け） — https://manual.sakura.ad.jp/cloud/tool/usacloud/guides/rest.html"
+  global_options: [--config/--profile, --token, --secret, --zone, --zones, --output-type, --quiet, --format, --query, --parameters, --example, --assumeyes]
+  docs: https://manual.sakura.ad.jp/cloud/tool/usacloud/guides/basic-usage.html
+auth:
+  env: [SAKURA_ACCESS_TOKEN, SAKURA_ACCESS_TOKEN_SECRET, SAKURA_ZONE, SAKURA_PROFILE]
+  config_file: ~/.usacloud/<profile>/config.json
+key_flows:
+  sandbox: Set zone tk1v to run against the Sandbox (test) zone.

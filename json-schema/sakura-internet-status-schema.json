@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-status-schema.json",
+  "title": "Status",
+  "description": "Status",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-objectstorage-openapi.yml#/components/schemas/Status",
+  "type": "object",
+  "required": [
+    "data"
+  ],
+  "properties": {
+    "data": {
+      "description": "data type",
+      "type": "object",
+      "required": [
+        "accept_new",
+        "message",
+        "started_at",
+        "status_code"
+      ],
+      "properties": {
+        "accept_new": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "started_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status_code": {
+          "type": "object",
+          "required": [
+            "id",
+            "status"
+          ],
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "status": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

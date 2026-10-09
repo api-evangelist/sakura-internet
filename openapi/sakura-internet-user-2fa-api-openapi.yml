@@ -1,0 +1,546 @@
+openapi: 3.2.0
+info:
+  title: Sakura Internet User 2fa API
+  version: 2.1.0
+  contact:
+    name: SAKURA internet Inc.
+  description: 'Operations tagged user-2fa across 2 of this provider''s published API definitions: iam-api.yaml, sakura-internet-iam-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
+security:
+- ServicePrincipalAuth: []
+tags:
+- name: user-2fa
+  x-displayName: ユーザ2要素認証
+  description: ユーザの2要素認証に関する機能
+paths:
+  /compat/users/{user_id}/deactivate-otp:
+    parameters:
+    - $ref: '#/components/parameters/UserID'
+    post:
+      operationId: deactivateOtp
+      tags:
+      - user-2fa
+      summary: ユーザのOTPを無効化する
+      description: 指定したユーザのワンタイムパスワード認証を無効化します。
+      responses:
+        '204':
+          description: 成功
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '404':
+          description: 指定したユーザが存在しない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http404NotFound'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
+  /compat/users/{user_id}/trusted-devices:
+    parameters:
+    - $ref: '#/components/parameters/UserID'
+    get:
+      operationId: listTrustedDevices
+      tags:
+      - user-2fa
+      summary: ユーザの信頼済みデバイス一覧を取得する
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                allOf:
+                - type: object
+                  required:
+                  - items
+                  properties:
+                    items:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/UserTrustedDevice'
+                - $ref: '#/components/schemas/Pagination'
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '404':
+          description: 指定したユーザが存在しない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http404NotFound'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
+  /compat/users/{user_id}/trusted-devices/{trusted_device_id}:
+    parameters:
+    - $ref: '#/components/parameters/UserID'
+    - $ref: '#/components/parameters/TrustedDeviceID'
+    delete:
+      operationId: deleteTrustedDevice
+      tags:
+      - user-2fa
+      summary: ユーザの信頼済みデバイスを削除する
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '404':
+          description: 指定したユーザが存在しない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http404NotFound'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
+  /compat/users/{user_id}/clear-trusted-devices:
+    parameters:
+    - $ref: '#/components/parameters/UserID'
+    post:
+      operationId: clearTrustedDevices
+      tags:
+      - user-2fa
+      summary: ユーザの全信頼済みデバイスを削除する
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '404':
+          description: 指定したユーザが存在しない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http404NotFound'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
+  /compat/users/{user_id}/security-keys:
+    parameters:
+    - $ref: '#/components/parameters/UserID'
+    get:
+      operationId: listSecurityKeys
+      tags:
+      - user-2fa
+      summary: ユーザのセキュリティキー一覧を取得する
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                allOf:
+                - type: object
+                  required:
+                  - items
+                  properties:
+                    items:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/UserSecurityKey'
+                - $ref: '#/components/schemas/Pagination'
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '404':
+          description: 指定したユーザが存在しない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http404NotFound'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
+  /compat/users/{user_id}/security-keys/{security_key_id}:
+    parameters:
+    - $ref: '#/components/parameters/UserID'
+    - $ref: '#/components/parameters/SecurityKeyID'
+    get:
+      operationId: readSecurityKey
+      tags:
+      - user-2fa
+      summary: ユーザのセキュリティキーを取得する
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSecurityKey'
+              examples:
+                Response1:
+                  summary: 登録直後のレスポンス
+                  value:
+                    id: 1
+                    name: ''
+                    sign_count: 0
+                    aaguid: 00000000-0000-0000-0000-000000000000
+                    registered_at: '2025-08-27T10:00:00.123456+09:00'
+                    last_used_at: null
+                Response2:
+                  summary: ログイン認証で利用後のレスポンス
+                  value:
+                    id: 1
+                    name: ユーザが設定した名前
+                    sign_count: 1
+                    aaguid: 00000000-0000-0000-0000-000000000000
+                    registered_at: '2025-08-27T10:00:00.123456+09:00'
+                    last_used_at: '2025-08-27T11:00:00.123456+09:00'
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '404':
+          description: 指定したセキュリティキーが存在しない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http404NotFound'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+    delete:
+      operationId: deleteSecurityKey
+      tags:
+      - user-2fa
+      summary: ユーザのセキュリティキーを削除する
+      responses:
+        '204':
+          description: 成功
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '404':
+          description: 指定したセキュリティキーが存在しない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http404NotFound'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
+components:
+  parameters:
+    UserID:
+      in: path
+      name: user_id
+      description: ユーザID
+      required: true
+      schema:
+        type: integer
+    TrustedDeviceID:
+      in: path
+      name: trusted_device_id
+      description: ユーザID
+      required: true
+      schema:
+        type: integer
+    SecurityKeyID:
+      in: path
+      name: security_key_id
+      description: セキュリティキーID
+      required: true
+      schema:
+        type: integer
+  schemas:
+    Http404NotFound:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 404
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: not_found
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 見つかりませんでした。
+    Http429TooManyRequests:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 429
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: throttled
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: リクエストの処理は絞られました。 60秒後に利用可能になります。
+    UserTrustedDevice:
+      type: object
+      required:
+      - id
+      - name
+      - created_at
+      properties:
+        id:
+          type: integer
+          description: ユーザの信頼済みデバイスID
+          example: 1
+        name:
+          type: string
+          description: 名前
+          example: xxxxxxxx
+          minLength: 1
+          maxLength: 32
+        created_at:
+          type: string
+          format: date-time
+          description: 作成日時
+          example: '2021-01-01T00:00:01+09:00'
+    UserSecurityKey:
+      type: object
+      required:
+      - id
+      - name
+      - sign_count
+      - aaguid
+      - registered_at
+      - last_used_at
+      properties:
+        id:
+          type: integer
+          description: セキュリティキーID
+          minimum: 1
+        name:
+          type: string
+          description: セキュリティキー名
+          example: ユーザが任意に設定する名前
+        sign_count:
+          type: integer
+          description: 使用回数
+        aaguid:
+          type: string
+          example: a25342c0-3cdc-4414-8e46-f4807fca511c
+          description: セキュリティキーの識別子
+        registered_at:
+          type: string
+          format: date-time
+          description: 登録日時
+        last_used_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: 最終使用日時
+    Http403Forbidden:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 403
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: permission_denied
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: このアクションを実行する権限がありません。
+    Pagination:
+      type: object
+      required:
+      - count
+      - next
+      - previous
+      properties:
+        count:
+          type: integer
+          description: データ総数
+          example: 100
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          description: 次のページへのURL
+          example: https://api.example.com/?page=3&per_page=10
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          description: 前のページへのURL
+          example: https://api.example.com/?per_page=10
+    Http401Unauthorized:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 401
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: authentication_failed
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 認証情報が含まれていません。
+  securitySchemes:
+    ServicePrincipalAuth:
+      description: 'サービスプリンシパル認証
+
+        - サービスプリンシパルのアクセストークンを指定
+
+        '
+      type: http
+      scheme: bearer
+    ProjectApiKeyAuth:
+      description: 'APIキー認証
+
+        - ユーザー名に発行したAPIキーのアクセストークンを指定
+
+        - パスワードに発行したAPIキーのアクセストークンシークレットを指定
+
+        '
+      type: http
+      scheme: basic
+x-refined-from:
+- iam-api.yaml
+- sakura-internet-iam-openapi.yml

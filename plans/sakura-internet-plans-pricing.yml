@@ -1,0 +1,22 @@
+generated: '2026-10-09'
+method: searched
+source: https://cloud.sakura.ad.jp/payment/
+name: さくらのクラウド pricing
+audience: business-product
+pricing_basis: usage-other
+published: true
+currency: JPY
+delivery:
+  delivery: managed
+plan_count: 1
+note: Per-product prices are on each product page and a calculator; the API itself is not separately priced. Membership registration is free and no charge accrues until resources are added. Sandbox zone resources are not billed.
+plans:
+- name: さくらのクラウド (利用時間課金)
+  description: Time-based billing with no data-transfer charges; under 20 days billed pro rata, thereafter fixed at 20 days (monthly price). Entry price quoted for the Ishikari region.
+  price_text: 1時間7円
+  price: 7
+  period: hour
+  features:
+  - データ転送量による従量課金がないため、想定外の出費となることがありません。
+  - 割引パスポート (long-term discount)
+  limits: []

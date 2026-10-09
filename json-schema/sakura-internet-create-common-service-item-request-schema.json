@@ -1,0 +1,276 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-create-common-service-item-request-schema.json",
+  "title": "CreateCommonServiceItemRequest",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-eventbus-openapi.yml#/components/schemas/CreateCommonServiceItemRequest",
+  "type": "object",
+  "required": [
+    "CommonServiceItem"
+  ],
+  "properties": {
+    "CommonServiceItem": {
+      "type": "object",
+      "required": [
+        "Name",
+        "Settings",
+        "Provider"
+      ],
+      "properties": {
+        "Name": {
+          "type": "string",
+          "description": "リソース名"
+        },
+        "Description": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "Settings": {
+          "$ref": "#/$defs/Settings"
+        },
+        "Provider": {
+          "$ref": "#/$defs/Provider"
+        },
+        "Icon": {
+          "$ref": "#/$defs/Icon"
+        },
+        "Tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "Icon": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "ID": {
+          "type": "string"
+        },
+        "URL": {
+          "type": "string"
+        },
+        "Name": {
+          "type": "string"
+        },
+        "Scope": {
+          "type": "string"
+        },
+        "Tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ProcessConfigurationSettings": {
+      "type": "object",
+      "required": [
+        "Destination",
+        "Parameters"
+      ],
+      "properties": {
+        "Destination": {
+          "type": "string",
+          "enum": [
+            "simplenotification",
+            "simplemq",
+            "autoscale"
+          ],
+          "description": "ジョブの宛先（simplenotification/simplemq/autoscale）"
+        },
+        "Parameters": {
+          "type": "string",
+          "description": "Destinationごとのパラメータ（group_id, message, queue_name, content等）"
+        }
+      }
+    },
+    "Provider": {
+      "type": "object",
+      "required": [
+        "Class"
+      ],
+      "properties": {
+        "ID": {
+          "type": "integer"
+        },
+        "Class": {
+          "type": "string",
+          "enum": [
+            "eventbusprocessconfiguration",
+            "eventbusschedule",
+            "eventbustrigger"
+          ]
+        },
+        "Name": {
+          "type": "string"
+        },
+        "ServiceClass": {
+          "type": "string"
+        }
+      }
+    },
+    "ScheduleSettings": {
+      "type": "object",
+      "required": [
+        "ProcessConfigurationID",
+        "StartsAt"
+      ],
+      "properties": {
+        "ProcessConfigurationID": {
+          "type": "string",
+          "description": "実行設定ID"
+        },
+        "RecurringStep": {
+          "type": "integer",
+          "description": "実行間隔"
+        },
+        "RecurringUnit": {
+          "type": "string",
+          "enum": [
+            "min",
+            "hour",
+            "day"
+          ],
+          "description": "実行間隔単位"
+        },
+        "Crontab": {
+          "type": "string",
+          "description": "crontab形式"
+        },
+        "StartsAt": {
+          "oneOf": [
+            {
+              "type": "integer",
+              "format": "int64"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "description": "スケジュール開始時刻（エポックミリ秒）\nリクエスト時はintegerで指定する必要があります。\nレスポンスはstringで返却されます。"
+        }
+      }
+    },
+    "Settings": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/ProcessConfigurationSettings"
+        },
+        {
+          "$ref": "#/$defs/ScheduleSettings"
+        },
+        {
+          "$ref": "#/$defs/TriggerSettings"
+        }
+      ],
+      "description": "実行設定(ProcessConfiguration)、トリガー(Trigger)またはスケジュール(Schedule)用設定"
+    },
+    "TriggerConditionEq": {
+      "type": "object",
+      "required": [
+        "Key",
+        "Op",
+        "Values"
+      ],
+      "properties": {
+        "Key": {
+          "type": "string",
+          "pattern": "^(?!data$)[a-z0-9]{1,20}$"
+        },
+        "Op": {
+          "type": "string",
+          "enum": [
+            "eq"
+          ]
+        },
+        "Values": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "TriggerConditionIn": {
+      "type": "object",
+      "required": [
+        "Key",
+        "Op",
+        "Values"
+      ],
+      "properties": {
+        "Key": {
+          "type": "string",
+          "pattern": "^(?!data$)[a-z0-9]{1,20}$"
+        },
+        "Op": {
+          "type": "string",
+          "enum": [
+            "in"
+          ]
+        },
+        "Values": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "TriggerSettings": {
+      "type": "object",
+      "properties": {
+        "Source": {
+          "type": "string"
+        },
+        "Types": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "Conditions": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/TriggerConditionEq"
+              },
+              {
+                "$ref": "#/$defs/TriggerConditionIn"
+              }
+            ]
+          }
+        },
+        "ProcessConfigurationID": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Source",
+        "ProcessConfigurationID"
+      ]
+    }
+  }
+}

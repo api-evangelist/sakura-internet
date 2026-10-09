@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-paginated-cloud-hsmclient-list-schema.json",
+  "title": "PaginatedCloudHSMClientList",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-security-encryption-openapi.yml#/components/schemas/PaginatedCloudHSMClientList",
+  "type": "object",
+  "required": [
+    "Count",
+    "From",
+    "Total",
+    "Clients",
+    "is_ok"
+  ],
+  "properties": {
+    "Count": {
+      "type": "integer"
+    },
+    "From": {
+      "type": "integer"
+    },
+    "Total": {
+      "type": "integer"
+    },
+    "Clients": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/CloudHSMClient"
+      }
+    },
+    "is_ok": {
+      "type": "boolean"
+    }
+  },
+  "$defs": {
+    "CloudHSMClient": {
+      "type": "object",
+      "properties": {
+        "ID": {
+          "type": "string",
+          "readOnly": true
+        },
+        "CreatedAt": {
+          "$ref": "#/$defs/DateTime"
+        },
+        "ModifiedAt": {
+          "$ref": "#/$defs/DateTime"
+        },
+        "Availability": {
+          "enum": [
+            "precreate",
+            "available",
+            "discontinued"
+          ],
+          "type": "string",
+          "description": "* `precreate` - 準備中\n* `available` - 利用可能\n* `discontinued` - 廃止",
+          "x-spec-enum-id": "329069c36229258c",
+          "readOnly": true,
+          "title": "状態"
+        },
+        "Name": {
+          "type": "string",
+          "title": "名前",
+          "maxLength": 255
+        },
+        "Certificate": {
+          "type": "string",
+          "readOnly": true,
+          "title": "証明書"
+        }
+      },
+      "required": [
+        "Availability",
+        "Certificate",
+        "CreatedAt",
+        "ID",
+        "ModifiedAt",
+        "Name"
+      ]
+    },
+    "DateTime": {
+      "type": "string",
+      "format": "iso8601"
+    }
+  }
+}

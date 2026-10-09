@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-port-channel-schema.json",
+  "title": "port_channel",
+  "description": "ネットワークインターフェース ポートチャネル情報",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-phy-openapi.yml#/components/schemas/port_channel",
+  "type": "object",
+  "properties": {
+    "port_channel_id": {
+      "type": "integer",
+      "description": "ポートチャネルID"
+    },
+    "bonding_type": {
+      "type": "string",
+      "enum": [
+        "lacp",
+        "static",
+        "single"
+      ],
+      "description": "ボンディング方式\n\n* `lacp` - LACP\n* `static` - static link aggregation\n* `single` - ボンディングなし(単体構成)"
+    },
+    "ports": {
+      "type": "array",
+      "description": "ポートチャネルを構成するポートIDのリスト",
+      "items": {
+        "type": "integer",
+        "description": "ポートID"
+      },
+      "maxItems": 2,
+      "minItems": 2
+    },
+    "locked": {
+      "type": "boolean",
+      "description": "設定変更によるロック状態(ロック中の場合は `true`)"
+    },
+    "link_speed_type": {
+      "type": "string",
+      "enum": [
+        "1gbe",
+        "10gbe"
+      ],
+      "description": "提供速度分類\n\n* `1gbe` - 1GbE\n* `10gbe` - 10GbE"
+    }
+  }
+}

@@ -1,0 +1,188 @@
+generated: '2026-10-09'
+method: derived
+source: https://github.com/sacloud/sacloud-mcp (tool source) + openapi/sakura-internet-objectstorage-openapi.yml
+purpose: Bind each sacloud-mcp tool to the captured OpenAPI operation that backs it.
+surfaces:
+  openapi: openapi/sakura-internet-objectstorage-openapi.yml
+  other_openapi: 19 further SAKURA OpenAPI files under openapi/ have no corresponding MCP tool
+  graphql: null
+  mcp:
+    mode: local-stdio
+    repository: https://github.com/sacloud/sacloud-mcp
+    status: archived 2026-04-13
+    gated: false
+crosswalk:
+- tool: get_objectstorage_accesskey_list
+  category: objectstorage
+  rest:
+  - listAccountKeys
+  binding: GET {site}/v2/account/keys
+  confidence: high
+  spec: openapi/sakura-internet-objectstorage-openapi.yml
+- tool: get_objectstorage_site_list
+  category: objectstorage
+  rest:
+  - listClusters
+  binding: tool calls fed/v1/clusters; the spec documents GET /clusters under each site /v2 server
+  confidence: medium
+  spec: openapi/sakura-internet-objectstorage-openapi.yml
+  note: Same resource (sites/clusters) but a different API path version than the captured spec.
+mcp_only:
+- tool: get_detabases
+  reason: backed by Cloud API 1.1 /appliance (database class) — the SAKURA Cloud API 1.1 / System API core resources
+    have no OpenAPI captured in openapi/
+- tool: get_loadbalancer
+  reason: backed by Cloud API 1.1 /appliance — the SAKURA Cloud API 1.1 / System API core resources have no OpenAPI
+    captured in openapi/
+- tool: create_loadbalancer
+  reason: backed by Cloud API 1.1 /appliance — the SAKURA Cloud API 1.1 / System API core resources have no OpenAPI
+    captured in openapi/
+- tool: attach_servers
+  reason: backed by Cloud API 1.1 /appliance/{id}/config — the SAKURA Cloud API 1.1 / System API core resources
+    have no OpenAPI captured in openapi/
+- tool: get_vpn_router_list
+  reason: backed by Cloud API 1.1 /appliance (vpcrouter class) — the SAKURA Cloud API 1.1 / System API core resources
+    have no OpenAPI captured in openapi/
+- tool: get_vpn_monitor
+  reason: backed by Cloud API 1.1 /appliance/{id}/interface/monitor — the SAKURA Cloud API 1.1 / System API core
+    resources have no OpenAPI captured in openapi/
+- tool: get_bill_list
+  reason: backed by System API 1.0 /bill/by-contract/{account_id} — the SAKURA Cloud API 1.1 / System API core resources
+    have no OpenAPI captured in openapi/
+- tool: get_bill_list_by_month
+  reason: backed by System API 1.0 /bill/by-contract/{account_id}/{year}/{month} — the SAKURA Cloud API 1.1 / System
+    API core resources have no OpenAPI captured in openapi/
+- tool: get_coupon_list
+  reason: backed by System API 1.0 /coupon/{account_id} — the SAKURA Cloud API 1.1 / System API core resources have
+    no OpenAPI captured in openapi/
+- tool: get_interface_list
+  reason: backed by Cloud API 1.1 /interface — the SAKURA Cloud API 1.1 / System API core resources have no OpenAPI
+    captured in openapi/
+- tool: get_packet_filter_list
+  reason: backed by Cloud API 1.1 /packetfilter — the SAKURA Cloud API 1.1 / System API core resources have no OpenAPI
+    captured in openapi/
+- tool: get_server_list
+  reason: backed by Cloud API 1.1 /server — the SAKURA Cloud API 1.1 / System API core resources have no OpenAPI
+    captured in openapi/
+- tool: get_server_plan
+  reason: backed by Cloud API 1.1 /product/server — the SAKURA Cloud API 1.1 / System API core resources have no
+    OpenAPI captured in openapi/
+- tool: create_server
+  reason: backed by Cloud API 1.1 /server — the SAKURA Cloud API 1.1 / System API core resources have no OpenAPI
+    captured in openapi/
+- tool: get_server_power_status
+  reason: backed by Cloud API 1.1 /server/{id}/power — the SAKURA Cloud API 1.1 / System API core resources have
+    no OpenAPI captured in openapi/
+- tool: stop_server
+  reason: backed by Cloud API 1.1 /server/{id}/power — the SAKURA Cloud API 1.1 / System API core resources have
+    no OpenAPI captured in openapi/
+- tool: start_server
+  reason: backed by Cloud API 1.1 /server/{id}/power — the SAKURA Cloud API 1.1 / System API core resources have
+    no OpenAPI captured in openapi/
+- tool: get_icon_list
+  reason: backed by Cloud API 1.1 /icon — the SAKURA Cloud API 1.1 / System API core resources have no OpenAPI captured
+    in openapi/
+- tool: get_icon_tag_list
+  reason: backed by Cloud API 1.1 /icon/tag — the SAKURA Cloud API 1.1 / System API core resources have no OpenAPI
+    captured in openapi/
+- tool: get_region_list
+  reason: backed by Cloud API 1.1 /region — the SAKURA Cloud API 1.1 / System API core resources have no OpenAPI
+    captured in openapi/
+- tool: get_zone_list
+  reason: backed by Cloud API 1.1 /zone — the SAKURA Cloud API 1.1 / System API core resources have no OpenAPI captured
+    in openapi/
+- tool: get_api_manual_outline
+  reason: documentation/price lookup, not a REST operation
+- tool: read_api_manual
+  reason: documentation/price lookup, not a REST operation
+- tool: read_object_storage_api_manual
+  reason: documentation/price lookup, not a REST operation
+- tool: get_manual_outline
+  reason: documentation/price lookup, not a REST operation
+- tool: read_manual
+  reason: documentation/price lookup, not a REST operation
+- tool: get_price
+  reason: documentation/price lookup, not a REST operation
+- tool: get_bridge_list
+  reason: backed by Cloud API 1.1 /bridge — the SAKURA Cloud API 1.1 / System API core resources have no OpenAPI
+    captured in openapi/
+- tool: create_bridge
+  reason: backed by Cloud API 1.1 /bridge — the SAKURA Cloud API 1.1 / System API core resources have no OpenAPI
+    captured in openapi/
+- tool: delete_bridge
+  reason: backed by Cloud API 1.1 /bridge/{id} — the SAKURA Cloud API 1.1 / System API core resources have no OpenAPI
+    captured in openapi/
+- tool: get_router_list
+  reason: backed by Cloud API 1.1 /internet — the SAKURA Cloud API 1.1 / System API core resources have no OpenAPI
+    captured in openapi/
+- tool: get_router_monitor
+  reason: backed by Cloud API 1.1 /internet/{id}/monitor — the SAKURA Cloud API 1.1 / System API core resources
+    have no OpenAPI captured in openapi/
+- tool: create_router
+  reason: backed by Cloud API 1.1 /internet — the SAKURA Cloud API 1.1 / System API core resources have no OpenAPI
+    captured in openapi/
+- tool: delete_router
+  reason: backed by Cloud API 1.1 /internet/{id} — the SAKURA Cloud API 1.1 / System API core resources have no
+    OpenAPI captured in openapi/
+- tool: get_switch_list
+  reason: backed by Cloud API 1.1 /switch — the SAKURA Cloud API 1.1 / System API core resources have no OpenAPI
+    captured in openapi/
+- tool: create_switch
+  reason: backed by Cloud API 1.1 /switch — the SAKURA Cloud API 1.1 / System API core resources have no OpenAPI
+    captured in openapi/
+- tool: get_objectstorage_bucket_list
+  reason: S3-compatible API, not in the captured OpenAPI
+- tool: get_archive_list
+  reason: backed by Cloud API 1.1 /archive — the SAKURA Cloud API 1.1 / System API core resources have no OpenAPI
+    captured in openapi/
+- tool: get_disk
+  reason: backed by Cloud API 1.1 /disk — the SAKURA Cloud API 1.1 / System API core resources have no OpenAPI captured
+    in openapi/
+- tool: create_disk
+  reason: backed by Cloud API 1.1 /disk — the SAKURA Cloud API 1.1 / System API core resources have no OpenAPI captured
+    in openapi/
+- tool: get_disk_plan
+  reason: backed by Cloud API 1.1 /product/disk — the SAKURA Cloud API 1.1 / System API core resources have no OpenAPI
+    captured in openapi/
+rest_only:
+- readCluster
+- listBuckets
+- createBucket
+- deleteBucket
+- readBucketReplication
+- createBucketReplication
+- deleteBucketReplication
+- listBucketReplicableTargets
+- readBucketEncryption
+- updateBucketEncryption
+- deleteBucketEncryption
+- readBucketPlan
+- updateBucketPlan
+- readBucketPenalty
+- readBucketUsage
+- readBucketQuota
+- readAccount
+- createAccount
+- deleteAccount
+- createAccountKey
+- readAccountKey
+- deleteAccountKey
+- listPermissions
+- createPermission
+- readPermission
+- updatePermission
+- deletePermission
+- listPermissionKeys
+- createPermissionKey
+- readPermissionKey
+- deletePermissionKey
+- readStatus
+- listPlans
+- readQuota
+- listBucketMetering
+rest_only_scope: objectstorage spec only; every operation in the other 19 openapi/ files is also REST-only
+coverage:
+  tools: 43
+  bound: 2
+  mcp_only: 41
+  rest_only_objectstorage: 35

@@ -1,0 +1,53 @@
+generated: '2026-10-09'
+method: searched
+source: https://manual.sakura.ad.jp/cloud-api/1.1/
+description: Cross-cutting conventions of the さくらのクラウド IaaS API 1.1 (一般注記事項), plus what the per-service OpenAPI contracts in the API portal declare.
+base_url: https://secure.sakura.ad.jp/cloud/zone/{zone}/api/cloud/1.1/
+api_style: REST, JSON request/response, HTTPS only, UTF-8; one API endpoint per zone (tk1a, tk1b, is1a, is1b, is1c, tk1v=Sandbox); billing APIs use a different URL.
+authentication:
+  scheme: HTTP Basic or Digest with APIキー (access token) + シークレットトークン
+  detail: さくらのクラウドAPIはAPIキーとシークレットトークンを利用したBasic認証またはDigest認証を使用します。 Some portal APIs (AI Engine, IAM service principals, SimpleMQ) declare HTTP bearer.
+  docs: https://manual.sakura.ad.jp/cloud-api/1.1/
+  see: authentication/sakura-internet-authentication.yml
+idempotency:
+  supported: false
+  coverage: none
+  detail: No Idempotency-Key header or replay-protection mechanism is documented in the API 1.1 notes or declared in any of the 20 OpenAPI contracts. Docs instead ask clients to create resources sequentially ("個々のリソースの作成が完了してから次のリソースを作成するようにしてください").
+pagination:
+  style: offset
+  request_params: [From, Count]
+  response_fields: [Total, From, Count]
+  detail: From is a 0-based offset; most resources cap results at a Limit even when omitted. Sort accepts an array of keys ("-" prefix = descending); Filter supports partial match on strings and exact/OR match on arrays.
+  docs: https://manual.sakura.ad.jp/cloud-api/1.1/
+field_expansion:
+  supported: true
+  mechanism: Include / Exclude arrays of key paths with * wildcards (sparse fieldsets)
+  docs: https://manual.sakura.ad.jp/cloud-api/1.1/
+response_envelope:
+  get: '{is_ok, <Resource>}'
+  post: '{is_ok, ...}'
+  put: '{Success}'
+  delete: '{Success, is_ok}'
+  beautify_header: 'X-Sakura-API-Beautify: 1'
+datetime: ISO 8601 (e.g. 2013-01-14T09:30:00+09:00)
+versioning:
+  scheme: url-path
+  current: '1.1'
+  detail: IaaS API is versioned in the path (/api/cloud/1.1/); portal APIs carry their own info.version (e.g. IAM 2.1.0, NoSQL 2.1.1).
+  see: lifecycle/sakura-internet-lifecycle.yml
+error_envelope:
+  detail: IaaS API returns standard HTTP status codes (table in docs). PHY and security-control contracts declare RFC 9457-style problem details (type/title/detail/status; application/problem+json in security-control).
+  see: errors/sakura-internet-problem-types.yml
+rate_limits:
+  signal_status: 429
+  headers: [Retry-After]
+  detail: IaaS docs give no numeric limits, only "短期間に集中したアクセスはしないでください。"; IAM, PHY, AI Engine and security-control contracts declare 429 responses, PHY and security-control with Retry-After.
+  see: rate-limits/sakura-internet-rate-limits.yml
+reversibility:
+  status: undocumented
+  detail: The API exposes create/update/delete and power operations, but no documented undo/restore/cancel path or reversal window was found in the API 1.1 notes or the manual pages read. No window is asserted.
+  surfaces: []
+dry_run_mode:
+  supported: true
+  mechanism: Sandbox zone tk1v (no billing, resources non-functional)
+  docs: https://manual.sakura.ad.jp/cloud/server/sandbox.html

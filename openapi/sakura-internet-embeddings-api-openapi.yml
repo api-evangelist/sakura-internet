@@ -1,0 +1,99 @@
+openapi: 3.2.0
+info:
+  title: Sakura Internet Embeddings API
+  version: 1.0.1
+  description: 'Operations tagged Embeddings across 2 of this provider''s published API definitions: ai-engine-inference-api.yaml, sakura-internet-ai-engine-inference-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.ai.sakura.ad.jp
+security:
+- BearerAuth: []
+tags:
+- name: Embeddings
+paths:
+  /v1/embeddings:
+    post:
+      summary: Create embeddings
+      operationId: createEmbeddings
+      description: 埋め込みベクトル作成のリクエストの代表例です。利用するモデルによってはサポートされていないパラメータもありますので、ご注意ください。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - model
+              - input
+              properties:
+                model:
+                  type: string
+                  description: 利用する埋め込みモデル名。利用可能なモデルはコントロールパネル等をご確認ください。
+                input:
+                  anyOf:
+                  - type: string
+                    description: 埋め込む入力テキスト
+                  - type: array
+                    items:
+                      type: string
+      responses:
+        '200':
+          description: Embedding created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmbeddingResponse'
+              examples:
+                exampleOk:
+                  summary: Successful embedding
+                  value:
+                    model: multilingual-e5-large
+                    data:
+                    - index: 0
+                      object: embedding
+                      embedding: []
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '429':
+          description: Rate limited
+        '500':
+          description: Server error
+        '504':
+          description: Server error
+      tags:
+      - Embeddings
+    servers:
+    - url: https://api.ai.sakura.ad.jp
+components:
+  schemas:
+    EmbeddingResponse:
+      type: object
+      required:
+      - model
+      - data
+      properties:
+        model:
+          type: string
+          description: Model used.
+        data:
+          type: array
+          description: null
+          items:
+            type: object
+            properties:
+              index:
+                type: integer
+              object:
+                type: string
+              embedding:
+                type: array
+                items:
+                  type: float64
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+x-refined-from:
+- ai-engine-inference-api.yaml
+- sakura-internet-ai-engine-inference-openapi.yml

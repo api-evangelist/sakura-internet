@@ -1,0 +1,236 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-handler-read-application-schema.json",
+  "title": "handler.readApplication",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-apprun-shared-openapi.yml#/components/schemas/handler.readApplication",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "timeout_seconds",
+    "port",
+    "min_scale",
+    "max_scale",
+    "components",
+    "status",
+    "public_url",
+    "resource_id",
+    "created_at"
+  ],
+  "properties": {
+    "id": {
+      "description": "アプリケーションID",
+      "type": "string"
+    },
+    "name": {
+      "description": "アプリケーション名",
+      "type": "string"
+    },
+    "timeout_seconds": {
+      "description": "アプリケーションの公開URLにアクセスして、インスタンスが起動してからレスポンスが返るまでの時間制限",
+      "type": "integer",
+      "default": 60,
+      "minimum": 1,
+      "maximum": 300
+    },
+    "port": {
+      "description": "アプリケーションがリクエストを待ち受けるポート番号",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 65535
+    },
+    "min_scale": {
+      "description": "アプリケーション全体の最小スケール数",
+      "type": "integer",
+      "default": 0,
+      "minimum": 0,
+      "maximum": 10
+    },
+    "max_scale": {
+      "description": "アプリケーション全体の最大スケール数",
+      "type": "integer",
+      "default": 10,
+      "minimum": 1,
+      "maximum": 10
+    },
+    "scale_target_concurrency": {
+      "description": "アプリケーションのスケールの閾値の目安となる同時リクエスト数",
+      "type": "integer",
+      "default": 100,
+      "minimum": 50,
+      "maximum": 200
+    },
+    "components": {
+      "description": "アプリケーションのコンポーネント情報",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "max_cpu",
+          "max_memory",
+          "deploy_source"
+        ],
+        "properties": {
+          "name": {
+            "description": "コンポーネント名",
+            "type": "string"
+          },
+          "max_cpu": {
+            "description": "コンポーネントの最大vCPU数",
+            "type": "string"
+          },
+          "max_memory": {
+            "description": "コンポーネントの最大メモリ",
+            "type": "string"
+          },
+          "deploy_source": {
+            "description": "コンポーネントを構成するソース",
+            "type": "object",
+            "properties": {
+              "container_registry": {
+                "description": "コンテナレジストリ",
+                "type": "object",
+                "required": [
+                  "image"
+                ],
+                "properties": {
+                  "image": {
+                    "description": "コンテナイメージ名",
+                    "type": "string"
+                  },
+                  "server": {
+                    "description": "コンテナレジストリの認証に使用するサーバー名",
+                    "type": "string"
+                  },
+                  "username": {
+                    "description": "コンテナレジストリの認証に使用するユーザー名",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "env": {
+            "$ref": "#/$defs/response.env"
+          },
+          "secret": {
+            "$ref": "#/$defs/response.secret"
+          },
+          "probe": {
+            "description": "コンポーネントのプローブ設定",
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "http_get": {
+                "description": "HTTP Getプローブタイプ",
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "required": [
+                  "path",
+                  "port"
+                ],
+                "properties": {
+                  "path": {
+                    "description": "HTTPサーバーへアクセスしプローブをチェックする際のパス",
+                    "type": "string"
+                  },
+                  "port": {
+                    "description": "HTTPサーバーへアクセスしプローブをチェックする際のポート番号",
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 65535
+                  },
+                  "headers": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "description": "ヘッダーフィールド名",
+                          "type": "string"
+                        },
+                        "value": {
+                          "description": "ヘッダーフィールド値",
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "status": {
+      "description": "アプリケーションステータス",
+      "type": "string",
+      "enum": [
+        "Healthy",
+        "UnHealthy",
+        "Deploying"
+      ]
+    },
+    "public_url": {
+      "description": "公開URL",
+      "type": "string"
+    },
+    "resource_id": {
+      "description": "リソースID",
+      "type": "string"
+    },
+    "created_at": {
+      "description": "作成日時",
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "$defs": {
+    "response.env": {
+      "description": "コンポーネントに渡す環境変数",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "key",
+          "value"
+        ],
+        "properties": {
+          "key": {
+            "description": "環境変数名",
+            "type": "string"
+          },
+          "value": {
+            "description": "環境変数の値",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "response.secret": {
+      "description": "コンポーネントに渡す環境変数（レスポンスに値は表示されません）",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "key"
+        ],
+        "properties": {
+          "key": {
+            "description": "環境変数名",
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

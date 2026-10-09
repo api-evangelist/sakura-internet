@@ -1,0 +1,397 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-server-schema.json",
+  "title": "server",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-phy-openapi.yml#/components/schemas/server",
+  "type": "object",
+  "properties": {
+    "server_id": {
+      "type": "string",
+      "description": "サーバーのサービスコード"
+    },
+    "service": {
+      "$ref": "#/$defs/service_quiet"
+    },
+    "zone": {
+      "type": "object",
+      "properties": {
+        "zone_id": {
+          "type": "integer",
+          "description": "ネットワークゾーンID"
+        },
+        "region": {
+          "type": "string",
+          "description": "地域名"
+        }
+      }
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "cpu_model_name": {
+          "type": "string",
+          "description": "CPU製品モデル名"
+        },
+        "cpu_count": {
+          "type": "integer",
+          "description": "物理CPU数"
+        },
+        "cpu_core_count": {
+          "description": "総CPUコア数",
+          "type": "integer"
+        },
+        "cpu_clock_speed": {
+          "type": "string",
+          "description": "CPUクロック数(GHz)"
+        },
+        "memory_size": {
+          "type": "integer",
+          "description": "総メモリ数(GB)"
+        },
+        "port_channel_1gbe_count": {
+          "type": "integer",
+          "description": "1GbEネットワークインターフェース ポートチャネル数"
+        },
+        "port_channel_10gbe_count": {
+          "type": "integer",
+          "description": "10GbEネットワークインターフェース ポートチャネル数"
+        },
+        "storages": {
+          "type": "array",
+          "description": "ストレージ構成情報\n同一構成(接続方式,記録方式,容量)ごとの配列",
+          "items": {
+            "type": "object",
+            "properties": {
+              "size": {
+                "type": "integer",
+                "description": "ストレージ1つあたりの容量(GB)"
+              },
+              "bus_type": {
+                "type": "string",
+                "enum": [
+                  "sata",
+                  "sas",
+                  "nvme"
+                ],
+                "description": "ストレージ接続方式\n\n* `sata` - SATA\n* `sas` - SAS\n* `nvme` - NVMe(PCIe)"
+              },
+              "media_type": {
+                "type": "string",
+                "enum": [
+                  "hdd",
+                  "ssd",
+                  "flash_memory"
+                ],
+                "description": "ストレージ記録方式\n\n* `hdd` - 磁気HDD\n* `ssd` - SSD\n* `flash_memory` - Flash Memory(不揮発性メモリ)"
+              },
+              "device_count": {
+                "type": "integer",
+                "description": "ストレージ構成物理デバイス数"
+              }
+            }
+          }
+        },
+        "total_storage_device_count": {
+          "type": "integer",
+          "description": "ストレージ構成物理デバイス数の合計"
+        }
+      }
+    },
+    "cached_power_status": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "キャッシュされた電源状態(未キャッシュならば`null`)",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "on",
+            "off"
+          ],
+          "description": "電源状態"
+        },
+        "stored": {
+          "type": "string",
+          "format": "date-time",
+          "description": "電源状態キャッシュの保存時刻"
+        }
+      }
+    },
+    "ipv4": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "グローバルIPアドレス割り当て情報(未設定時は`null`)",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "common_ip_address",
+            "dedicated_ip_address"
+          ],
+          "description": "IPアドレスの種類\n\n* `common_ip_address` - 共用グローバルネットワークのIPアドレス\n* `dedicated_ip_address` - 専用グローバルネットワークのIPアドレス(割り当て設定が必要)"
+        },
+        "ip_address": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "IPアドレス"
+        },
+        "network_address": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "ネットワークアドレス"
+        },
+        "prefix_length": {
+          "type": "integer",
+          "description": "ネットワーク長"
+        },
+        "gateway_address": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "ゲートウェイアドレス"
+        },
+        "name_servers": {
+          "type": "array",
+          "description": "DNSサーバーリスト",
+          "items": {
+            "type": "string",
+            "format": "ipv4",
+            "description": "DNSサーバーIPアドレス"
+          }
+        }
+      }
+    },
+    "port_channels": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/port_channel"
+      }
+    },
+    "ports": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/interface_port"
+      }
+    },
+    "lock_status": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "os_install",
+        "configure_raid",
+        "administrative_lock"
+      ],
+      "description": "設定変更処理によるロック状態\n`null`以外がセットされている場合は\nOS再インストール,ネットワークIF設定(VLAN,通信無効など),電源操作を受け付けない\n\n* `os_install` - OSインストール処理中\n* `configure_raid` - RAID設定処理中\n* `administrative_lock` - 機器交換,増設などの作業を行っている\n* `null` - 設定変更を行っていない(処理を完了している)"
+    }
+  },
+  "$defs": {
+    "interface_port": {
+      "type": "object",
+      "description": "ネットワークインターフェースの接続ポート情報",
+      "properties": {
+        "port_id": {
+          "type": "integer",
+          "description": "ポートID"
+        },
+        "nickname": {
+          "type": "string",
+          "description": "インターフェース名称"
+        },
+        "port_channel_id": {
+          "type": "integer",
+          "description": "所属ポートチャネルID"
+        },
+        "mode": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "access",
+            "trunk"
+          ],
+          "description": "動作モード(初期化後の未設定時は`null`)"
+        },
+        "global_bandwidth_mbps": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "グローバル側の帯域幅(Mbps)\nボンディングされている場合は合計値"
+        },
+        "local_bandwidth_mbps": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "ローカル側の帯域幅(Mbps)\nボンディングされている場合は合計値"
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "ポート有効状態(通信が有効になっている場合 `true`)"
+        },
+        "internet": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "description": "グローバルネットワーク情報\nこのポートにインターネット接続が割り当てられていない場合は`null`",
+          "properties": {
+            "subnet_type": {
+              "type": "string",
+              "enum": [
+                "common_subnet",
+                "dedicated_subnet"
+              ],
+              "description": "グローバルネットワーク分類\n\n* `common_subnet` - 共用グローバルネットワークのIPアドレスを割り当て\n* `dedicated_subnet` - 専用グローバルネットワーク割り当て"
+            },
+            "dedicated_subnet": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "description": "専用グローバルネットワーク情報(共用グローバルネットワーク割り当て時は`null`)",
+              "properties": {
+                "dedicated_subnet_id": {
+                  "type": "string",
+                  "description": "専用グローバルネットワークのサービスコード"
+                },
+                "nickname": {
+                  "type": "string",
+                  "description": "専用グローバルネットワークに設定した名称"
+                }
+              }
+            },
+            "network_address": {
+              "type": "string",
+              "format": "ipv4",
+              "description": "ネットワークアドレス"
+            },
+            "prefix_length": {
+              "type": "integer",
+              "description": "ネットワーク長"
+            }
+          }
+        },
+        "private_networks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "description": "ローカルネットワーク情報",
+            "properties": {
+              "private_network_id": {
+                "type": "string",
+                "description": "ローカルネットワークID"
+              },
+              "nickname": {
+                "type": "string",
+                "description": "ローカルネットワークに設定した名称"
+              }
+            }
+          }
+        }
+      }
+    },
+    "port_channel": {
+      "type": "object",
+      "description": "ネットワークインターフェース ポートチャネル情報",
+      "properties": {
+        "port_channel_id": {
+          "type": "integer",
+          "description": "ポートチャネルID"
+        },
+        "bonding_type": {
+          "type": "string",
+          "enum": [
+            "lacp",
+            "static",
+            "single"
+          ],
+          "description": "ボンディング方式\n\n* `lacp` - LACP\n* `static` - static link aggregation\n* `single` - ボンディングなし(単体構成)"
+        },
+        "ports": {
+          "type": "array",
+          "description": "ポートチャネルを構成するポートIDのリスト",
+          "items": {
+            "type": "integer",
+            "description": "ポートID"
+          },
+          "maxItems": 2,
+          "minItems": 2
+        },
+        "locked": {
+          "type": "boolean",
+          "description": "設定変更によるロック状態(ロック中の場合は `true`)"
+        },
+        "link_speed_type": {
+          "type": "string",
+          "enum": [
+            "1gbe",
+            "10gbe"
+          ],
+          "description": "提供速度分類\n\n* `1gbe` - 1GbE\n* `10gbe` - 10GbE"
+        }
+      }
+    },
+    "service_quiet": {
+      "type": "object",
+      "description": "サービス情報",
+      "properties": {
+        "service_id": {
+          "type": "string",
+          "description": "サービスコード"
+        },
+        "nickname": {
+          "type": "string",
+          "description": "名称：サーバーやネットワークなどの表示名"
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "メモ：サーバーやネットワークなどの説明"
+        },
+        "activated": {
+          "type": "string",
+          "format": "date-time",
+          "description": "利用開始日時"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/tag"
+          }
+        }
+      }
+    },
+    "tag": {
+      "type": "object",
+      "properties": {
+        "tag_id": {
+          "type": "integer",
+          "description": "タグID"
+        },
+        "label": {
+          "type": "string",
+          "description": "タグの名称"
+        },
+        "color": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "タグの色"
+        }
+      }
+    }
+  }
+}

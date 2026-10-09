@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-interface-port-schema.json",
+  "title": "interface_port",
+  "description": "ネットワークインターフェースの接続ポート情報",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-phy-openapi.yml#/components/schemas/interface_port",
+  "type": "object",
+  "properties": {
+    "port_id": {
+      "type": "integer",
+      "description": "ポートID"
+    },
+    "nickname": {
+      "type": "string",
+      "description": "インターフェース名称"
+    },
+    "port_channel_id": {
+      "type": "integer",
+      "description": "所属ポートチャネルID"
+    },
+    "mode": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "access",
+        "trunk"
+      ],
+      "description": "動作モード(初期化後の未設定時は`null`)"
+    },
+    "global_bandwidth_mbps": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "グローバル側の帯域幅(Mbps)\nボンディングされている場合は合計値"
+    },
+    "local_bandwidth_mbps": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "ローカル側の帯域幅(Mbps)\nボンディングされている場合は合計値"
+    },
+    "enabled": {
+      "type": "boolean",
+      "description": "ポート有効状態(通信が有効になっている場合 `true`)"
+    },
+    "internet": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "グローバルネットワーク情報\nこのポートにインターネット接続が割り当てられていない場合は`null`",
+      "properties": {
+        "subnet_type": {
+          "type": "string",
+          "enum": [
+            "common_subnet",
+            "dedicated_subnet"
+          ],
+          "description": "グローバルネットワーク分類\n\n* `common_subnet` - 共用グローバルネットワークのIPアドレスを割り当て\n* `dedicated_subnet` - 専用グローバルネットワーク割り当て"
+        },
+        "dedicated_subnet": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "description": "専用グローバルネットワーク情報(共用グローバルネットワーク割り当て時は`null`)",
+          "properties": {
+            "dedicated_subnet_id": {
+              "type": "string",
+              "description": "専用グローバルネットワークのサービスコード"
+            },
+            "nickname": {
+              "type": "string",
+              "description": "専用グローバルネットワークに設定した名称"
+            }
+          }
+        },
+        "network_address": {
+          "type": "string",
+          "format": "ipv4",
+          "description": "ネットワークアドレス"
+        },
+        "prefix_length": {
+          "type": "integer",
+          "description": "ネットワーク長"
+        }
+      }
+    },
+    "private_networks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "ローカルネットワーク情報",
+        "properties": {
+          "private_network_id": {
+            "type": "string",
+            "description": "ローカルネットワークID"
+          },
+          "nickname": {
+            "type": "string",
+            "description": "ローカルネットワークに設定した名称"
+          }
+        }
+      }
+    }
+  }
+}

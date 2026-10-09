@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-search-post-request-body-schema.json",
+  "title": "SearchPostRequestBody",
+  "description": "検索機能の作成APIで受信するリクエストボディ",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-addon-openapi.yml#/components/schemas/SearchPostRequestBody",
+  "required": [
+    "location",
+    "partitionCount",
+    "replicaCount",
+    "sku"
+  ],
+  "type": "object",
+  "properties": {
+    "location": {
+      "minLength": 1,
+      "enum": [
+        "japaneast"
+      ],
+      "type": "string",
+      "description": "デプロイ先のリージョン"
+    },
+    "sku": {
+      "$ref": "#/$defs/SearchSku"
+    },
+    "skuString": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Azure AI SearchのSKUのBicepパラメータ用文字列",
+      "readOnly": true
+    },
+    "replicaCount": {
+      "maximum": 12,
+      "minimum": 1,
+      "type": "integer",
+      "description": "AI Searchのレプリカ数を指定します。\r\n選択したSKUに応じて、指定可能な値は次の通りです。\r\n- 1: 全SKUで指定可能\r\n- 2, 3: Free 以外のSKUで指定可能\r\n- 4 ～ 12: Free、Basic 以外のSKUで指定可能",
+      "format": "int32"
+    },
+    "partitionCount": {
+      "enum": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "6",
+        "12"
+      ],
+      "type": "integer",
+      "description": "AI Searchのパーティション数を指定します。\r\n指定できる値は 1, 2, 3, 4, 6, 12 のいずれかです。\r\n選択したSKUに応じて、指定可能な値は次の通りです。\r\n- 1: 全SKUで指定可能\r\n- 2, 3: Free 以外のSKUで指定可能\r\n- 4, 6, 12: Free、Basic、Standard3HD 以外のSKUで指定可能\r\n\r\nまた、レプリカ数 × パーティション数は次の範囲にしてください。\r\n- 1: SKUにFreeを指定する場合\r\n- 1 ～ 9: SKUにBasicを指定する場合\r\n- 1 ～ 36: Free、Basic 以外のSKUを指定する場合",
+      "format": "int32"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "SearchSku": {
+      "enum": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "type": "integer",
+      "description": "AI SearchのSKUを指定します。\r\n指定値とSKUの対応は次の通りです。\r\n- 1: Free\r\n- 2: Basic\r\n- 3: Standard\r\n- 4: Standard2\r\n- 5: Standard3\r\n- 6: Standard3HD\r\n- 7: StorageOptimizedL1\r\n- 8: StorageOptimizedL2",
+      "format": "int32"
+    }
+  }
+}

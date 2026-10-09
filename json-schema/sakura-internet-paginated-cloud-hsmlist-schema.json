@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-paginated-cloud-hsmlist-schema.json",
+  "title": "PaginatedCloudHSMList",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-security-encryption-openapi.yml#/components/schemas/PaginatedCloudHSMList",
+  "type": "object",
+  "required": [
+    "Count",
+    "From",
+    "Total",
+    "CloudHSMs",
+    "is_ok"
+  ],
+  "properties": {
+    "Count": {
+      "type": "integer"
+    },
+    "From": {
+      "type": "integer"
+    },
+    "Total": {
+      "type": "integer"
+    },
+    "CloudHSMs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/CloudHSM"
+      }
+    },
+    "is_ok": {
+      "type": "boolean"
+    }
+  },
+  "$defs": {
+    "CloudHSM": {
+      "type": "object",
+      "properties": {
+        "ID": {
+          "type": "string",
+          "readOnly": true
+        },
+        "CreatedAt": {
+          "$ref": "#/$defs/DateTime"
+        },
+        "ModifiedAt": {
+          "$ref": "#/$defs/DateTime"
+        },
+        "ServiceClass": {
+          "enum": [
+            "cloud/cloudhsm/partition"
+          ],
+          "type": "string",
+          "description": "* `cloud/cloudhsm/partition` - Type-L7",
+          "x-spec-enum-id": "aec33bb088a5c108",
+          "readOnly": true,
+          "title": "サービスクラス"
+        },
+        "Availability": {
+          "enum": [
+            "precreate",
+            "available",
+            "discontinued"
+          ],
+          "type": "string",
+          "description": "* `precreate` - 準備中\n* `available` - 利用可能\n* `discontinued` - 廃止",
+          "x-spec-enum-id": "329069c36229258c",
+          "readOnly": true,
+          "title": "状態"
+        },
+        "Name": {
+          "type": "string",
+          "title": "名前",
+          "maxLength": 255
+        },
+        "Description": {
+          "type": "string",
+          "title": "説明"
+        },
+        "Tags": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "IPv4NetworkAddress": {
+          "type": "string",
+          "title": "IPv4ネットワークアドレス"
+        },
+        "IPv4PrefixLength": {
+          "type": "integer",
+          "title": "IPv4プレフィックス長"
+        },
+        "IPv4Address": {
+          "type": "string",
+          "readOnly": true
+        },
+        "LocalRouter": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/LocalRouter"
+            }
+          ],
+          "nullable": true,
+          "readOnly": true
+        },
+        "InitialData": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/CloudHSMInitialData"
+            }
+          ],
+          "nullable": true,
+          "readOnly": true
+        }
+      },
+      "required": [
+        "Availability",
+        "CreatedAt",
+        "Description",
+        "ID",
+        "InitialData",
+        "IPv4Address",
+        "IPv4NetworkAddress",
+        "IPv4PrefixLength",
+        "LocalRouter",
+        "ModifiedAt",
+        "Name",
+        "ServiceClass",
+        "Tags"
+      ]
+    },
+    "CloudHSMInitialData": {
+      "type": "object",
+      "properties": {
+        "PartitionName": {
+          "type": "string",
+          "title": "HSM 上のパーティション名"
+        },
+        "Certificate": {
+          "type": "string",
+          "title": "HSM のサーバー証明書"
+        },
+        "PartitionID": {
+          "type": "string",
+          "title": "HSM 上のパーティション ID"
+        }
+      },
+      "required": [
+        "Certificate",
+        "PartitionID",
+        "PartitionName"
+      ]
+    },
+    "DateTime": {
+      "type": "string",
+      "format": "iso8601"
+    },
+    "LocalRouter": {
+      "type": "object",
+      "properties": {
+        "ResourceID": {
+          "type": "string"
+        },
+        "SecretKey": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

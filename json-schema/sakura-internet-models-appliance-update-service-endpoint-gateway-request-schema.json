@@ -1,0 +1,176 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-models-appliance-update-service-endpoint-gateway-request-schema.json",
+  "title": "Models.Appliance.UpdateServiceEndpointGatewayRequest",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-seg-openapi.yml#/components/schemas/Models.Appliance.UpdateServiceEndpointGatewayRequest",
+  "type": "object",
+  "required": [
+    "Appliance"
+  ],
+  "properties": {
+    "Appliance": {
+      "$ref": "#/$defs/Models.Appliance.ApplianceUpdateBody"
+    }
+  },
+  "$defs": {
+    "Models.Appliance.ApplianceUpdateBody": {
+      "type": "object",
+      "required": [
+        "Settings"
+      ],
+      "properties": {
+        "Settings": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Models.Settings.ApplianceSettings"
+            }
+          ],
+          "description": "設定情報"
+        }
+      }
+    },
+    "Models.Settings.ApplianceSettings": {
+      "type": "object",
+      "required": [
+        "ServiceEndpointGateway"
+      ],
+      "properties": {
+        "ServiceEndpointGateway": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Models.Settings.ServiceEndpointGatewaySettings"
+            }
+          ],
+          "description": "サービスエンドポイントゲートウェイの設定情報"
+        }
+      }
+    },
+    "Models.Settings.DNSForwardingSettings": {
+      "type": "object",
+      "required": [
+        "Enabled"
+      ],
+      "properties": {
+        "Enabled": {
+          "type": "string",
+          "enum": [
+            "True",
+            "False"
+          ],
+          "description": "有効化・無効化の選択"
+        },
+        "PrivateHostedZone": {
+          "type": "string",
+          "description": "ゾーン名"
+        },
+        "UpstreamDNS1": {
+          "type": "string",
+          "description": "フォワード先のDNSサーバ(1)"
+        },
+        "UpstreamDNS2": {
+          "type": "string",
+          "description": "フォワード先のDNSサーバ(2)"
+        }
+      }
+    },
+    "Models.Settings.EnabledService": {
+      "type": "object",
+      "required": [
+        "Type",
+        "Config"
+      ],
+      "properties": {
+        "Type": {
+          "type": "string",
+          "enum": [
+            "ObjectStorage",
+            "ContainerRegistry",
+            "MonitoringSuite",
+            "AIEngine",
+            "SimpleAI",
+            "AppRunDedicatedControlPlane"
+          ],
+          "description": "接続先マネージドサービス\n\n| Type | 説明 |\n|---|---|\n| ObjectStorage | オブジェクトストレージ |\n| ContainerRegistry | コンテナレジストリ |\n| MonitoringSuite | モニタリングスイート |\n| AIEngine | AI Engine |\n| SimpleAI | シンプルAI |\n| AppRunDedicatedControlPlane | AppRun専有型コントロールプレーン |"
+        },
+        "Config": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Models.Settings.ServiceConfig"
+            }
+          ],
+          "description": "接続先マネージドサービスの設定"
+        }
+      }
+    },
+    "Models.Settings.MonitoringSuiteSettings": {
+      "type": "object",
+      "required": [
+        "Enabled"
+      ],
+      "properties": {
+        "Enabled": {
+          "type": "string",
+          "enum": [
+            "True",
+            "False"
+          ],
+          "description": "有効化・無効化の選択"
+        }
+      }
+    },
+    "Models.Settings.ServiceConfig": {
+      "type": "object",
+      "properties": {
+        "Endpoints": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "### ObjectStorage Type\nエンドポイントは以下に限定されます。\n\n| 名前 | エンドポイント |\n|---|---|\n| 石狩第1サイト | `s3.isk01.sakurastorage.jp` |\n| 東京第1サイト | `s3.tky01.sakurastorage.jp` |\n| 東京第1サイト（アーカイブプラン） | `s3.arc02.sakurastorage.jp` |\n\n### ContainerRegistry Type\nsakuracr.jp のサブドメインを指定してください。\n\n### MonitoringSuite Type\nモニタリングスイートのログストレージ・メトリクスストレージのエンドポイントを指定してください。\n\n| ストレージ | エンドポイントの形式 |\n|---|---|\n| ログストレージ | `[0-9]{12}.logs.monitoring.global.api.sacloud.jp` |\n| メトリクスストレージ | `[0-9]{12}.metrics.monitoring.global.api.sacloud.jp` |\n\n### AIEngine Type\nエンドポイントは以下に限定されます。\n\n- api.ai.sakura.ad.jp\n\n### SimpleAI Type\nエンドポイントは以下に限定されます。\n\n- simpleai.is1.api.sacloud.jp\n\n### AppRunDedicatedControlPlane Type\nエンドポイントは指定できません。"
+        },
+        "Mode": {
+          "type": "string",
+          "enum": [
+            "Managed",
+            ""
+          ],
+          "description": "接続先マネージドサービスのエンドポイントの自動設定モード。\n\nAppRunDedicatedControlPlaneのみ利用できます。"
+        }
+      }
+    },
+    "Models.Settings.ServiceEndpointGatewaySettings": {
+      "type": "object",
+      "required": [
+        "EnabledServices"
+      ],
+      "properties": {
+        "EnabledServices": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Models.Settings.EnabledService"
+          },
+          "description": "接続先マネージドサービスの設定"
+        },
+        "MonitoringSuite": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Models.Settings.MonitoringSuiteSettings"
+            }
+          ],
+          "description": "モニタリングスイート連携の設定"
+        },
+        "DNSForwarding": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Models.Settings.DNSForwardingSettings"
+            }
+          ],
+          "description": "DNSプライベートホストゾーンの設定"
+        }
+      }
+    }
+  }
+}

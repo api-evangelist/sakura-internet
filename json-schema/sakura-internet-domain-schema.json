@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-domain-schema.json",
+  "title": "Domain",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-apigw-openapi.yml#/components/schemas/Domain",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "#/$defs/Model"
+    },
+    {
+      "properties": {
+        "domainName": {
+          "type": "string",
+          "description": "ドメイン名<br>ドメイン名はドメイン名形式を指定する<br>IPv4アドレス及びワイルドカード（*）を指定できない<br>大文字を含めることはできない",
+          "pattern": "^\\s*(([a-z\\d]([a-z\\d-]*[a-z\\d])?)\\.)+([a-z\\d-]{2,})(\\.)?\\s*$"
+        },
+        "certificateId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "証明書のID"
+        },
+        "certificateName": {
+          "type": "string",
+          "description": "証明書の識別名",
+          "readOnly": true
+        }
+      }
+    },
+    {
+      "required": [
+        "domainName"
+      ]
+    }
+  ],
+  "$defs": {
+    "Model": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true,
+          "description": "Entityを識別するためのID"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "作成日時"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "更新日時"
+        }
+      },
+      "description": "各Entity共通のモデル"
+    }
+  }
+}

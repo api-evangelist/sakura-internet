@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-bucket-penalty-schema.json",
+  "title": "BucketPenalty",
+  "description": "Bucket penalty",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-objectstorage-openapi.yml#/components/schemas/BucketPenalty",
+  "type": "object",
+  "required": [
+    "data"
+  ],
+  "properties": {
+    "data": {
+      "type": "object",
+      "required": [
+        "num_objects_per_bucket",
+        "amount_gib_per_bucket"
+      ],
+      "properties": {
+        "num_objects_per_bucket": {
+          "type": "object",
+          "required": [
+            "val",
+            "quota",
+            "is_applied"
+          ],
+          "properties": {
+            "val": {
+              "type": "integer"
+            },
+            "quota": {
+              "type": "integer"
+            },
+            "is_applied": {
+              "type": "boolean"
+            }
+          }
+        },
+        "amount_gib_per_bucket": {
+          "type": "object",
+          "required": [
+            "val",
+            "quota",
+            "is_applied"
+          ],
+          "properties": {
+            "val": {
+              "type": "number",
+              "format": "float"
+            },
+            "quota": {
+              "type": "number",
+              "format": "float"
+            },
+            "is_applied": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    }
+  }
+}

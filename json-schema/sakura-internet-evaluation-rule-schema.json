@@ -1,0 +1,411 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-evaluation-rule-schema.json",
+  "title": "EvaluationRule",
+  "description": "プロジェクトに適用できるセキュリティ評価ルールを表す。",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-security-control-openapi.yml#/components/schemas/EvaluationRule",
+  "type": "object",
+  "required": [
+    "rule",
+    "iamRolesRequired",
+    "isEnabled"
+  ],
+  "properties": {
+    "rule": {
+      "$ref": "#/$defs/EvaluationRuleUnion"
+    },
+    "description": {
+      "type": "string",
+      "description": "評価ルールの説明。",
+      "readOnly": true
+    },
+    "iamRolesRequired": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "評価ルールを適用するために必要なIAMロールの一覧。",
+      "readOnly": true
+    },
+    "isEnabled": {
+      "type": "boolean",
+      "description": "ルールが有効かどうか。"
+    }
+  },
+  "$defs": {
+    "AddonDatalakeNoPublicAccess": {
+      "type": "object",
+      "required": [
+        "evaluationRuleId"
+      ],
+      "properties": {
+        "evaluationRuleId": {
+          "type": "string",
+          "enum": [
+            "addon-datalake-no-public-access"
+          ]
+        },
+        "parameter": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/EvaluationRuleParameters.EvaluationTarget"
+            }
+          ]
+        }
+      }
+    },
+    "AddonDwhNoPublicAccess": {
+      "type": "object",
+      "required": [
+        "evaluationRuleId"
+      ],
+      "properties": {
+        "evaluationRuleId": {
+          "type": "string",
+          "enum": [
+            "addon-dwh-no-public-access"
+          ]
+        },
+        "parameter": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/EvaluationRuleParameters.EvaluationTarget"
+            }
+          ]
+        }
+      }
+    },
+    "AddonThreatDetectionEnabled": {
+      "type": "object",
+      "required": [
+        "evaluationRuleId"
+      ],
+      "properties": {
+        "evaluationRuleId": {
+          "type": "string",
+          "enum": [
+            "addon-threat-detection-enabled"
+          ]
+        },
+        "parameter": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/EvaluationRuleParameters.ZonedEvaluationTarget"
+            }
+          ]
+        }
+      }
+    },
+    "AddonThreatDetections": {
+      "type": "object",
+      "required": [
+        "evaluationRuleId"
+      ],
+      "properties": {
+        "evaluationRuleId": {
+          "type": "string",
+          "enum": [
+            "addon-threat-detections"
+          ]
+        }
+      }
+    },
+    "AddonVulnerabilityDetections": {
+      "type": "object",
+      "required": [
+        "evaluationRuleId"
+      ],
+      "properties": {
+        "evaluationRuleId": {
+          "type": "string",
+          "enum": [
+            "addon-vulnerability-detections"
+          ]
+        }
+      }
+    },
+    "DbaEncryptionEnabled": {
+      "type": "object",
+      "required": [
+        "evaluationRuleId"
+      ],
+      "properties": {
+        "evaluationRuleId": {
+          "type": "string",
+          "enum": [
+            "dba-encryption-enabled"
+          ]
+        },
+        "parameter": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/EvaluationRuleParameters.ZonedEvaluationTarget"
+            }
+          ]
+        }
+      }
+    },
+    "DbaNoPublicIP": {
+      "type": "object",
+      "required": [
+        "evaluationRuleId"
+      ],
+      "properties": {
+        "evaluationRuleId": {
+          "type": "string",
+          "enum": [
+            "dba-no-public-ip"
+          ]
+        },
+        "parameter": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/EvaluationRuleParameters.ZonedEvaluationTarget"
+            }
+          ]
+        }
+      }
+    },
+    "DiskEncryptionEnabled": {
+      "type": "object",
+      "required": [
+        "evaluationRuleId"
+      ],
+      "properties": {
+        "evaluationRuleId": {
+          "type": "string",
+          "enum": [
+            "disk-encryption-enabled"
+          ]
+        },
+        "parameter": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/EvaluationRuleParameters.ZonedEvaluationTarget"
+            }
+          ]
+        }
+      }
+    },
+    "ELBLoggingEnabled": {
+      "type": "object",
+      "required": [
+        "evaluationRuleId"
+      ],
+      "properties": {
+        "evaluationRuleId": {
+          "type": "string",
+          "enum": [
+            "elb-logging-enabled"
+          ]
+        },
+        "parameter": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/EvaluationRuleParameters.EvaluationTarget"
+            }
+          ]
+        }
+      }
+    },
+    "EvaluationRuleParameters.EvaluationTarget": {
+      "type": "object",
+      "properties": {
+        "servicePrincipalId": {
+          "type": "string",
+          "description": "評価対象リソースに対する読み取り権限を持つサービスプリンシパルのID。未指定の場合はセキュリティコントロール有効化時に設定されたサービスプリンシパルが使用される。"
+        }
+      },
+      "description": "すべての評価ルールに共通する最小セットのパラメータ。"
+    },
+    "EvaluationRuleParameters.ObjectStorageEvaluationTarget": {
+      "type": "object",
+      "properties": {
+        "servicePrincipalId": {
+          "type": "string",
+          "description": "評価対象リソースに対する読み取り権限を持つサービスプリンシパルのID。未指定の場合はセキュリティコントロール有効化時に設定されたサービスプリンシパルが使用される。"
+        },
+        "sites": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "評価対象のオブジェクトストレージ用サイトを指定。未指定または空配列の場合はすべてのサイトが対象となる。"
+        }
+      },
+      "description": "サービスプリンシパルIDと評価対象のオブジェクトストレージ用サイト配列を要求するパラメータ。\nオブジェクトストレージに関連する評価ルールで使用される。\n`sites == []` の場合は「全サイト対象」の意味。"
+    },
+    "EvaluationRuleParameters.ZonedEvaluationTarget": {
+      "type": "object",
+      "properties": {
+        "servicePrincipalId": {
+          "type": "string",
+          "description": "評価対象リソースに対する読み取り権限を持つサービスプリンシパルのID。未指定の場合はセキュリティコントロール有効化時に設定されたサービスプリンシパルが使用される。"
+        },
+        "zones": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "評価対象ゾーンを指定。未指定または空配列の場合はすべてのゾーンが対象となる。"
+        }
+      },
+      "description": "サービスプリンシパルIDと評価対象ゾーン配列を要求するパラメータ。\n`zones == []` の場合は「全ゾーン対象」の意味。"
+    },
+    "EvaluationRuleUnion": {
+      "type": "object",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/ServerNoPublicIP"
+        },
+        {
+          "$ref": "#/$defs/DiskEncryptionEnabled"
+        },
+        {
+          "$ref": "#/$defs/DbaEncryptionEnabled"
+        },
+        {
+          "$ref": "#/$defs/DbaNoPublicIP"
+        },
+        {
+          "$ref": "#/$defs/ObjectStorageBucketACLChanged"
+        },
+        {
+          "$ref": "#/$defs/ObjectStorageBucketEncryptionEnabled"
+        },
+        {
+          "$ref": "#/$defs/AddonDatalakeNoPublicAccess"
+        },
+        {
+          "$ref": "#/$defs/AddonDwhNoPublicAccess"
+        },
+        {
+          "$ref": "#/$defs/AddonThreatDetectionEnabled"
+        },
+        {
+          "$ref": "#/$defs/ELBLoggingEnabled"
+        },
+        {
+          "$ref": "#/$defs/IAMMemberOperationDetected"
+        },
+        {
+          "$ref": "#/$defs/NoSQLEncryptionEnabled"
+        },
+        {
+          "$ref": "#/$defs/AddonThreatDetections"
+        },
+        {
+          "$ref": "#/$defs/AddonVulnerabilityDetections"
+        }
+      ]
+    },
+    "IAMMemberOperationDetected": {
+      "type": "object",
+      "required": [
+        "evaluationRuleId"
+      ],
+      "properties": {
+        "evaluationRuleId": {
+          "type": "string",
+          "enum": [
+            "iam-member-operation-detected"
+          ]
+        },
+        "parameter": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/EvaluationRuleParameters.EvaluationTarget"
+            }
+          ]
+        }
+      }
+    },
+    "NoSQLEncryptionEnabled": {
+      "type": "object",
+      "required": [
+        "evaluationRuleId"
+      ],
+      "properties": {
+        "evaluationRuleId": {
+          "type": "string",
+          "enum": [
+            "nosql-encryption-enabled"
+          ]
+        },
+        "parameter": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/EvaluationRuleParameters.ZonedEvaluationTarget"
+            }
+          ]
+        }
+      }
+    },
+    "ObjectStorageBucketACLChanged": {
+      "type": "object",
+      "required": [
+        "evaluationRuleId"
+      ],
+      "properties": {
+        "evaluationRuleId": {
+          "type": "string",
+          "enum": [
+            "objectstorage-bucket-acl-changed"
+          ]
+        },
+        "parameter": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/EvaluationRuleParameters.EvaluationTarget"
+            }
+          ]
+        }
+      }
+    },
+    "ObjectStorageBucketEncryptionEnabled": {
+      "type": "object",
+      "required": [
+        "evaluationRuleId"
+      ],
+      "properties": {
+        "evaluationRuleId": {
+          "type": "string",
+          "enum": [
+            "objectstorage-bucket-encryption-enabled"
+          ]
+        },
+        "parameter": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/EvaluationRuleParameters.ObjectStorageEvaluationTarget"
+            }
+          ]
+        }
+      }
+    },
+    "ServerNoPublicIP": {
+      "type": "object",
+      "required": [
+        "evaluationRuleId"
+      ],
+      "properties": {
+        "evaluationRuleId": {
+          "type": "string",
+          "enum": [
+            "server-no-public-ip"
+          ]
+        },
+        "parameter": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/EvaluationRuleParameters.ZonedEvaluationTarget"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

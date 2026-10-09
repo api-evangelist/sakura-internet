@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-put-common-service-item-request-schema.json",
+  "title": "PutCommonServiceItemRequest",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-simple-notification-openapi.yml#/components/schemas/PutCommonServiceItemRequest",
+  "type": "object",
+  "properties": {
+    "CommonServiceItem": {
+      "type": "object",
+      "properties": {
+        "Name": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "Tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "Icon": {
+          "$ref": "#/$defs/CommonServiceItemIcon"
+        },
+        "Settings": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/CommonServiceItemDestinationSettings"
+            },
+            {
+              "$ref": "#/$defs/CommonServiceItemGroupSettings"
+            },
+            {
+              "$ref": "#/$defs/CommonServiceItemRoutingSettings"
+            }
+          ]
+        }
+      },
+      "required": [
+        "Name",
+        "Description",
+        "Tags",
+        "Icon"
+      ]
+    }
+  },
+  "required": [
+    "CommonServiceItem"
+  ],
+  "$defs": {
+    "CommonServiceItemDestinationSettings": {
+      "type": "object",
+      "properties": {
+        "Type": {
+          "type": "string",
+          "enum": [
+            "email",
+            "webhook"
+          ]
+        },
+        "Value": {
+          "type": "string"
+        },
+        "Disabled": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "Type",
+        "Value"
+      ]
+    },
+    "CommonServiceItemGroupSettings": {
+      "type": "object",
+      "properties": {
+        "Destinations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9]{12}$"
+          }
+        },
+        "Disabled": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "Destinations"
+      ]
+    },
+    "CommonServiceItemIcon": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "ID": {
+          "type": "string"
+        },
+        "URL": {
+          "type": "string"
+        },
+        "Name": {
+          "type": "string"
+        },
+        "Scope": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ID"
+      ]
+    },
+    "CommonServiceItemRoutingSettings": {
+      "type": "object",
+      "properties": {
+        "MatchLabels": {
+          "items": {
+            "properties": {
+              "Name": {
+                "type": "string",
+                "maxLength": 64,
+                "pattern": "^[a-zA-Z0-9_-]*$"
+              },
+              "Value": {
+                "type": "string",
+                "maxLength": 64,
+                "pattern": "^[\\x20-\\x7E]*$"
+              }
+            },
+            "required": [
+              "Name",
+              "Value"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "SourceID": {
+          "pattern": "^[0-9]{1,12}$",
+          "type": "string"
+        },
+        "TargetGroupID": {
+          "pattern": "^[0-9]{1,12}$",
+          "type": "string"
+        },
+        "PriorityRank": {
+          "maximum": 100,
+          "minimum": 1,
+          "type": "integer",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "SourceID",
+        "MatchLabels",
+        "TargetGroupID",
+        "PriorityRank"
+      ]
+    }
+  }
+}

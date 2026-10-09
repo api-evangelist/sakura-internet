@@ -1,0 +1,216 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-read-worker-node-response-schema.json",
+  "title": "ReadWorkerNodeResponse",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-apprun-dedicated-openapi.yml#/components/schemas/ReadWorkerNodeResponse",
+  "type": "object",
+  "required": [
+    "workerNode"
+  ],
+  "properties": {
+    "workerNode": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/WorkerNode"
+        }
+      ],
+      "description": "ワーカノードの詳細"
+    }
+  },
+  "$defs": {
+    "ApplicationID": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "ApplicationVersionNumber": {
+      "type": "integer",
+      "format": "int32",
+      "minimum": 1
+    },
+    "WorkerNode": {
+      "type": "object",
+      "required": [
+        "workerNodeID",
+        "resourceID",
+        "draining",
+        "status",
+        "networkInterfaces",
+        "created",
+        "healthy",
+        "creating",
+        "runningContainers"
+      ],
+      "properties": {
+        "workerNodeID": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/WorkerNodeID"
+            }
+          ],
+          "description": "ワーカノードID"
+        },
+        "resourceID": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "アプライアンスリソースID"
+        },
+        "draining": {
+          "type": "boolean",
+          "description": "ドレイン状態かどうか"
+        },
+        "status": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/WorkerNodeStatus"
+            }
+          ],
+          "description": "ノード状態"
+        },
+        "networkInterfaces": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/WorkerNodeNetworkInterface"
+          },
+          "description": "ネットワークインターフェース情報"
+        },
+        "archiveVersion": {
+          "type": "string",
+          "description": "ノードにインストールされているアーカイブのバージョン"
+        },
+        "created": {
+          "type": "integer",
+          "format": "unixtime",
+          "description": "リソース作成日時：UNIX時間（秒）"
+        },
+        "createErrorMessage": {
+          "type": "string",
+          "description": "ノード作成に関するエラーメッセージ"
+        },
+        "healthy": {
+          "type": "boolean",
+          "description": "ヘルシーかどうか"
+        },
+        "creating": {
+          "type": "boolean",
+          "description": "ワーカノードが作成中かどうか"
+        },
+        "runningContainers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/WorkerNodeRunningContainer"
+          },
+          "description": "実行中コンテナ"
+        }
+      }
+    },
+    "WorkerNodeID": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "WorkerNodeInterfaceAddress": {
+      "type": "object",
+      "required": [
+        "address"
+      ],
+      "properties": {
+        "address": {
+          "type": "string",
+          "description": "アドレス"
+        }
+      }
+    },
+    "WorkerNodeNetworkInterface": {
+      "type": "object",
+      "required": [
+        "interfaceIndex",
+        "addresses"
+      ],
+      "properties": {
+        "interfaceIndex": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 0,
+          "description": "インターフェース番号。eth0 なら 0。eth1 なら 1。"
+        },
+        "addresses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/WorkerNodeInterfaceAddress"
+          },
+          "description": "インターフェースに割り当てられたIPアドレスのリスト"
+        }
+      }
+    },
+    "WorkerNodeRunningContainer": {
+      "type": "object",
+      "required": [
+        "containerID",
+        "name",
+        "state",
+        "status",
+        "image",
+        "startedAt",
+        "applicationID",
+        "applicationVersion"
+      ],
+      "properties": {
+        "containerID": {
+          "type": "string",
+          "description": "コンテナID"
+        },
+        "name": {
+          "type": "string",
+          "description": "コンテナ名"
+        },
+        "state": {
+          "type": "string",
+          "description": "コンテナのステート（created、running、restarting、removing、paused、exited、dead のうちいずれか）"
+        },
+        "status": {
+          "type": "string",
+          "description": "コンテナのステータス"
+        },
+        "image": {
+          "type": "string",
+          "description": "コンテナのイメージ"
+        },
+        "startedAt": {
+          "type": "integer",
+          "format": "unixtime",
+          "description": "コンテナの開始日時：UNIX時間（秒）"
+        },
+        "applicationID": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/ApplicationID"
+            }
+          ],
+          "description": "アプリケーションID"
+        },
+        "applicationVersion": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/ApplicationVersionNumber"
+            }
+          ],
+          "description": "アプリケーションバージョン"
+        }
+      }
+    },
+    "WorkerNodeStatus": {
+      "type": "string",
+      "enum": [
+        "healthy",
+        "unhealthy",
+        "creating",
+        "starting"
+      ],
+      "description": "ワーカノードの状態を表す列挙型"
+    }
+  }
+}

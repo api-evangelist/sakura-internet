@@ -1,0 +1,28 @@
+generated: '2026-10-09'
+method: searched
+source: https://manual.sakura.ad.jp/cloud/server/sandbox.html
+description: >-
+  Sandboxゾーンは、既存のサービス用ゾーンとほぼ同様の条件でコントロールパネルやAPIの操作をお試しいただけるゾーンです。
+  Resources created in the Sandbox zone do not actually function, and no charges are incurred; it is independent
+  of production zones. Same API keys as production; selected by zone (tk1v) rather than by key mode.
+docs:
+- https://manual.sakura.ad.jp/cloud/server/sandbox.html
+- https://manual.sakura.ad.jp/cloud-api/1.1/
+modes:
+- name: Sandbox
+  zone: tk1v
+  base_url: https://secure.sakura.ad.jp/cloud/zone/tk1v/api/cloud/1.1/
+  billing: Sandbox内で作成したすべてのリソースは実際には課金されません。
+  cli: usacloud --zone tk1v server ls
+- name: production zones
+  zones: [tk1a, tk1b, is1a, is1b, is1c]
+limitations:
+- No upload/download of archive or ISO images via FTP(S)
+- No copy from SAKURA VPS or service zones into archives
+- No VNC / console display for servers
+- No internet connectivity for any device
+- Bridge connections cannot be created
+- KMS disk encryption unavailable
+- Activity graphs empty; database appliance backups do not run; logs are dummy data
+- Resources may be deleted without notice if creation volume affects the Sandbox
+scope_note: Documented for the IaaS (cloud/1.1) API zones; the per-service portal APIs do not document a sandbox.

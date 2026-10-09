@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-address-list-response-schema.json",
+  "title": "AddressListResponse",
+  "description": "成功時のレスポンス",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-networking-suite-openapi.yml#/components/schemas/AddressListResponse",
+  "type": "object",
+  "required": [
+    "Total",
+    "From",
+    "Count",
+    "Addresses"
+  ],
+  "properties": {
+    "Total": {
+      "type": "integer",
+      "format": "int32",
+      "description": "対象リソースの総件数"
+    },
+    "From": {
+      "type": "integer",
+      "format": "int32",
+      "description": "現在のページ番号"
+    },
+    "Count": {
+      "type": "integer",
+      "format": "int32",
+      "description": "現在のページの件数"
+    },
+    "Addresses": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ReadAddress"
+      },
+      "description": "アドレス一覧"
+    }
+  },
+  "$defs": {
+    "ReadAddress": {
+      "type": "object",
+      "required": [
+        "SRN",
+        "AddressType",
+        "IPVersion",
+        "IPAddress",
+        "Subnet"
+      ],
+      "properties": {
+        "SRN": {
+          "type": "string",
+          "description": "さくらのリソース名 (SRN)"
+        },
+        "AddressType": {
+          "type": "string",
+          "description": "アドレス種別; `EPHEMERAL_ADDRESS` 固定"
+        },
+        "IPVersion": {
+          "type": "string",
+          "description": "アドレスバージョン; `IPv4` 固定"
+        },
+        "IPAddress": {
+          "type": "string",
+          "description": "IPアドレス"
+        },
+        "Subnet": {
+          "$ref": "#/$defs/SakuraResourceNameRef",
+          "description": "アドレスが属するサブネット"
+        }
+      }
+    },
+    "SakuraResourceNameRef": {
+      "type": "object",
+      "required": [
+        "SRN"
+      ],
+      "properties": {
+        "SRN": {
+          "type": "string",
+          "description": "さくらのリソース名 (SRN)"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,729 @@
+openapi: 3.2.0
+info:
+  title: Sakura Internet Group API
+  version: 2.1.0
+  contact:
+    name: SAKURA internet Inc.
+  description: 'Operations tagged group across 2 of this provider''s published API definitions: iam-api.yaml, sakura-internet-iam-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
+security:
+- ServicePrincipalAuth: []
+tags:
+- name: Group
+  x-displayName: グループ
+  description: グループに関する機能
+paths:
+  /groups:
+    get:
+      operationId: listGroups
+      tags:
+      - Group
+      summary: グループ一覧を取得する
+      parameters:
+      - $ref: '#/components/parameters/PaginationPage'
+      - $ref: '#/components/parameters/PaginationPerPage'
+      - name: ordering
+        in: query
+        description: '並び替えキー
+
+          * `name` - グループ名昇順
+
+          * `-name` - グループ名降順
+
+          '
+        schema:
+          type: string
+          enum:
+          - name
+          - -name
+      - name: compat_user_id
+        in: query
+        description: 所属するユーザIDでの絞り込み
+        schema:
+          type: integer
+          example: 111111111111
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                allOf:
+                - type: object
+                  required:
+                  - items
+                  properties:
+                    items:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Group'
+                - $ref: '#/components/schemas/Pagination'
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+    post:
+      operationId: createGroup
+      tags:
+      - Group
+      summary: グループを作成する
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: マイグループ
+                  description: グループの名前
+                description:
+                  type: string
+                  example: グループの説明
+              required:
+              - name
+              - description
+      responses:
+        '201':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+        '400':
+          description: 不正なリクエスト
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http400BadRequest'
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '409':
+          description: グループ数の上限到達
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http409Conflict'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+        '503':
+          description: 一時的な処理エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http503ServiceUnavailable'
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
+  /groups/{group_id}:
+    parameters:
+    - $ref: '#/components/parameters/GroupID'
+    get:
+      operationId: readGroup
+      tags:
+      - Group
+      summary: 指定したグループを取得する
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '404':
+          description: 指定したグループが存在しない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http404NotFound'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+    put:
+      operationId: updateGroup
+      tags:
+      - Group
+      summary: 指定したグループを更新する
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - name
+              - description
+              properties:
+                name:
+                  type: string
+                  example: グループの名前
+                description:
+                  type: string
+                  example: グループの説明
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+        '400':
+          description: 不正なリクエスト
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http400BadRequest'
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '404':
+          description: 指定したグループが存在しない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http404NotFound'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+        '503':
+          description: 一時的な処理エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http503ServiceUnavailable'
+    delete:
+      operationId: deleteGroup
+      tags:
+      - Group
+      summary: 指定したグループを削除する
+      responses:
+        '204':
+          description: 成功
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '404':
+          description: 指定したグループが存在しない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http404NotFound'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+        '503':
+          description: 一時的な処理エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http503ServiceUnavailable'
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
+  /groups/{group_id}/memberships:
+    parameters:
+    - $ref: '#/components/parameters/GroupID'
+    get:
+      operationId: listMemberships
+      tags:
+      - Group
+      summary: グループの所属情報を取得する
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupMemberships'
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '404':
+          description: 指定したグループが存在しない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http404NotFound'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+    put:
+      operationId: updateMemberships
+      tags:
+      - Group
+      summary: グループの所属情報を更新する
+      requestBody:
+        description: グループの所属情報
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - compat_users
+              properties:
+                compat_users:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                    - id
+                    properties:
+                      id:
+                        type: integer
+                        description: ユーザID
+                        example: 111111111111
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupMemberships'
+        '400':
+          description: 不正なリクエスト
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http400BadRequest'
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '404':
+          description: 指定したグループが存在しない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http404NotFound'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+        '503':
+          description: 一時的な処理エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http503ServiceUnavailable'
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
+components:
+  schemas:
+    Http404NotFound:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 404
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: not_found
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 見つかりませんでした。
+    Http429TooManyRequests:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 429
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: throttled
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: リクエストの処理は絞られました。 60秒後に利用可能になります。
+    Http503ServiceUnavailable:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 503
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: temporary_unavailable
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 一時的にエラーが発生しました。
+    Http409Conflict:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 409
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: conflict
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 状態の競合によりリクエストを処理できません。
+    Http403Forbidden:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 403
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: permission_denied
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: このアクションを実行する権限がありません。
+    GroupMemberships:
+      type: object
+      required:
+      - compat_users
+      properties:
+        compat_users:
+          type: array
+          items:
+            type: object
+            required:
+            - id
+            properties:
+              id:
+                type: integer
+                description: ユーザID
+                example: 111111111111
+    Http400BadRequest:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      - errors
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 400
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: invalid
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 不正な入力です。
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: object
+              required:
+              - message
+              - code
+              properties:
+                message:
+                  type: string
+                  description: エラー内容を説明した文字列
+                code:
+                  type: string
+                  description: エラーの内容を表す文字列
+            description: リクエストボディの特定キーに関するエラー
+          properties:
+            non_field_errors:
+              type: array
+              items:
+                type: object
+                required:
+                - message
+                - code
+                properties:
+                  message:
+                    type: string
+                    description: エラー内容を説明した文字列
+                  code:
+                    type: string
+                    description: エラーの内容を表す文字列
+              description: リクエストボディの特定キーに関係しないエラー
+          example:
+            key1:
+            - message: この項目は必須です。
+              code: required
+            key2:
+            - message: 有効な値ではありません。
+              code: invalid
+            key3:
+            - message: この項目は少なくとも*文字以上にしてください。
+              code: min_length
+            key4:
+            - message: この項目が*文字より長くならないようにしてください。
+              code: max_length
+    Pagination:
+      type: object
+      required:
+      - count
+      - next
+      - previous
+      properties:
+        count:
+          type: integer
+          description: データ総数
+          example: 100
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          description: 次のページへのURL
+          example: https://api.example.com/?page=3&per_page=10
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          description: 前のページへのURL
+          example: https://api.example.com/?per_page=10
+    Group:
+      type: object
+      required:
+      - id
+      - name
+      - description
+      - created_at
+      - updated_at
+      properties:
+        id:
+          type: integer
+          description: グループID
+          readOnly: true
+          example: 1
+        name:
+          type: string
+          description: グループ名
+          example: グループの名前
+        description:
+          type: string
+          description: グループの説明
+          example: グループの説明
+        created_at:
+          type: string
+          description: 作成日時
+          readOnly: true
+          example: 2024-05-02 16:32:23+00:00
+        updated_at:
+          type: string
+          description: 更新日時
+          readOnly: true
+          example: 2024-05-02 16:32:23+00:00
+    Http401Unauthorized:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 401
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: authentication_failed
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 認証情報が含まれていません。
+  parameters:
+    PaginationPage:
+      in: query
+      name: page
+      schema:
+        type: integer
+    GroupID:
+      in: path
+      name: group_id
+      description: グループID
+      required: true
+      schema:
+        type: integer
+    PaginationPerPage:
+      in: query
+      name: per_page
+      schema:
+        type: integer
+  securitySchemes:
+    ServicePrincipalAuth:
+      description: 'サービスプリンシパル認証
+
+        - サービスプリンシパルのアクセストークンを指定
+
+        '
+      type: http
+      scheme: bearer
+    ProjectApiKeyAuth:
+      description: 'APIキー認証
+
+        - ユーザー名に発行したAPIキーのアクセストークンを指定
+
+        - パスワードに発行したAPIキーのアクセストークンシークレットを指定
+
+        '
+      type: http
+      scheme: basic
+x-refined-from:
+- iam-api.yaml
+- sakura-internet-iam-openapi.yml

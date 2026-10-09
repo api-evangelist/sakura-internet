@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-message-schema.json",
+  "title": "Message",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-simplemq-openapi.yml#/components/schemas/Message",
+  "allOf": [
+    {
+      "$ref": "#/$defs/NewMessage"
+    },
+    {
+      "type": "object",
+      "required": [
+        "acquired_at",
+        "visibility_timeout_at"
+      ],
+      "properties": {
+        "acquired_at": {
+          "description": "最新のメッセージ取得時刻 (Epochからのミリ秒)",
+          "type": "integer",
+          "format": "int64"
+        },
+        "visibility_timeout_at": {
+          "description": "可視性タイムアウトする時点 (Epochからのミリ秒)",
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "MessageContent": {
+      "description": "メッセージ本文",
+      "type": "string",
+      "maxLength": 256000,
+      "pattern": "^[0-9a-zA-Z+/=]*$"
+    },
+    "MessageId": {
+      "description": "メッセージID",
+      "type": "string",
+      "minLength": 36,
+      "maxLength": 36,
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    },
+    "NewMessage": {
+      "type": "object",
+      "required": [
+        "id",
+        "content",
+        "created_at",
+        "updated_at",
+        "expires_at"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/MessageId"
+        },
+        "content": {
+          "description": "メッセージ本文",
+          "$ref": "#/$defs/MessageContent"
+        },
+        "created_at": {
+          "description": "登録時刻 (Epochからのミリ秒)",
+          "type": "integer",
+          "format": "int64"
+        },
+        "updated_at": {
+          "description": "更新時刻 (Epochからのミリ秒)",
+          "type": "integer",
+          "format": "int64"
+        },
+        "expires_at": {
+          "description": "未処理メッセージ保存期間が過ぎる時点 (Epochからのミリ秒)",
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    }
+  }
+}

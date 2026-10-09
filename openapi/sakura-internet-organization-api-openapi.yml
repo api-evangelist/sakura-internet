@@ -1,0 +1,775 @@
+openapi: 3.2.0
+info:
+  title: Sakura Internet Organization API
+  version: 2.1.0
+  contact:
+    name: SAKURA internet Inc.
+  description: 'Operations tagged organization across 2 of this provider''s published API definitions: iam-api.yaml, sakura-internet-iam-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
+security:
+- ServicePrincipalAuth: []
+tags:
+- name: Organization
+  x-displayName: 組織
+  description: IAM APIの組織に関する機能
+paths:
+  /organization:
+    get:
+      operationId: readOrganization
+      tags:
+      - Organization
+      summary: 組織を取得する
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '404':
+          description: 指定したSSOプロファイルが存在しない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http404NotFound'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+    put:
+      operationId: updateOrganization
+      tags:
+      - Organization
+      summary: 組織を更新する
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - name
+              properties:
+                name:
+                  type: string
+                  description: 組織名
+                  example: 組織名
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '400':
+          description: 不正なリクエスト
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http400BadRequest'
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
+  /organization-service-policy:
+    put:
+      operationId: updateOrganizationServicePolicy
+      tags:
+      - Organization
+      summary: 組織のサービスポリシーを更新する
+      description: 組織のサービスポリシーを構成するルールの設定値を更新するエンドポイント。設定を更新するルールをリクエストボディで指定する
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - rules
+              properties:
+                rules:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Rule'
+            examples:
+              listAndBoolRules:
+                summary: List型・Bool型の両方を設定する場合
+                value:
+                  rules:
+                  - code: example.rule.list
+                    spec:
+                      contents:
+                      - allow_all: true
+                        deny_all: false
+                        values:
+                          allowed_values:
+                          - example1
+                          - example2
+                    is_active: true
+                    is_dry_run: false
+                  - code: example.rule.bool
+                    spec:
+                      contents:
+                      - enforce: true
+                    is_active: false
+                    is_dry_run: false
+              listRulesAllowAll:
+                summary: List型ルール allow_allを指定する場合
+                value:
+                  rules:
+                  - code: example.rule.list
+                    spec:
+                      contents:
+                      - allow_all: true
+                        deny_all: false
+                        values: {}
+                    is_active: true
+                    is_dry_run: false
+              listRulesDenyAll:
+                summary: List型ルール deny_allを指定する場合
+                value:
+                  rules:
+                  - code: example.rule.list
+                    spec:
+                      contents:
+                      - allow_all: false
+                        deny_all: true
+                        values: {}
+                    is_active: true
+                    is_dry_run: false
+              listRulesAllowedValues:
+                summary: List型ルール allowed_valuesを指定する場合
+                value:
+                  rules:
+                  - code: example.rule.list
+                    spec:
+                      contents:
+                      - allow_all: false
+                        deny_all: false
+                        values:
+                          allowed_values:
+                          - example1
+                          - example2
+                    is_active: true
+                    is_dry_run: false
+              listRulesDeniedValues:
+                summary: List型ルール denied_valuesを指定する場合
+                value:
+                  rules:
+                  - code: example.rule.list
+                    spec:
+                      contents:
+                      - allow_all: false
+                        deny_all: false
+                        values:
+                          denied_values:
+                          - example1
+                          - example2
+                    is_active: true
+                    is_dry_run: false
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rules:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RuleResponse'
+        '400':
+          description: 不正なリクエスト
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http400BadRequest'
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '409':
+          description: サービスポリシーが有効化されていない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http409Conflict'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+    get:
+      operationId: readOrganizationServicePolicy
+      tags:
+      - Organization
+      summary: 組織のサービスポリシーを構成するルールを取得する
+      parameters:
+      - name: is_active
+        in: query
+        description: 有効かどうか
+        schema:
+          type: boolean
+      - name: is_dry_run
+        in: query
+        description: ドライランかどうか
+        schema:
+          type: boolean
+      - name: name
+        in: query
+        description: ルール名
+        schema:
+          type: string
+      - name: code
+        in: query
+        description: ルールのコード
+        schema:
+          type: string
+      - name: type
+        in: query
+        description: ルールのタイプ
+        schema:
+          type: string
+          enum:
+          - bool
+          - list
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rules:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RuleResponse'
+              examples:
+                listRulesActiveDryRun:
+                  summary: List型ルール ルールが有効かつドライランのとき
+                  value:
+                    rules:
+                    - code: example.rule.code1
+                      name: Example List Rule
+                      spec:
+                        contents:
+                        - values:
+                            allowed_values:
+                            - example1
+                            denied_values:
+                            - example2
+                          allow_all: true
+                          deny_all: true
+                      dry_run_spec:
+                        contents:
+                        - values:
+                            allowed_values:
+                            - example1
+                            denied_values:
+                            - example2
+                          allow_all: false
+                          deny_all: true
+                      is_active: true
+                      is_dry_run: true
+                listRulesActiveNotDryRun:
+                  summary: List型ルール ルールが有効かつ非ドライランのとき
+                  value:
+                    rules:
+                    - code: example.rule.code1
+                      name: Example List Rule
+                      spec:
+                        contents:
+                        - values:
+                            allowed_values:
+                            - example1
+                            denied_values:
+                            - example2
+                          allow_all: true
+                          deny_all: true
+                      dry_run_spec:
+                        contents:
+                        - values:
+                            allowed_values:
+                            - example1
+                            denied_values:
+                            - example2
+                          allow_all: false
+                          deny_all: true
+                      is_active: true
+                      is_dry_run: false
+                listRulesDisableDryRun:
+                  summary: List型ルール ルールが無効かつドライランのとき
+                  value:
+                    rules:
+                    - code: example.rule.code1
+                      name: Example List Rule
+                      spec:
+                        contents:
+                        - values:
+                            allowed_values:
+                            - example1
+                            denied_values:
+                            - example2
+                          allow_all: true
+                          deny_all: true
+                      dry_run_spec:
+                        contents:
+                        - values:
+                            allowed_values:
+                            - example1
+                            denied_values:
+                            - example2
+                          allow_all: false
+                          deny_all: true
+                      is_active: false
+                      is_dry_run: true
+                listRulesDisableNotDryRun:
+                  summary: List型ルール ルールが無効かつ非ドライランのとき
+                  value:
+                    rules:
+                    - code: example.rule.code1
+                      name: Example List Rule
+                      spec:
+                        contents:
+                        - values:
+                            allowed_values:
+                            - example1
+                            denied_values:
+                            - example2
+                          allow_all: true
+                          deny_all: true
+                      dry_run_spec:
+                        contents:
+                        - values:
+                            allowed_values:
+                            - example1
+                            denied_values:
+                            - example2
+                          allow_all: false
+                          deny_all: true
+                      is_active: false
+                      is_dry_run: false
+                BoolRulesActiveDryRun:
+                  summary: Bool型ルール ルールが有効かつドライランのとき
+                  value:
+                    rules:
+                    - code: example.rule.code2
+                      name: Example Bool Rule
+                      spec:
+                        contents:
+                        - enforce: true
+                      dry_run_spec:
+                        contents:
+                        - enforce: true
+                      is_active: true
+                      is_dry_run: true
+                BoolRulesActiveNotDryRun:
+                  summary: Bool型ルール ルールが有効かつ非ドライランのとき
+                  value:
+                    rules:
+                    - code: example.rule.code2
+                      name: Example Bool Rule
+                      spec:
+                        contents:
+                        - enforce: true
+                      dry_run_spec:
+                        contents:
+                        - enforce: true
+                      is_active: true
+                      is_dry_run: false
+                BoolRulesDisableDryRun:
+                  summary: Bool型ルール ルールが無効かつドライランのとき
+                  value:
+                    rules:
+                    - code: example.rule.code2
+                      name: Example Bool Rule
+                      spec:
+                        contents:
+                        - enforce: true
+                      dry_run_spec:
+                        contents:
+                        - enforce: true
+                      is_active: false
+                      is_dry_run: true
+                BoolRulesDisableNotDryRun:
+                  summary: Bool型ルール ルールが無効かつ非ドライランのとき
+                  value:
+                    rules:
+                    - code: example.rule.code2
+                      name: Example Bool Rule
+                      spec:
+                        contents:
+                        - enforce: true
+                      dry_run_spec:
+                        contents:
+                        - enforce: true
+                      is_active: false
+                      is_dry_run: false
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
+components:
+  schemas:
+    RuleStatus:
+      type: object
+      properties:
+        is_active:
+          type: boolean
+          description: ルールが有効かどうか
+          example: true
+        is_dry_run:
+          type: boolean
+          description: ルールがドライランかどうか
+          example: false
+    Http404NotFound:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 404
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: not_found
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 見つかりませんでした。
+    Http429TooManyRequests:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 429
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: throttled
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: リクエストの処理は絞られました。 60秒後に利用可能になります。
+    RuleResponse:
+      allOf:
+      - type: object
+        properties:
+          code:
+            type: string
+            description: ルールテンプレートのコード
+          name:
+            type: string
+            description: ルール名
+            example: Example Rule
+          spec:
+            $ref: '#/components/schemas/RuleSpec'
+          dry_run_spec:
+            $ref: '#/components/schemas/RuleSpec'
+      - $ref: '#/components/schemas/RuleStatus'
+    Http409Conflict:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 409
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: conflict
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 状態の競合によりリクエストを処理できません。
+    Http403Forbidden:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 403
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: permission_denied
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: このアクションを実行する権限がありません。
+    Rule:
+      type: object
+      required:
+      - code
+      - is_active
+      - is_dry_run
+      allOf:
+      - type: object
+        properties:
+          code:
+            type: string
+            description: ルールテンプレートのコード
+          spec:
+            $ref: '#/components/schemas/RuleSpec'
+          dry_run_spec:
+            $ref: '#/components/schemas/RuleSpec'
+      - $ref: '#/components/schemas/RuleStatus'
+    Organization:
+      type: object
+      required:
+      - name
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: 組織のリソースID
+          example: 123456789123
+        name:
+          type: string
+          description: 組織名
+          example: 組織名
+    RuleContent:
+      type: object
+      properties:
+        values:
+          type: object
+          properties:
+            allowed_values:
+              type: array
+              items:
+                type: string
+              description: 許可する値のリスト
+            denied_values:
+              type: array
+              items:
+                type: string
+              description: 拒否する値のリスト
+        allow_all:
+          type: boolean
+          description: すべての値を許可する。リスト型ルールの場合のみ設定可能。
+        deny_all:
+          type: boolean
+          description: すべての値を許可する。リスト型ルールの場合のみ設定可能。
+        enforce:
+          type: boolean
+          description: ブール型ルールを強制するかどうか
+    Http400BadRequest:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      - errors
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 400
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: invalid
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 不正な入力です。
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: object
+              required:
+              - message
+              - code
+              properties:
+                message:
+                  type: string
+                  description: エラー内容を説明した文字列
+                code:
+                  type: string
+                  description: エラーの内容を表す文字列
+            description: リクエストボディの特定キーに関するエラー
+          properties:
+            non_field_errors:
+              type: array
+              items:
+                type: object
+                required:
+                - message
+                - code
+                properties:
+                  message:
+                    type: string
+                    description: エラー内容を説明した文字列
+                  code:
+                    type: string
+                    description: エラーの内容を表す文字列
+              description: リクエストボディの特定キーに関係しないエラー
+          example:
+            key1:
+            - message: この項目は必須です。
+              code: required
+            key2:
+            - message: 有効な値ではありません。
+              code: invalid
+            key3:
+            - message: この項目は少なくとも*文字以上にしてください。
+              code: min_length
+            key4:
+            - message: この項目が*文字より長くならないようにしてください。
+              code: max_length
+    RuleSpec:
+      type: object
+      description: spec, dry_run_specのどちらか一方は必須
+      properties:
+        contents:
+          type: array
+          items:
+            $ref: '#/components/schemas/RuleContent'
+    Http401Unauthorized:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 401
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: authentication_failed
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 認証情報が含まれていません。
+  securitySchemes:
+    ServicePrincipalAuth:
+      description: 'サービスプリンシパル認証
+
+        - サービスプリンシパルのアクセストークンを指定
+
+        '
+      type: http
+      scheme: bearer
+    ProjectApiKeyAuth:
+      description: 'APIキー認証
+
+        - ユーザー名に発行したAPIキーのアクセストークンを指定
+
+        - パスワードに発行したAPIキーのアクセストークンシークレットを指定
+
+        '
+      type: http
+      scheme: basic
+x-refined-from:
+- iam-api.yaml
+- sakura-internet-iam-openapi.yml

@@ -1,0 +1,149 @@
+openapi: 3.2.0
+info:
+  title: Sakura Internet Responses API
+  version: 1.0.1
+  description: 'Operations tagged Responses across 2 of this provider''s published API definitions: ai-engine-inference-api.yaml, sakura-internet-ai-engine-inference-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.ai.sakura.ad.jp
+security:
+- BearerAuth: []
+tags:
+- name: Responses
+paths:
+  /v1/responses:
+    post:
+      summary: Create a response
+      operationId: createResponse
+      description: 'OpenAI互換のResponses APIエンドポイントです。
+
+        利用するモデルによってはサポートされていないパラメータもありますので、ご注意ください。'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - model
+              - input
+              properties:
+                model:
+                  type: string
+                  description: 使用するモデル名
+                input:
+                  description: 'モデルへの入力。文字列またはメッセージオブジェクトの配列を指定できます
+
+                    '
+                  oneOf:
+                  - type: string
+                    description: シンプルなテキスト入力
+                  - type: array
+                    description: メッセージオブジェクトの配列
+                    items:
+                      type: object
+                      properties:
+                        role:
+                          type: string
+                          enum:
+                          - user
+                          - assistant
+                          - system
+                          - developer
+                        content:
+                          description: メッセージの内容
+                instructions:
+                  type: string
+                  description: モデルのコンテキストに挿入されるシステムプロンプト
+                stream:
+                  type: boolean
+                  description: ストリーミング応答を有効にするかどうか
+                  default: false
+                temperature:
+                  type: number
+                  description: 生成の多様性を制御するパラメータ。値が高いほど多様な応答が生成され、値が低いほど決定的な応答が生成されます。
+                  minimum: 0
+                  maximum: 1
+                top_p:
+                  type: number
+                  description: Nucleus sampling の確率質量
+                  minimum: 0
+                  maximum: 1
+                max_output_tokens:
+                  type: integer
+                  description: 生成する最大出力トークン数
+                tools:
+                  description: モデルが呼び出し可能なツールのリスト
+                tool_choice:
+                  description: モデルがツールを使用する方法の制御
+                parallel_tool_calls:
+                  type: boolean
+                  description: 並列ツール呼び出しを許可するかどうか
+                store:
+                  type: boolean
+                  description: 生成されたモデルのレスポンスを保存するかどうか（OpenAI API互換のための項目）。 ※現在は指定可能ですが、システム上は参照されません
+                previous_response_id:
+                  type: string
+                  description: チェーンする前回のレスポンスID（OpenAI API互換のための項目）。 ※現在は指定可能ですが、システム上は参照されません
+                conversation_id:
+                  type: string
+                  description: このレスポンスが属する会話のID（OpenAI API互換のための項目）。 ※現在は指定可能ですが、システム上は参照されません
+                truncation:
+                  type: string
+                  enum:
+                  - auto
+                  - disabled
+                  description: モデルレスポンスの切り詰め戦略
+                user:
+                  type: string
+                  description: エンドユーザーを表す一意な識別子
+                reasoning:
+                  type: object
+                  description: 'Reasoning/Thinking の動作を制御するためのオプション。
+
+                    effort 以外のキーもモデルに依存して受け付けます。
+
+                    '
+                  additionalProperties: true
+                  properties:
+                    effort:
+                      type: string
+                      description: 'Reasoning/Thinking の強度を指定するパラメータ。
+
+                        受け付ける値はモデルに依存します。例: "low", "medium", "high", "none"。
+
+                        '
+                chat_template_kwargs:
+                  type: object
+                  description: 'モデルへの追加パラメータを指定するためのオブジェクト。
+
+                    例えば `{"enable_thinking": true}` のように指定することで、Reasoning/Thinking 出力の ON/OFF を制御できます。
+
+                    その他、モデル固有のパラメータも指定可能です。
+
+                    '
+                  additionalProperties: true
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '429':
+          description: Rate limited
+        '500':
+          description: Server error
+        '504':
+          description: Server error
+      tags:
+      - Responses
+    servers:
+    - url: https://api.ai.sakura.ad.jp
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+x-refined-from:
+- ai-engine-inference-api.yaml
+- sakura-internet-ai-engine-inference-openapi.yml

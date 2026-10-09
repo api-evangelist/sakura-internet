@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-service-principal-key-schema.json",
+  "title": "ServicePrincipalKey",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-iam-openapi.yml#/components/schemas/ServicePrincipalKey",
+  "type": "object",
+  "required": [
+    "id",
+    "kid",
+    "status",
+    "key_origin",
+    "public_key",
+    "created_at"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "サービスプリンシパルキーID",
+      "readOnly": true,
+      "format": "uuid"
+    },
+    "kid": {
+      "type": "string",
+      "description": "公開鍵のkid",
+      "readOnly": true
+    },
+    "status": {
+      "type": "string",
+      "description": "サービスプリンシパルキーの状態\n* enabled 有効\n* disabled 無効\n",
+      "enum": [
+        "enabled",
+        "disabled"
+      ]
+    },
+    "key_origin": {
+      "type": "string",
+      "description": "鍵の生成元\n",
+      "readOnly": true,
+      "enum": [
+        "user"
+      ]
+    },
+    "public_key": {
+      "$ref": "#/$defs/ServiceprincipalKeyPublicKey"
+    },
+    "created_at": {
+      "type": "string",
+      "description": "作成日時"
+    },
+    "key_expires_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "有効期限"
+    }
+  },
+  "$defs": {
+    "ServiceprincipalKeyPublicKey": {
+      "type": "string",
+      "description": "PEM形式の公開鍵文字列\nRSA鍵のみをサポート\n鍵長は2048ビット以上かつ4096ビット以下をサポート\n"
+    }
+  }
+}

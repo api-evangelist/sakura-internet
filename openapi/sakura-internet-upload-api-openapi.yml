@@ -1,0 +1,115 @@
+openapi: 3.2.0
+info:
+  title: Sakura Internet Upload API
+  version: '2026-06-29'
+  description: 'Operations tagged upload across 2 of this provider''s published API definitions: ai-engine-rag-api.yaml, sakura-internet-ai-engine-rag-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: ' https://api.ai.sakura.ad.jp'
+tags:
+- name: Upload
+paths:
+  /v1/documents/upload/:
+    post:
+      operationId: documents_upload
+      tags:
+      - Upload
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DocumentUpload'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DocumentUpload'
+        required: true
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentUpload'
+          description: ''
+      summary: Documents upload
+      x-summary-source: derived
+    servers:
+    - url: ' https://api.ai.sakura.ad.jp'
+components:
+  schemas:
+    DocumentUpload:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          readOnly: true
+          title: ステータス
+        content:
+          type: string
+          readOnly: true
+        file:
+          type: string
+          format: uri
+          writeOnly: true
+        name:
+          type: string
+          description: 未指定の場合はアップロードされたファイル名が使用されます。
+          maxLength: 255
+        tags:
+          type: array
+          items:
+            type: string
+        model:
+          allOf:
+          - $ref: '#/components/schemas/ModelEnum'
+          description: 'ベクトル化に利用するモデル。
+
+
+            * `multilingual-e5-large` - multilingual-e5-large
+
+            * `preview/Qwen3-Embedding-4B-FP16` - preview/Qwen3-Embedding-4B-FP16'
+        chunk_size:
+          type: integer
+          description: モデルによって最大値が異なります。未指定の場合はモデルのデフォルト値が設定されます。
+      required:
+      - content
+      - file
+      - id
+      - status
+    StatusEnum:
+      enum:
+      - pending
+      - processing
+      - available
+      - deleted
+      - error
+      type: string
+      description: '* `pending` - Pending
+
+        * `processing` - Processing
+
+        * `available` - Available
+
+        * `deleted` - Deleted
+
+        * `error` - Error'
+    ModelEnum:
+      enum:
+      - multilingual-e5-large
+      - preview/Qwen3-Embedding-4B-FP16
+      type: string
+      description: '* `multilingual-e5-large` - multilingual-e5-large
+
+        * `preview/Qwen3-Embedding-4B-FP16` - preview/Qwen3-Embedding-4B-FP16'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+x-refined-from:
+- ai-engine-rag-api.yaml
+- sakura-internet-ai-engine-rag-openapi.yml

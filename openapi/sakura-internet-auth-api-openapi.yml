@@ -1,0 +1,532 @@
+openapi: 3.2.0
+info:
+  title: Sakura Internet Auth API
+  version: 2.1.0
+  contact:
+    name: SAKURA internet Inc.
+  description: 'Operations tagged auth across 2 of this provider''s published API definitions: iam-api.yaml, sakura-internet-iam-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
+security:
+- ServicePrincipalAuth: []
+tags:
+- name: Auth
+  x-displayName: 認証
+  description: 認証に関する機能
+paths:
+  /organization-password-policy:
+    get:
+      operationId: readOrganizationPasswordPolicy
+      tags:
+      - Auth
+      summary: 組織のパスワードポリシーを取得する
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PasswordPolicy'
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+    put:
+      operationId: updateOrganizationPasswordPolicy
+      tags:
+      - Auth
+      summary: 組織のパスワードポリシーを更新する
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordPolicy'
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PasswordPolicy'
+        '400':
+          description: 不正なリクエスト
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http400BadRequest'
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
+  /organization-auth-conditions:
+    get:
+      operationId: readOrganizationAuthConditions
+      tags:
+      - Auth
+      summary: 組織の認証条件を取得する
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthConditions'
+              examples:
+                Response1:
+                  summary: すべてのネットワークからの認証を許可
+                  value:
+                    ip_restriction:
+                      mode: allow_all
+                    require_two_factor_auth:
+                      enabled: false
+                    datetime_restriction:
+                      after: '2025-09-01T00:00:00+09:00'
+                      before: '2025-10-01T00:00:00+09:00'
+                Response2:
+                  summary: 指定したネットワークからの認証を許可
+                  value:
+                    ip_restriction:
+                      mode: allow_list
+                      source_network:
+                      - 192.0.2.0/24
+                      - 198.51.100.0/24
+                      - 203.0.113.0/24
+                    require_two_factor_auth:
+                      enabled: false
+                    datetime_restriction:
+                      after: '2025-09-01T00:00:00+09:00'
+                      before: '2025-10-01T00:00:00+09:00'
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+    put:
+      operationId: updateOrganizationAuthConditions
+      tags:
+      - Auth
+      summary: 組織の認証条件を更新する
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthConditions'
+            examples:
+              Request1:
+                summary: すべてのネットワークからの認証を許可
+                value:
+                  ip_restriction:
+                    mode: allow_all
+                  require_two_factor_auth:
+                    enabled: false
+                  datetime_restriction:
+                    after: '2025-09-01T00:00:00+09:00'
+                    before: '2025-10-01T00:00:00+09:00'
+              Request2:
+                summary: 指定したネットワークからの認証を許可
+                value:
+                  ip_restriction:
+                    mode: allow_list
+                    source_network:
+                    - 192.0.2.0/24
+                    - 198.51.100.0/24
+                    - 203.0.113.0/24
+                  require_two_factor_auth:
+                    enabled: false
+                  datetime_restriction:
+                    after: '2025-09-01T00:00:00+09:00'
+                    before: '2025-10-01T00:00:00+09:00'
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthConditions'
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
+  /auth/context:
+    get:
+      summary: 認証情報のコンテキストを取得
+      security:
+      - ProjectApiKeyAuth: []
+      - ServicePrincipalAuth: []
+      description: APIキー・サービスプリンシパルの属性情報を取得する。usacloudなどOSSプロダクトからの利用を想定としたAPI。
+      operationId: readAuthContext
+      tags:
+      - Auth
+      responses:
+        '200':
+          description: 認証情報のコンテキストの取得に成功
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - resource_id
+                - auth_type
+                - limited_to_project_id
+                - member_code
+                properties:
+                  resource_id:
+                    type: integer
+                    format: int64
+                    description: APIキーのIDまたはサービスプリンシパルのID
+                    example: 987654321098
+                  auth_type:
+                    type: string
+                    enum:
+                    - apikey
+                    - service_principal
+                    description: 認証種別。APIキーまたはサービスプリンシパル。
+                  limited_to_project_id:
+                    type:
+                    - integer
+                    - 'null'
+                    description: 操作可能なプロジェクトのID。現状、APIキー・サービスプリンシパルが属するプロジェクトのIDが設定されるが、将来的に操作可能なプロジェクトの制限が撤廃された場合にはnullが設定される可能性がある。
+                    example: 123456789012
+                  member_code:
+                    type: string
+                    description: APIキー・サービスプリンシパルに紐づく会員IDを取得する
+                    example: aaa00000
+        '401':
+          description: 認証に失敗
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
+components:
+  schemas:
+    Http429TooManyRequests:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 429
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: throttled
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: リクエストの処理は絞られました。 60秒後に利用可能になります。
+    Http403Forbidden:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 403
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: permission_denied
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: このアクションを実行する権限がありません。
+    Http400BadRequest:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      - errors
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 400
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: invalid
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 不正な入力です。
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: object
+              required:
+              - message
+              - code
+              properties:
+                message:
+                  type: string
+                  description: エラー内容を説明した文字列
+                code:
+                  type: string
+                  description: エラーの内容を表す文字列
+            description: リクエストボディの特定キーに関するエラー
+          properties:
+            non_field_errors:
+              type: array
+              items:
+                type: object
+                required:
+                - message
+                - code
+                properties:
+                  message:
+                    type: string
+                    description: エラー内容を説明した文字列
+                  code:
+                    type: string
+                    description: エラーの内容を表す文字列
+              description: リクエストボディの特定キーに関係しないエラー
+          example:
+            key1:
+            - message: この項目は必須です。
+              code: required
+            key2:
+            - message: 有効な値ではありません。
+              code: invalid
+            key3:
+            - message: この項目は少なくとも*文字以上にしてください。
+              code: min_length
+            key4:
+            - message: この項目が*文字より長くならないようにしてください。
+              code: max_length
+    AuthConditions:
+      type: object
+      required:
+      - ip_restriction
+      - require_two_factor_auth
+      - datetime_restriction
+      properties:
+        ip_restriction:
+          type: object
+          required:
+          - mode
+          description: 認証を許可するIPサブネットワーク (デフォルトはすべて許可)
+          oneOf:
+          - type: object
+            properties:
+              mode:
+                type: string
+                enum:
+                - allow_all
+                description: 'allow_all = すべて許可
+
+                  allow_list = source_networkで許可リスト指定
+
+                  '
+          - type: object
+            properties:
+              mode:
+                type: string
+                enum:
+                - allow_list
+                description: 'allow_all = すべて許可
+
+                  allow_list = source_networkで許可リスト指定
+
+                  '
+              source_network:
+                type: array
+                items:
+                  type: string
+                  description: IPv4のCIDR表記
+                description: modeがallow_listの場合のみ必須
+        require_two_factor_auth:
+          type: object
+          properties:
+            enabled:
+              type: boolean
+              description: 2要素認証によるログインを必須とするかどうか (デフォルトは `false`)
+          required:
+          - enabled
+          example:
+            enabled: false
+        datetime_restriction:
+          type: object
+          required:
+          - after
+          - before
+          properties:
+            after:
+              type:
+              - string
+              - 'null'
+              format: date-time
+              description: 日時がこの時間より後であることを要求 (ISO 8601形式; デフォルトは未設定 (`null`))
+              example: '2025-09-01T00:00:00+09:00'
+            before:
+              type:
+              - string
+              - 'null'
+              format: date-time
+              description: 日時がこの時間より前であることを要求 (ISO 8601形式; デフォルトは未設定 (`null`))
+              example: '2025-10-01T00:00:00+09:00'
+    Http401Unauthorized:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 401
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: authentication_failed
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 認証情報が含まれていません。
+    PasswordPolicy:
+      type: object
+      required:
+      - min_length
+      - require_uppercase
+      - require_lowercase
+      - require_symbols
+      properties:
+        min_length:
+          type: integer
+          description: パスワードの最小文字数 (8文字以上64文字以下; デフォルトは`8`)
+          example: 8
+        require_uppercase:
+          type: boolean
+          description: '大文字を必須とするか (デフォルトは`false`)
+
+            `false` であっても英字自体は必須
+
+            '
+          example: false
+        require_lowercase:
+          type: boolean
+          description: '小文字を必須とするか (デフォルトは`false`)
+
+            `false` であっても英字自体は必須
+
+            '
+          example: false
+        require_symbols:
+          type: boolean
+          description: 記号を必須とするか (デフォルトは`false`)
+          example: false
+  securitySchemes:
+    ServicePrincipalAuth:
+      description: 'サービスプリンシパル認証
+
+        - サービスプリンシパルのアクセストークンを指定
+
+        '
+      type: http
+      scheme: bearer
+    ProjectApiKeyAuth:
+      description: 'APIキー認証
+
+        - ユーザー名に発行したAPIキーのアクセストークンを指定
+
+        - パスワードに発行したAPIキーのアクセストークンシークレットを指定
+
+        '
+      type: http
+      scheme: basic
+x-refined-from:
+- iam-api.yaml
+- sakura-internet-iam-openapi.yml

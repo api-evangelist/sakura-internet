@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-ddos-request-body-schema.json",
+  "title": "DdosRequestBody",
+  "description": "セキュリティ機能 DDoSサービスの作成APIで受信するリクエストボディを表します。",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-addon-openapi.yml#/components/schemas/DdosRequestBody",
+  "required": [
+    "endpoint",
+    "location",
+    "profile"
+  ],
+  "type": "object",
+  "properties": {
+    "location": {
+      "minLength": 1,
+      "enum": [
+        "japaneast"
+      ],
+      "type": "string",
+      "description": "デプロイ先のリージョン"
+    },
+    "profile": {
+      "$ref": "#/$defs/FrontDoorProfile"
+    },
+    "endpoint": {
+      "$ref": "#/$defs/FrontDoorEndpoint"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "FrontDoorEndpoint": {
+      "required": [
+        "route"
+      ],
+      "type": "object",
+      "properties": {
+        "route": {
+          "$ref": "#/$defs/FrontDoorRoute"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Front Doorのエンドポイント"
+    },
+    "FrontDoorOrigin": {
+      "required": [
+        "hostHeader",
+        "hostName"
+      ],
+      "type": "object",
+      "properties": {
+        "hostName": {
+          "maxLength": 100,
+          "minLength": 1,
+          "type": "string",
+          "description": "配信元のホスト名を指定します。\r\nホスト名は、有効なドメイン名、IPv4、または IPv6 である必要があります。"
+        },
+        "hostHeader": {
+          "maxLength": 100,
+          "minLength": 1,
+          "type": "string",
+          "description": "配信元のホストヘッダーを指定します。\r\nホストヘッダーは、有効なドメイン名、IPv4、または IPv6 である必要があります。"
+        }
+      },
+      "additionalProperties": false,
+      "description": "配信元"
+    },
+    "FrontDoorOriginGroup": {
+      "required": [
+        "origin"
+      ],
+      "type": "object",
+      "properties": {
+        "origin": {
+          "$ref": "#/$defs/FrontDoorOrigin"
+        }
+      },
+      "additionalProperties": false,
+      "description": "配信元グループ"
+    },
+    "FrontDoorProfile": {
+      "required": [
+        "level"
+      ],
+      "type": "object",
+      "properties": {
+        "level": {
+          "$ref": "#/$defs/PricingLevel"
+        },
+        "levelNameOfBicepParameter": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Azure Front Doorの価格レベルのBicepテンプレートパラメーター名を取得します。",
+          "readOnly": true
+        }
+      },
+      "additionalProperties": false,
+      "description": "Front Doorのプロファイル"
+    },
+    "FrontDoorRoute": {
+      "required": [
+        "originGroup",
+        "patterns"
+      ],
+      "type": "object",
+      "properties": {
+        "patterns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Front Doorルートのパスパターンを指定します。\r\nパターンの先頭はスラッシュ (/) にする必要があります。アスタリスクは末尾のみで使用でき、アスタリスクの前はスラッシュ (/*) にする必要があります 。"
+        },
+        "originGroup": {
+          "$ref": "#/$defs/FrontDoorOriginGroup"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Front Doorルート"
+    },
+    "PricingLevel": {
+      "enum": [
+        1,
+        2
+      ],
+      "type": "integer",
+      "description": "Front Doorリソースの価格レベルを指定します。指定値と価格レベルの対応は次の通りです。\r\n- 1: Standard\r\n- 2: Premium",
+      "format": "int32"
+    }
+  }
+}

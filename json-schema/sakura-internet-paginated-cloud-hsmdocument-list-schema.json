@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-paginated-cloud-hsmdocument-list-schema.json",
+  "title": "PaginatedCloudHSMDocumentList",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-security-encryption-openapi.yml#/components/schemas/PaginatedCloudHSMDocumentList",
+  "type": "object",
+  "required": [
+    "Count",
+    "From",
+    "Total",
+    "CloudHSMDocuments",
+    "is_ok"
+  ],
+  "properties": {
+    "Count": {
+      "type": "integer"
+    },
+    "From": {
+      "type": "integer"
+    },
+    "Total": {
+      "type": "integer"
+    },
+    "CloudHSMDocuments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/CloudHSMDocument"
+      }
+    },
+    "is_ok": {
+      "type": "boolean"
+    }
+  },
+  "$defs": {
+    "CloudHSMDocument": {
+      "type": "object",
+      "properties": {
+        "ID": {
+          "type": "string"
+        },
+        "CreatedAt": {
+          "$ref": "#/$defs/DateTime"
+        },
+        "ModifiedAt": {
+          "$ref": "#/$defs/DateTime"
+        },
+        "Name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "CreatedAt",
+        "ID",
+        "ModifiedAt",
+        "Name"
+      ]
+    },
+    "DateTime": {
+      "type": "string",
+      "format": "iso8601"
+    }
+  }
+}

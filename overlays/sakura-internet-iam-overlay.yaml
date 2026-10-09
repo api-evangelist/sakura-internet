@@ -1,0 +1,24 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist overlay for さくらのクラウドIAM API
+  version: 1.0.0
+extends: ../openapi/_original/sakura-internet-iam-openapi.yml
+x-generated: '2026-10-09'
+x-method: generated
+x-source: openapi/sakura-internet-iam-openapi.yml
+x-rationale: 'Enhancements captured without mutating the original: links the provider-hosted docs as externalDocs.'
+actions:
+- target: $
+  description: Link the provider-hosted human documentation.
+  update:
+    externalDocs:
+      url: https://manual.sakura.ad.jp/api/cloud/portal/iam-api/index.html
+      description: SAKURA internet documentation
+- target: $.info
+  description: Agent-surface hints from the API Evangelist profile.
+  update:
+    x-api-evangelist:
+      provider: sakura-internet
+      mcp: mcp/sakura-internet-mcp.yml
+      tool_crosswalk: mcp/sakura-internet-tool-crosswalk.yml
+      llms: llms/sakura-internet-llms.txt

@@ -1,0 +1,572 @@
+openapi: 3.2.0
+info:
+  title: Sakura Internet Chat API
+  version: '1.0'
+  description: 'Operations tagged Chat across 4 of this provider''s published API definitions: ai-engine-inference-api.yaml, ai-engine-rag-api.yaml, sakura-internet-ai-engine-inference-openapi.yml, sakura-internet-ai-engine-rag-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.ai.sakura.ad.jp
+- url: ' https://api.ai.sakura.ad.jp'
+tags:
+- name: Chat
+paths:
+  /v1/chat/completions:
+    post:
+      summary: Create chat completion
+      operationId: createChatCompletion
+      description: チャット生成のリクエストの代表例です。利用するモデルによってはサポートされていないパラメータもありますので、ご注意ください。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - model
+              - messages
+              properties:
+                model:
+                  type: string
+                  description: 利用するチャットモデル名。利用可能なモデルはコントロールパネル等をご確認ください。
+                messages:
+                  type: array
+                  description: チャットのメッセージ履歴。モデルによってサポートしているメッセージタイプが異なります。
+                  items:
+                    anyOf:
+                    - $ref: '#/components/schemas/ChatCompletionRequestDeveloperMessage'
+                    - $ref: '#/components/schemas/ChatCompletionRequestSystemMessage'
+                    - $ref: '#/components/schemas/ChatCompletionRequestUserMessage'
+                    - $ref: '#/components/schemas/ChatCompletionRequestAssistantMessage'
+                    - $ref: '#/components/schemas/ChatCompletionRequestToolMessage'
+                max_tokens:
+                  type: integer
+                  description: 応答生成に使用する最大トークン数。
+                  minimum: 1
+                temperature:
+                  type: number
+                  description: 生成の多様性を制御するパラメータ。値が高いほど多様な応答が生成され、値が低いほど決定的な応答が生成されます。
+                  minimum: 0
+                  maximum: 2
+                  default: 1
+                tool_choice:
+                  description: モデルのツール利用方針を制御する。
+                  $ref: '#/components/schemas/ChatCompletionToolChoiceOption'
+                tools:
+                  type: array
+                  description: モデルが利用可能なツールのリスト。
+                  items:
+                    anyOf:
+                    - $ref: '#/components/schemas/ChatCompletionTool'
+                stream:
+                  type: boolean
+                  description: ストリーミング応答を有効にするかどうか。
+                  default: false
+                reasoning_effort:
+                  type: string
+                  description: 'Reasoning/Thinking の強度を制御するパラメータ。
+
+                    受け付ける値はモデルに依存します。例: "low", "medium", "high", "none"。
+
+                    "none" を指定すると推論出力が無効になります。
+
+                    '
+                chat_template_kwargs:
+                  type: object
+                  description: 'モデルへの追加パラメータを指定するためのオブジェクト。
+
+                    例えば `{"enable_thinking": true}` のように指定することで、Reasoning/Thinking 出力の ON/OFF を制御できます。
+
+                    その他、モデル固有のパラメータも指定可能です。
+
+                    '
+                  additionalProperties: true
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '429':
+          description: Rate limited
+        '500':
+          description: Server error
+        '504':
+          description: Server error
+      tags:
+      - Chat
+      security:
+      - BearerAuth: []
+    servers:
+    - url: https://api.ai.sakura.ad.jp
+  /v1/documents/chat/:
+    post:
+      operationId: documents_chat
+      tags:
+      - Chat
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatQueryRequest'
+        required: true
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResult'
+          description: ''
+      summary: Documents chat
+      x-summary-source: derived
+    servers:
+    - url: ' https://api.ai.sakura.ad.jp'
+components:
+  schemas:
+    ChatCompletionRequestAssistantMessageContentPart:
+      anyOf:
+      - $ref: '#/components/schemas/ChatCompletionRequestMessageContentPartText'
+    ChatCompletionRequestToolMessage:
+      type: object
+      title: Tool message
+      description: ツールの応答メッセージ。
+      properties:
+        role:
+          type: string
+          description: メッセージの発言者の役割。
+          enum:
+          - tool
+        content:
+          description: ツールの応答メッセージの内容。
+          anyOf:
+          - type: string
+            description: メッセージの内容。
+          - type: array
+            items:
+              $ref: '#/components/schemas/ChatCompletionRequestToolMessageContentPart'
+            minItems: 1
+        tool_call_id:
+          type: string
+          description: ツール呼び出しの一意な識別子。
+      required:
+      - role
+      - content
+      - tool_call_id
+    ChatCompletionRequestSystemMessageContentPart:
+      anyOf:
+      - $ref: '#/components/schemas/ChatCompletionRequestMessageContentPartText'
+    ChatCompletionRequestMessageContentPartText:
+      type: object
+      description: テキストコンテンツ。
+      properties:
+        type:
+          type: string
+          enum:
+          - text
+        text:
+          type: string
+          description: メッセージの内容。
+      required:
+      - type
+      - text
+    FunctionObject:
+      type: object
+      properties:
+        description:
+          type: string
+          description: ツールの説明。
+        name:
+          type: string
+          description: ツールの名前。英数字、アンダースコア、ハイフンのみ使用可能で、最大64文字まで指定できます。
+        parameters:
+          type: object
+          description: ツールのパラメータ仕様。
+      required:
+      - name
+    ChatCompletionTool:
+      type: object
+      required:
+      - type
+      - function
+      properties:
+        type:
+          type: string
+          enum:
+          - function
+        function:
+          $ref: '#/components/schemas/FunctionObject'
+    ChatCompletionRequestDeveloperMessage:
+      type: object
+      title: Developer message
+      description: モデルに対する開発者からの指示メッセージ。
+      required:
+      - content
+      - role
+      properties:
+        content:
+          anyOf:
+          - type: string
+            description: メッセージの内容。
+          - type: array
+            items:
+              $ref: '#/components/schemas/ChatCompletionRequestMessageContentPartText'
+            minItems: 1
+        role:
+          type: string
+          description: メッセージの発言者の役割。
+          enum:
+          - developer
+    ChatCompletionRequestToolMessageContentPart:
+      anyOf:
+      - $ref: '#/components/schemas/ChatCompletionRequestMessageContentPartText'
+    ChatCompletionRequestUserMessage:
+      type: object
+      title: User message
+      description: ユーザーからのメッセージ。
+      required:
+      - content
+      - role
+      properties:
+        content:
+          anyOf:
+          - type: string
+            description: メッセージの内容。
+          - type: array
+            items:
+              $ref: '#/components/schemas/ChatCompletionRequestUserMessageContentPart'
+            minItems: 1
+        role:
+          type: string
+          description: メッセージの発言者の役割。
+          enum:
+          - user
+    ChatCompletionRequestMessageContentPartImage:
+      type: object
+      description: 画像コンテンツ。
+      properties:
+        type:
+          type: string
+          enum:
+          - image_url
+        image_url:
+          type: object
+          properties:
+            url:
+              type: string
+              description: MIMEタイプ情報を付与したbase64エンコードされた画像データ。（例："data:image/png;base64,xxx..."）
+              format: uri
+          required:
+          - url
+      required:
+      - type
+      - image_url
+    ChatCompletionNamedToolChoice:
+      type: object
+      description: 特定のツールをモデルに利用させる。
+      required:
+      - type
+      - function
+      properties:
+        type:
+          type: string
+          enum:
+          - function
+        function:
+          type: object
+          required:
+          - name
+          properties:
+            name:
+              type: string
+              description: ツールの名前。
+    ChatCompletionRequestUserMessageContentPart:
+      anyOf:
+      - $ref: '#/components/schemas/ChatCompletionRequestMessageContentPartText'
+      - $ref: '#/components/schemas/ChatCompletionRequestMessageContentPartImage'
+    ChatCompletionRequestAssistantMessage:
+      type: object
+      title: Assistant message
+      description: モデルからの応答メッセージ。
+      required:
+      - role
+      properties:
+        content:
+          anyOf:
+          - type: string
+            description: メッセージの内容。
+          - type: array
+            items:
+              $ref: '#/components/schemas/ChatCompletionRequestAssistantMessageContentPart'
+            minItems: 1
+        role:
+          type: string
+          description: メッセージの発言者の役割。
+          enum:
+          - assistant
+    ChatCompletionToolChoiceOption:
+      anyOf:
+      - type: string
+        description: モデルにツールを利用させるかどうか。
+        enum:
+        - none
+        - auto
+        - required
+      - $ref: '#/components/schemas/ChatCompletionNamedToolChoice'
+    ChatCompletionRequestSystemMessage:
+      type: object
+      title: System message
+      description: モデルに対する開発者からの指示メッセージ。
+      required:
+      - content
+      - role
+      properties:
+        content:
+          description: メッセージの内容
+          anyOf:
+          - type: string
+          - type: array
+            items:
+              $ref: '#/components/schemas/ChatCompletionRequestSystemMessageContentPart'
+            minItems: 1
+        role:
+          type: string
+          description: メッセージの発言者の役割。
+          enum:
+          - system
+    DocumentList:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          readOnly: true
+          title: ステータス
+        name:
+          type: string
+          maxLength: 255
+        model:
+          type: string
+          readOnly: true
+        chunk_size:
+          type: integer
+          readOnly: true
+        chunk_count:
+          type: integer
+          readOnly: true
+        tags:
+          type: array
+          items:
+            type: string
+        error_message:
+          type: string
+          readOnly: true
+      required:
+      - chunk_count
+      - chunk_size
+      - created_at
+      - error_message
+      - id
+      - model
+      - name
+      - status
+    DistanceTypeEnum:
+      enum:
+      - cosine
+      - l2
+      type: string
+      description: '* `cosine` - cosine
+
+        * `l2` - l2'
+    ChatResultSource:
+      oneOf:
+      - $ref: '#/components/schemas/QueryResultChunk'
+      - $ref: '#/components/schemas/QueryResultDocument'
+    ChatResult:
+      type: object
+      properties:
+        answer:
+          type: string
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatResultSource'
+          readOnly: true
+      required:
+      - answer
+      - sources
+    ChatQueryRequest:
+      type: object
+      properties:
+        distance_type:
+          allOf:
+          - $ref: '#/components/schemas/DistanceTypeEnum'
+          default: cosine
+          description: '類似度計算に使用する距離メトリクスです。
+
+            * `cosine`: コサイン距離
+
+            * `l2`: L2距離（ユークリッド距離）
+
+
+            * `cosine` - cosine
+
+            * `l2` - l2'
+        model:
+          type: string
+          default: multilingual-e5-large
+          description: '検索時に使用する埋め込みモデルを指定します。
+
+            指定したモデルでクエリおよびドキュメントの埋め込みを生成し、
+
+            類似度検索を行います。(利用可能なモデルはコントロールパネル等をご確認ください。)'
+          maxLength: 255
+        chat_model:
+          type: string
+          description: '回答生成に使用するチャットモデルを指定します。
+
+            検索結果をもとに、このモデルを用いて回答文を生成します。(利用可能なモデルはコントロールパネル等をご確認ください。)'
+          maxLength: 255
+        query:
+          type: string
+          description: '質問文を指定します。
+
+            指定されたクエリは検索および回答生成の両方に使用されます。'
+          maxLength: 1000
+        prompt:
+          type: string
+          description: '回答生成時の`system_prompt`に追加されるカスタム指示文を指定します。
+
+            口調の指定や回答形式の制御などに利用できます。
+
+            未指定の場合は、デフォルトのsystem_promptが使用されます。'
+          maxLength: 2000
+        tags:
+          type: array
+          items:
+            type: string
+            maxLength: 255
+          description: '検索対象にするタグを指定します。
+
+            指定したタグが含まれるドキュメントのみが検索対象となります。
+
+            複数指定した場合はすべてのタグが指定されているドキュメントのみ対象となります。'
+        top_k:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 5
+          description: '検索結果として取得する最大件数を指定します。
+
+            類似度の高いドキュメントから順に、この件数分が使用されます。'
+        threshold:
+          type: number
+          format: double
+          maximum: 2.0
+          minimum: 0.0
+          default: 0.3
+          description: ベクトル距離のしきい値。この值よりも距離が大きいドキュメントは検索結果から除外されます。
+        use_full_content:
+          type: boolean
+          default: false
+          description: 'trueの場合は、ドキュメント全文をコンテキストとして使用します。
+
+            falseの場合は、分割されたチャンク単位で検索・回答生成を行います。'
+      required:
+      - chat_model
+      - query
+    StatusEnum:
+      enum:
+      - pending
+      - processing
+      - available
+      - deleted
+      - error
+      type: string
+      description: '* `pending` - Pending
+
+        * `processing` - Processing
+
+        * `available` - Available
+
+        * `deleted` - Deleted
+
+        * `error` - Error'
+    QueryResultChunk:
+      type: object
+      properties:
+        document:
+          allOf:
+          - $ref: '#/components/schemas/DocumentList'
+          readOnly: true
+        chunk_index:
+          type: integer
+          readOnly: true
+        distance:
+          type: number
+          format: double
+          readOnly: true
+        content:
+          type: string
+          readOnly: true
+        metadata:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+      required:
+      - chunk_index
+      - content
+      - distance
+      - document
+      - metadata
+    QueryResultDocument:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        tags:
+          type: array
+          items:
+            type: string
+        model:
+          type: string
+          readOnly: true
+        chunk_size:
+          type: integer
+          readOnly: true
+        distance:
+          type: number
+          format: double
+          readOnly: true
+        content:
+          type: string
+          readOnly: true
+      required:
+      - chunk_size
+      - content
+      - distance
+      - id
+      - model
+      - name
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+x-refined-from:
+- ai-engine-inference-api.yaml
+- ai-engine-rag-api.yaml
+- sakura-internet-ai-engine-inference-openapi.yml
+- sakura-internet-ai-engine-rag-openapi.yml

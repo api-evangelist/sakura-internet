@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-deployment-status-schema.json",
+  "title": "DeploymentStatus",
+  "description": "デプロイメントステータスのレスポンスを表します。",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-addon-openapi.yml#/components/schemas/DeploymentStatus",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "デプロイメントの一意の識別子。"
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "デプロイメントの名前。"
+    },
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "デプロイメントのタイプ。"
+    },
+    "properties": {
+      "$ref": "#/$defs/DeploymentStatusProperties"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "DeploymentStatusProperties": {
+      "type": "object",
+      "properties": {
+        "provisioningState": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "リソースのプロビジョニング状態。"
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "デプロイメントステータスのタイムスタンプ。",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": false,
+      "description": "デプロイメントステータスのプロパティを表します。"
+    }
+  }
+}

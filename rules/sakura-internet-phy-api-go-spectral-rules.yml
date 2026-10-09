@@ -1,0 +1,9 @@
+# harvested from https://github.com/sacloud/phy-api-go/blob/64aa26e98ba90fc8731589c65234adbc5bea2222/.spectral.yaml on 2026-10-09 — a Spectral ruleset published in the provider's own GitHub repository (sacloud/phy-api-go); found by GitHub code search, fetched verbatim
+x-method: harvested
+x-stamped: 2026-10-09
+x-source-url: https://github.com/sacloud/phy-api-go/blob/64aa26e98ba90fc8731589c65234adbc5bea2222/.spectral.yaml
+extends: spectral:oas
+rules:
+  info-contact: false
+  operation-tag-defined: false
+  path-keys-no-trailing-slash: false

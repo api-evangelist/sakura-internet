@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-models-appliance-read-service-endpoint-gateway-interface-response-body-schema.json",
+  "title": "Models.Appliance.ReadServiceEndpointGatewayInterfaceResponseBody",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-seg-openapi.yml#/components/schemas/Models.Appliance.ReadServiceEndpointGatewayInterfaceResponseBody",
+  "type": "object",
+  "required": [
+    "Interface",
+    "is_ok"
+  ],
+  "properties": {
+    "Interface": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/Models.Network.SimpleInterface"
+        }
+      ],
+      "description": "サービスエンドポイントゲートウェイのインターフェース情報"
+    },
+    "is_ok": {
+      "type": "boolean",
+      "description": "操作結果"
+    }
+  },
+  "$defs": {
+    "Models.Network.SimpleInterface": {
+      "type": "object",
+      "required": [
+        "IPAddress",
+        "UserIPAddress",
+        "Switch"
+      ],
+      "properties": {
+        "IPAddress": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "IPアドレス"
+        },
+        "UserIPAddress": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "ユーザーIPアドレス"
+        },
+        "Switch": {
+          "type": "object",
+          "properties": {
+            "Scope": {
+              "type": "string",
+              "enum": [
+                "user",
+                "shared"
+              ],
+              "description": "スイッチのスコープ"
+            }
+          },
+          "required": [
+            "Scope"
+          ],
+          "description": "スイッチ情報"
+        }
+      }
+    }
+  }
+}

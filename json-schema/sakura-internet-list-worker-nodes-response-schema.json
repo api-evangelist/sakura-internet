@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-list-worker-nodes-response-schema.json",
+  "title": "ListWorkerNodesResponse",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-apprun-dedicated-openapi.yml#/components/schemas/ListWorkerNodesResponse",
+  "type": "object",
+  "required": [
+    "workerNodes"
+  ],
+  "properties": {
+    "workerNodes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/WorkerNodeSummary"
+      },
+      "description": "ワーカノードの一覧"
+    },
+    "nextCursor": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/WorkerNodeID"
+        }
+      ],
+      "description": "次ページのカーソル。次のリクエストでcursorとして指定する。データが残っていなければnull。"
+    }
+  },
+  "$defs": {
+    "WorkerNodeID": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "WorkerNodeInterfaceAddress": {
+      "type": "object",
+      "required": [
+        "address"
+      ],
+      "properties": {
+        "address": {
+          "type": "string",
+          "description": "アドレス"
+        }
+      }
+    },
+    "WorkerNodeNetworkInterface": {
+      "type": "object",
+      "required": [
+        "interfaceIndex",
+        "addresses"
+      ],
+      "properties": {
+        "interfaceIndex": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 0,
+          "description": "インターフェース番号。eth0 なら 0。eth1 なら 1。"
+        },
+        "addresses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/WorkerNodeInterfaceAddress"
+          },
+          "description": "インターフェースに割り当てられたIPアドレスのリスト"
+        }
+      }
+    },
+    "WorkerNodeStatus": {
+      "type": "string",
+      "enum": [
+        "healthy",
+        "unhealthy",
+        "creating",
+        "starting"
+      ],
+      "description": "ワーカノードの状態を表す列挙型"
+    },
+    "WorkerNodeSummary": {
+      "type": "object",
+      "required": [
+        "workerNodeID",
+        "resourceID",
+        "draining",
+        "status",
+        "networkInterfaces",
+        "created"
+      ],
+      "properties": {
+        "workerNodeID": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/WorkerNodeID"
+            }
+          ],
+          "description": "ワーカノードID"
+        },
+        "resourceID": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "アプライアンスリソースID"
+        },
+        "draining": {
+          "type": "boolean",
+          "description": "ドレイン状態かどうか"
+        },
+        "status": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/WorkerNodeStatus"
+            }
+          ],
+          "description": "ノード状態"
+        },
+        "networkInterfaces": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/WorkerNodeNetworkInterface"
+          },
+          "description": "ネットワークインターフェース情報"
+        },
+        "archiveVersion": {
+          "type": "string",
+          "description": "ノードにインストールされているアーカイブのバージョン"
+        },
+        "created": {
+          "type": "integer",
+          "format": "unixtime",
+          "description": "リソース作成日時：UNIX時間（秒）"
+        },
+        "createErrorMessage": {
+          "type": "string",
+          "description": "ノード作成に関するエラーメッセージ"
+        }
+      }
+    }
+  }
+}

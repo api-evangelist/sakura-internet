@@ -1,0 +1,776 @@
+openapi: 3.2.0
+info:
+  title: Sakura Internet Project Apikey API
+  version: 2.1.0
+  contact:
+    name: SAKURA internet Inc.
+  description: 'Operations tagged project-apikey across 2 of this provider''s published API definitions: iam-api.yaml, sakura-internet-iam-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
+security:
+- ServicePrincipalAuth: []
+tags:
+- name: project-apikey
+  x-displayName: プロジェクトAPIキー
+  description: クラウドAPIにアクセスするためのAPIキーに関する機能。
+paths:
+  /compat/api-keys:
+    get:
+      operationId: listApiKeys
+      tags:
+      - project-apikey
+      summary: APIキー一覧を取得する
+      description: サービスプリンシパルによる操作の場合、サービスプリンシパルが所属するプロジェクトとは異なるプロジェクトのAPIキーは操作できません。
+      parameters:
+      - $ref: '#/components/parameters/PaginationPage'
+      - $ref: '#/components/parameters/PaginationPerPage'
+      - name: ordering
+        in: query
+        description: '並び替えキー
+
+          * `name` - APIキー名昇順
+
+          * `-name` - APIキー名降順
+
+          '
+        schema:
+          type: string
+          enum:
+          - name
+          - -name
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                allOf:
+                - type: object
+                  required:
+                  - items
+                  properties:
+                    items:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/ProjectApiKey'
+                - $ref: '#/components/schemas/Pagination'
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+    post:
+      operationId: createApiKey
+      tags:
+      - project-apikey
+      summary: APIキーを作成する
+      description: サービスプリンシパルによる操作の場合、サービスプリンシパルが所属するプロジェクトとは異なるプロジェクトのAPIキーは操作できません。
+      requestBody:
+        description: APIキーの情報
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - project_id
+              - name
+              - description
+              - iam_roles
+              properties:
+                project_id:
+                  type: integer
+                  description: プロジェクトID
+                name:
+                  type: string
+                  description: APIキー名
+                description:
+                  type: string
+                  description: APIキーの説明
+                server_resource_id:
+                  type: string
+                  description: APIキーがシングルサーバコントロールパネルで利用される場合は必須
+                iam_roles:
+                  type: array
+                  description: IAMのロール
+                  items:
+                    type: string
+                zone_id:
+                  type: string
+                  description: ゾーンを指定。APIキーがシングルサーバコントロールパネルで利用される場合は必須。
+            examples:
+              resource-api-key:
+                summary: リソース操作APIキー
+                value:
+                  project_id: 123456789123
+                  name: リソース操作APIキー
+                  description: 通常のリソース操作用
+                  iam_roles:
+                  - admin
+              single-server-api-key:
+                summary: シングルサーバAPIキー
+                value:
+                  project_id: 123456789123
+                  name: シングルサーバAPIキー
+                  description: シングルサーバコントロールパネル用
+                  server_resource_id: '111222333444'
+                  iam_roles:
+                  - viewer
+                  - editor
+                  zone_id: is1a
+      responses:
+        '201':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectApiKeyWithSecret'
+              examples:
+                resource-api-key:
+                  $ref: '#/components/examples/ProjectApiKeyResourceWithSecret'
+                single-server-api-key:
+                  $ref: '#/components/examples/ProjectApiKeySingleServerWithSecret'
+        '400':
+          description: 不正なリクエスト
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http400BadRequest'
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+              examples:
+                Response1:
+                  summary: このアクションを実行する権限がない
+                  value:
+                    type: about:blank
+                    status: 403
+                    title: permission_denied
+                    detail: このアクションを実行する権限がありません。
+                Response2:
+                  summary: サービスポリシーを違反した
+                  value:
+                    type: about:blank
+                    status: 403
+                    title: permission_denied
+                    detail: '要求された操作は許可されていません。サービスポリシーを違反しました。
+
+                      iam-disable-api-key-creationの内容を確認してください。'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+        '503':
+          description: 一時的な処理エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http503ServiceUnavailable'
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
+  /compat/api-keys/{apikey_id}:
+    parameters:
+    - $ref: '#/components/parameters/ProjectApiKeyID'
+    get:
+      operationId: readApiKey
+      tags:
+      - project-apikey
+      summary: 指定したAPIキーを取得する
+      description: サービスプリンシパルによる操作の場合、サービスプリンシパルが所属するプロジェクトとは異なるプロジェクトのAPIキーは操作できません。
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectApiKey'
+              examples:
+                resource-api-key:
+                  $ref: '#/components/examples/ProjectApiKeyResource'
+                single-server-api-key:
+                  $ref: '#/components/examples/ProjectApiKeySingleServer'
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '404':
+          description: 指定したAPIキーが存在しない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http404NotFound'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+    put:
+      operationId: updateApiKey
+      tags:
+      - project-apikey
+      summary: 指定したAPIキーを更新する
+      description: サービスプリンシパルによる操作の場合、サービスプリンシパルが所属するプロジェクトとは異なるプロジェクトのAPIキーは操作できません。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - name
+              - description
+              - iam_roles
+              properties:
+                name:
+                  type: string
+                  description: APIキー名
+                description:
+                  type: string
+                  description: APIキーの説明
+                server_resource_id:
+                  type: string
+                  description: APIキーがシングルサーバコントロールパネルで利用される場合のみ変更可能
+                iam_roles:
+                  type: array
+                  description: IAMのロール。
+                  items:
+                    type: string
+                zone_id:
+                  type: string
+                  description: ゾーンを指定。APIキーがシングルサーバコントロールパネルで利用される場合のみ変更可能
+            examples:
+              resource-api-key:
+                summary: リソース操作APIキー
+                value:
+                  name: リソース操作APIキー
+                  description: 通常のリソース操作用
+                  iam_roles:
+                  - admin
+              single-server-api-key:
+                summary: シングルサーバAPIキー
+                value:
+                  name: シングルサーバAPIキー
+                  description: シングルサーバコントロールパネル用
+                  server_resource_id: '111222333444'
+                  iam_roles:
+                  - viewer
+                  - editor
+                  zone_id: is1a
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectApiKey'
+              examples:
+                resource-api-key:
+                  $ref: '#/components/examples/ProjectApiKeyResource'
+                single-server-api-key:
+                  $ref: '#/components/examples/ProjectApiKeySingleServer'
+        '400':
+          description: 不正なリクエスト
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http400BadRequest'
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '404':
+          description: 指定したAPIキーが存在しない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http404NotFound'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+        '503':
+          description: 一時的な処理エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http503ServiceUnavailable'
+    delete:
+      operationId: deleteApiKey
+      tags:
+      - project-apikey
+      summary: 指定したAPIキーを削除する
+      description: サービスプリンシパルによる操作の場合、サービスプリンシパルが所属するプロジェクトとは異なるプロジェクトのAPIキーは操作できません。
+      responses:
+        '204':
+          description: 成功
+        '401':
+          description: 認証情報が無効
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http401Unauthorized'
+        '403':
+          description: アクセス権限がない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http403Forbidden'
+        '404':
+          description: 指定したAPIキーが存在しない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http404NotFound'
+        '429':
+          description: APIリクエストのレートリミット超過
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http429TooManyRequests'
+        '503':
+          description: 一時的な処理エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Http503ServiceUnavailable'
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
+components:
+  schemas:
+    Http404NotFound:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 404
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: not_found
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 見つかりませんでした。
+    Http429TooManyRequests:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 429
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: throttled
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: リクエストの処理は絞られました。 60秒後に利用可能になります。
+    ProjectApiKey:
+      type: object
+      required:
+      - id
+      - project_id
+      - name
+      - description
+      - access_token
+      - iam_roles
+      properties:
+        id:
+          type: integer
+          description: APIキーID
+          readOnly: true
+          example: 111222333444
+        project_id:
+          type: integer
+          description: プロジェクトID
+          example: 123456789123
+        name:
+          type: string
+          description: APIキー名
+          example: リソース操作APIキー
+        description:
+          type: string
+          description: APIキーの説明
+          example: 通常のリソース操作用
+        access_token:
+          type: string
+          description: アクセストークン
+          example: '********'
+        server_resource_id:
+          type:
+          - string
+          - 'null'
+          description: APIキーがシングルサーバコントロールパネルで利用される場合は必須。
+          example: null
+        iam_roles:
+          type: array
+          description: IAMのロール。
+          example:
+          - viewer
+          - editor
+          - admin
+          items:
+            type: string
+        zone_id:
+          type:
+          - string
+          - 'null'
+          description: ゾーンを指定。APIキーがシングルサーバコントロールパネルで利用される場合は必須。
+          example: null
+        created_at:
+          type: string
+          description: 作成日時
+          example: 2024-05-01 14:30:00+00:00
+        updated_at:
+          type: string
+          description: 更新日時
+          example: 2024-05-02 14:30:00+00:00
+    Http503ServiceUnavailable:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 503
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: temporary_unavailable
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 一時的にエラーが発生しました。
+    Http403Forbidden:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 403
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: permission_denied
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: このアクションを実行する権限がありません。
+    ProjectApiKeyWithSecret:
+      allOf:
+      - $ref: '#/components/schemas/ProjectApiKey'
+      - type: object
+        required:
+        - access_token_secret
+        properties:
+          access_token_secret:
+            type: string
+            description: アクセストークンシークレット
+            example: '********'
+    Pagination:
+      type: object
+      required:
+      - count
+      - next
+      - previous
+      properties:
+        count:
+          type: integer
+          description: データ総数
+          example: 100
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          description: 次のページへのURL
+          example: https://api.example.com/?page=3&per_page=10
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          description: 前のページへのURL
+          example: https://api.example.com/?per_page=10
+    Http400BadRequest:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      - errors
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 400
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: invalid
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 不正な入力です。
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: object
+              required:
+              - message
+              - code
+              properties:
+                message:
+                  type: string
+                  description: エラー内容を説明した文字列
+                code:
+                  type: string
+                  description: エラーの内容を表す文字列
+            description: リクエストボディの特定キーに関するエラー
+          properties:
+            non_field_errors:
+              type: array
+              items:
+                type: object
+                required:
+                - message
+                - code
+                properties:
+                  message:
+                    type: string
+                    description: エラー内容を説明した文字列
+                  code:
+                    type: string
+                    description: エラーの内容を表す文字列
+              description: リクエストボディの特定キーに関係しないエラー
+          example:
+            key1:
+            - message: この項目は必須です。
+              code: required
+            key2:
+            - message: 有効な値ではありません。
+              code: invalid
+            key3:
+            - message: この項目は少なくとも*文字以上にしてください。
+              code: min_length
+            key4:
+            - message: この項目が*文字より長くならないようにしてください。
+              code: max_length
+    Http401Unauthorized:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 401
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: authentication_failed
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 認証情報が含まれていません。
+  examples:
+    ProjectApiKeySingleServer:
+      summary: シングルサーバAPIキー
+      value:
+        id: 222333444555
+        project_id: 123456789123
+        name: シングルサーバAPIキー
+        description: シングルサーバコントロールパネル用
+        access_token: '********'
+        server_resource_id: '321987654321'
+        iam_roles:
+        - viewer
+        - editor
+        - admin
+        zone_id: is1a
+        created_at: 2024-05-01 14:30:00+00:00
+        updated_at: 2024-05-02 14:30:00+00:00
+    ProjectApiKeyResourceWithSecret:
+      summary: リソース操作APIキー（シークレットあり）
+      value:
+        id: 111222333444
+        project_id: 123456789123
+        name: リソース操作APIキー
+        description: 通常のリソース操作用
+        access_token: '********'
+        access_token_secret: '********'
+        server_resource_id: null
+        iam_roles:
+        - viewer
+        - editor
+        - admin
+        zone_id: null
+        created_at: 2024-05-01 14:30:00+00:00
+        updated_at: 2024-05-02 14:30:00+00:00
+    ProjectApiKeyResource:
+      summary: リソース操作APIキー
+      value:
+        id: 111222333444
+        project_id: 123456789123
+        name: リソース操作APIキー
+        description: 通常のリソース操作用
+        access_token: '********'
+        server_resource_id: null
+        iam_roles:
+        - viewer
+        - editor
+        - admin
+        zone_id: null
+        created_at: 2024-05-01 14:30:00+00:00
+        updated_at: 2024-05-02 14:30:00+00:00
+    ProjectApiKeySingleServerWithSecret:
+      summary: シングルサーバAPIキー（シークレットあり）
+      value:
+        id: 222333444555
+        project_id: 123456789123
+        name: シングルサーバAPIキー
+        description: シングルサーバコントロールパネル用
+        access_token: '********'
+        access_token_secret: '********'
+        server_resource_id: '321987654321'
+        iam_roles:
+        - viewer
+        - editor
+        - admin
+        zone_id: is1a
+        created_at: 2024-05-01 14:30:00+00:00
+        updated_at: 2024-05-02 14:30:00+00:00
+  parameters:
+    PaginationPage:
+      in: query
+      name: page
+      schema:
+        type: integer
+    ProjectApiKeyID:
+      in: path
+      name: apikey_id
+      description: APIキーID
+      required: true
+      schema:
+        type: integer
+    PaginationPerPage:
+      in: query
+      name: per_page
+      schema:
+        type: integer
+  securitySchemes:
+    ServicePrincipalAuth:
+      description: 'サービスプリンシパル認証
+
+        - サービスプリンシパルのアクセストークンを指定
+
+        '
+      type: http
+      scheme: bearer
+    ProjectApiKeyAuth:
+      description: 'APIキー認証
+
+        - ユーザー名に発行したAPIキーのアクセストークンを指定
+
+        - パスワードに発行したAPIキーのアクセストークンシークレットを指定
+
+        '
+      type: http
+      scheme: basic
+x-refined-from:
+- iam-api.yaml
+- sakura-internet-iam-openapi.yml

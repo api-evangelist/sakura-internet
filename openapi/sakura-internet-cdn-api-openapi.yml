@@ -1,0 +1,499 @@
+openapi: 3.2.0
+info:
+  title: Sakura Internet CDN API
+  version: 1.1.1
+  contact:
+    name: SAKURA internet Inc.
+  license:
+    name: Copyright(C) SAKURA internet Inc. all rights reserved.
+  description: 'Operations tagged CDN across 2 of this provider''s published API definitions: addon-api.yaml, sakura-internet-addon-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://secure.sakura.ad.jp/cloud/api/addon/1.0/
+tags:
+- name: CDN
+paths:
+  /cdn:
+    get:
+      tags:
+      - CDN
+      summary: CDNサービスリソースの一覧を取得します。
+      description: アドオンのCDNサービスリソースの一覧を取得します。
+      operationId: list_AZ0301
+      responses:
+        '200':
+          description: CDNサービスリソースの取得に成功しました。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListResourcesResponse'
+        '400':
+          description: リクエストが不正です。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: CDNサービスリソースが見つかりませんでした。
+    post:
+      tags:
+      - CDN
+      summary: CDNサービスリソースを作成します。
+      description: アドオンのCDNサービスリソースを作成します。
+      operationId: create_AZ0301
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NetworkRequestBody'
+        required: true
+      responses:
+        '202':
+          description: CDNサービスリソースの作成を開始しました。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostDeploymentResponse'
+        '400':
+          description: リクエストが不正です。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/addon/1.0/
+  /cdn/{resourceGroupName}:
+    get:
+      tags:
+      - CDN
+      summary: 指定されたCDNサービスリソースを取得します。
+      description: アドオンの指定されたCDNサービスリソースを取得します。
+      operationId: get_AZ0301
+      parameters:
+      - name: resourceGroupName
+        in: path
+        description: リソースグループ名
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: CDNサービスリソースの取得に成功しました。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetResourceResponse'
+        '400':
+          description: リクエストが不正です。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: CDNサービスリソースが見つかりませんでした。
+    delete:
+      tags:
+      - CDN
+      summary: 指定されたCDNサービスリソースを削除します。
+      description: アドオンの指定されたCDNサービスリソースを削除します。
+      operationId: delete_AZ0301
+      parameters:
+      - name: resourceGroupName
+        in: path
+        description: リソースグループ名
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: CDNサービスリソースの削除を開始しました。
+        '400':
+          description: リクエストが不正です。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: CDNサービスリソースが見つかりませんでした。
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/addon/1.0/
+  /cdn/status/{resourceGroupName}/{deploymentName}:
+    get:
+      tags:
+      - CDN
+      summary: 指定されたCDNサービスリソースのステータスを取得します。
+      description: アドオンの指定されたCDNサービスリソースのステータスを取得します。
+      operationId: status_AZ0301
+      parameters:
+      - name: resourceGroupName
+        in: path
+        description: リソースグループ名
+        required: true
+        schema:
+          type: string
+      - name: deploymentName
+        in: path
+        description: デプロイメント名
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: CDNサービスリソースの取得に成功しました。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeploymentStatus'
+        '400':
+          description: リクエストが不正です。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/addon/1.0/
+components:
+  schemas:
+    ResourceGroupResource:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/ResourceIdentifier'
+        hasData:
+          type: boolean
+          readOnly: true
+        data:
+          $ref: '#/components/schemas/ResourceGroupData'
+      additionalProperties: false
+    SystemData:
+      type: object
+      properties:
+        createdBy:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        createdByType:
+          $ref: '#/components/schemas/CreatedByType'
+        createdOn:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        lastModifiedBy:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        lastModifiedByType:
+          $ref: '#/components/schemas/CreatedByType'
+        lastModifiedOn:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+      additionalProperties: false
+    PricingLevel:
+      enum:
+      - 1
+      - 2
+      type: integer
+      description: 'Front Doorリソースの価格レベルを指定します。指定値と価格レベルの対応は次の通りです。
+
+        - 1: Standard
+
+        - 2: Premium'
+      format: int32
+    ErrorResponse:
+      type: object
+      properties:
+        errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ErrorInfo'
+          description: エラーリスト
+      additionalProperties: false
+      description: エラーレスポンス
+    DeploymentStatus:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: デプロイメントの一意の識別子。
+        name:
+          type:
+          - string
+          - 'null'
+          description: デプロイメントの名前。
+        type:
+          type:
+          - string
+          - 'null'
+          description: デプロイメントのタイプ。
+        properties:
+          $ref: '#/components/schemas/DeploymentStatusProperties'
+      additionalProperties: false
+      description: デプロイメントステータスのレスポンスを表します。
+    FrontDoorOriginGroup:
+      required:
+      - origin
+      type: object
+      properties:
+        origin:
+          $ref: '#/components/schemas/FrontDoorOrigin'
+      additionalProperties: false
+      description: 配信元グループ
+    ListResourcesResponse:
+      type: object
+      properties:
+        resources:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ResourceGroupResource'
+          description: リソースグループ一覧
+      additionalProperties: false
+    PostDeploymentResponse:
+      type: object
+      properties:
+        resourceGroupName:
+          type:
+          - string
+          - 'null'
+          description: リソースグループ名を取得します。
+        deploymentName:
+          type:
+          - string
+          - 'null'
+          description: デプロイメント名を取得します。
+      additionalProperties: false
+      description: デプロイメントが投稿された後に受け取るレスポンスを表します。
+    FrontDoorEndpoint:
+      required:
+      - route
+      type: object
+      properties:
+        route:
+          $ref: '#/components/schemas/FrontDoorRoute'
+      additionalProperties: false
+      description: Front Doorのエンドポイント
+    CreatedByType:
+      type: object
+      additionalProperties: false
+    ResourceType:
+      type: object
+      properties:
+        namespace:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        type:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+      additionalProperties: false
+    AzureLocation:
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        displayName:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+      additionalProperties: false
+    NetworkRequestBody:
+      required:
+      - endpoint
+      - location
+      - profile
+      type: object
+      properties:
+        location:
+          minLength: 1
+          enum:
+          - japaneast
+          type: string
+          description: デプロイ先のリージョン
+          example: japaneast
+        profile:
+          $ref: '#/components/schemas/FrontDoorProfile'
+        endpoint:
+          $ref: '#/components/schemas/FrontDoorEndpoint'
+      additionalProperties: false
+      description: ネットワークとCDNの作成APIで受信するリクエストボディを表します。
+    FrontDoorProfile:
+      required:
+      - level
+      type: object
+      properties:
+        level:
+          $ref: '#/components/schemas/PricingLevel'
+        levelNameOfBicepParameter:
+          type:
+          - string
+          - 'null'
+          description: Azure Front Doorの価格レベルのBicepテンプレートパラメーター名を取得します。
+          readOnly: true
+      additionalProperties: false
+      description: Front Doorのプロファイル
+    ResourceIdentifier:
+      type: object
+      properties:
+        resourceType:
+          $ref: '#/components/schemas/ResourceType'
+        name:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        parent:
+          $ref: '#/components/schemas/ResourceIdentifier'
+        subscriptionId:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        provider:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        location:
+          $ref: '#/components/schemas/AzureLocation'
+        resourceGroupName:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+      additionalProperties: false
+    FrontDoorRoute:
+      required:
+      - originGroup
+      - patterns
+      type: object
+      properties:
+        patterns:
+          type: array
+          items:
+            type: string
+          description: 'Front Doorルートのパスパターンを指定します。
+
+            パターンの先頭はスラッシュ (/) にする必要があります。アスタリスクは末尾のみで使用でき、アスタリスクの前はスラッシュ (/*) にする必要があります 。'
+        originGroup:
+          $ref: '#/components/schemas/FrontDoorOriginGroup'
+      additionalProperties: false
+      description: Front Doorルート
+    DeploymentStatusProperties:
+      type: object
+      properties:
+        provisioningState:
+          type:
+          - string
+          - 'null'
+          description: リソースのプロビジョニング状態。
+        timestamp:
+          type: string
+          description: デプロイメントステータスのタイムスタンプ。
+          format: date-time
+      additionalProperties: false
+      description: デプロイメントステータスのプロパティを表します。
+    ErrorInfo:
+      type: object
+      properties:
+        code:
+          type:
+          - string
+          - 'null'
+          description: エラーコード
+        message:
+          type:
+          - string
+          - 'null'
+          description: エラーメッセージ
+      additionalProperties: false
+      description: エラー情報
+    ResourceGroupData:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/ResourceIdentifier'
+        name:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        resourceType:
+          $ref: '#/components/schemas/ResourceType'
+        systemData:
+          $ref: '#/components/schemas/SystemData'
+        tags:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type:
+            - string
+            - 'null'
+          readOnly: true
+        location:
+          $ref: '#/components/schemas/AzureLocation'
+        resourceGroupProvisioningState:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        managedBy:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    GetResourceResponse:
+      type: object
+      properties:
+        data:
+          description: データ
+        url:
+          type:
+          - string
+          - 'null'
+          description: 管理ポータルのURL
+      additionalProperties: false
+      description: リソース個別取得APIのレスポンス
+    FrontDoorOrigin:
+      required:
+      - hostHeader
+      - hostName
+      type: object
+      properties:
+        hostName:
+          maxLength: 100
+          minLength: 1
+          type: string
+          description: '配信元のホスト名を指定します。
+
+            ホスト名は、有効なドメイン名、IPv4、または IPv6 である必要があります。'
+        hostHeader:
+          maxLength: 100
+          minLength: 1
+          type: string
+          description: '配信元のホストヘッダーを指定します。
+
+            ホストヘッダーは、有効なドメイン名、IPv4、または IPv6 である必要があります。'
+      additionalProperties: false
+      description: 配信元
+x-refined-from:
+- addon-api.yaml
+- sakura-internet-addon-openapi.yml

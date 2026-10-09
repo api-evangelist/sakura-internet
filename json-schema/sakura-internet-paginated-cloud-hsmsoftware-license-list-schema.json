@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-paginated-cloud-hsmsoftware-license-list-schema.json",
+  "title": "PaginatedCloudHSMSoftwareLicenseList",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-security-encryption-openapi.yml#/components/schemas/PaginatedCloudHSMSoftwareLicenseList",
+  "type": "object",
+  "required": [
+    "Count",
+    "From",
+    "Total",
+    "Licenses",
+    "is_ok"
+  ],
+  "properties": {
+    "Count": {
+      "type": "integer"
+    },
+    "From": {
+      "type": "integer"
+    },
+    "Total": {
+      "type": "integer"
+    },
+    "Licenses": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/CloudHSMSoftwareLicense"
+      }
+    },
+    "is_ok": {
+      "type": "boolean"
+    }
+  },
+  "$defs": {
+    "CloudHSMSoftwareLicense": {
+      "type": "object",
+      "properties": {
+        "ID": {
+          "type": "string",
+          "readOnly": true
+        },
+        "CreatedAt": {
+          "$ref": "#/$defs/DateTime"
+        },
+        "ModifiedAt": {
+          "$ref": "#/$defs/DateTime"
+        },
+        "ServiceClass": {
+          "enum": [
+            "cloud/cloudhsm/license/l7"
+          ],
+          "type": "string",
+          "description": "* `cloud/cloudhsm/license/l7` - Type-L7",
+          "x-spec-enum-id": "a5b49b449aca4a6f",
+          "readOnly": true,
+          "title": "サービスクラス"
+        },
+        "Name": {
+          "type": "string",
+          "title": "名前",
+          "maxLength": 255
+        },
+        "Description": {
+          "type": "string",
+          "title": "説明"
+        },
+        "Tags": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": [
+        "CreatedAt",
+        "Description",
+        "ID",
+        "ModifiedAt",
+        "Name",
+        "ServiceClass",
+        "Tags"
+      ]
+    },
+    "DateTime": {
+      "type": "string",
+      "format": "iso8601"
+    }
+  }
+}

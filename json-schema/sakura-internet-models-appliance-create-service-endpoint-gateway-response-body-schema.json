@@ -1,0 +1,877 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-models-appliance-create-service-endpoint-gateway-response-body-schema.json",
+  "title": "Models.Appliance.CreateServiceEndpointGatewayResponseBody",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-seg-openapi.yml#/components/schemas/Models.Appliance.CreateServiceEndpointGatewayResponseBody",
+  "type": "object",
+  "required": [
+    "Appliance",
+    "is_ok"
+  ],
+  "properties": {
+    "Appliance": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/Models.Appliance.Appliance"
+        }
+      ],
+      "description": "サービスエンドポイントゲートウェイ情報"
+    },
+    "is_ok": {
+      "type": "boolean",
+      "description": "操作結果"
+    }
+  },
+  "$defs": {
+    "Models.Appliance.Appliance": {
+      "type": "object",
+      "required": [
+        "ID",
+        "Class",
+        "Name",
+        "Description",
+        "Plan",
+        "Settings",
+        "SettingsHash",
+        "Remark",
+        "Availability",
+        "Instance",
+        "Disk",
+        "ServiceClass",
+        "Generation",
+        "CreatedAt",
+        "Icon",
+        "Switch",
+        "Interfaces",
+        "Tags"
+      ],
+      "properties": {
+        "ID": {
+          "type": "string"
+        },
+        "Class": {
+          "type": "string",
+          "enum": [
+            "serviceendpointgateway"
+          ],
+          "description": "クラス名"
+        },
+        "Name": {
+          "type": "string",
+          "description": "名前"
+        },
+        "Description": {
+          "type": "string",
+          "description": "説明"
+        },
+        "Plan": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Models.Plan.Plan"
+            }
+          ],
+          "description": "プラン情報"
+        },
+        "Settings": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Models.Settings.ApplianceSettings"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "設定情報"
+        },
+        "SettingsHash": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "設定情報のハッシュ値"
+        },
+        "Remark": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Models.Remark.ApplianceRemark"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "備考情報"
+        },
+        "Availability": {
+          "type": "string",
+          "enum": [
+            "available",
+            "unavailable",
+            "migrating"
+          ],
+          "description": "稼働状態"
+        },
+        "Instance": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Models.Instance.Instance"
+            }
+          ],
+          "description": "インスタンス情報"
+        },
+        "Disk": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Models.Disk.Disk"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "ディスク情報"
+        },
+        "ServiceClass": {
+          "type": "string",
+          "enum": [
+            "cloud/appliance/serviceendpointgateway/1"
+          ],
+          "description": "サービスクラス"
+        },
+        "Generation": {
+          "type": "integer",
+          "format": "int32",
+          "description": "世代"
+        },
+        "CreatedAt": {
+          "type": "string",
+          "description": "作成日時"
+        },
+        "Icon": {
+          "type": "null",
+          "description": "アイコン情報"
+        },
+        "Switch": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Models.Network.Switch"
+            }
+          ],
+          "description": "接続先スイッチ情報"
+        },
+        "Interfaces": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Models.Network.Interface"
+          },
+          "description": "インターフェース情報"
+        },
+        "Tags": {
+          "type": "array",
+          "prefixItems": [],
+          "description": "タグ情報"
+        }
+      }
+    },
+    "Models.Disk.DedicatedStorageContract": {
+      "type": "object",
+      "required": [
+        "ID"
+      ],
+      "properties": {
+        "ID": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "契約ID"
+        }
+      }
+    },
+    "Models.Disk.Disk": {
+      "type": "object",
+      "required": [
+        "EncryptionAlgorithm",
+        "EncryptionKey",
+        "DedicatedStorageContract"
+      ],
+      "properties": {
+        "EncryptionAlgorithm": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "暗号化アルゴリズム"
+        },
+        "EncryptionKey": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Models.Disk.EncryptionKey"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "暗号化キー情報"
+        },
+        "DedicatedStorageContract": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Models.Disk.DedicatedStorageContract"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "専用ストレージ契約情報"
+        }
+      }
+    },
+    "Models.Disk.EncryptionKey": {
+      "type": "object",
+      "required": [
+        "KMSKeyID"
+      ],
+      "properties": {
+        "KMSKeyID": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "KMSキーID"
+        }
+      }
+    },
+    "Models.Instance.HostInfo": {
+      "type": "object",
+      "required": [
+        "Name",
+        "InfoURL"
+      ],
+      "properties": {
+        "Name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "ホスト名"
+        },
+        "InfoURL": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "ホスト情報のURL"
+        }
+      }
+    },
+    "Models.Instance.Instance": {
+      "type": "object",
+      "properties": {
+        "Status": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "up",
+                "down",
+                "cleaning"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "インスタンスの稼働状態"
+        },
+        "StatusChangedAt": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "状態変更日時"
+        },
+        "Host": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Models.Instance.HostInfo"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "ホスト情報"
+        },
+        "Hosts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Models.Instance.HostInfo"
+          },
+          "description": "ホスト情報一覧"
+        }
+      }
+    },
+    "Models.Network.Interface": {
+      "type": "object",
+      "required": [
+        "IPAddress",
+        "UserIPAddress",
+        "HostName",
+        "Switch"
+      ],
+      "properties": {
+        "IPAddress": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "IPアドレス"
+        },
+        "UserIPAddress": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "ユーザーIPアドレス"
+        },
+        "HostName": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "ホスト名"
+        },
+        "Switch": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Models.Network.InterfaceSwitch"
+            }
+          ],
+          "description": "スイッチ情報"
+        }
+      }
+    },
+    "Models.Network.InterfaceSwitch": {
+      "type": "object",
+      "required": [
+        "ID",
+        "Name",
+        "Scope",
+        "Subnet",
+        "UserSubnet"
+      ],
+      "properties": {
+        "ID": {
+          "type": "string",
+          "description": "スイッチID"
+        },
+        "Name": {
+          "type": "string",
+          "description": "スイッチ名"
+        },
+        "Scope": {
+          "type": "string",
+          "enum": [
+            "user",
+            "shared"
+          ],
+          "description": "スイッチのスコープ"
+        },
+        "Subnet": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Models.Network.Subnet"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "サブネット情報"
+        },
+        "UserSubnet": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Models.Network.UserSubnet"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "ユーザーサブネット情報"
+        }
+      }
+    },
+    "Models.Network.InternetInfo": {
+      "type": "object",
+      "required": [
+        "BandWidthMbps"
+      ],
+      "properties": {
+        "BandWidthMbps": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "format": "int32"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "帯域幅（Mbps）"
+        }
+      }
+    },
+    "Models.Network.Region": {
+      "type": "object",
+      "required": [
+        "ID",
+        "Name"
+      ],
+      "properties": {
+        "ID": {
+          "type": "integer",
+          "format": "int32",
+          "description": "リージョンID\n\nリージョンIDとリージョン名の対応表は以下の通りです。\n| リージョンID | リージョン名 | 説明 |\n|-------------|---------------|------|\n| 210         | 東京          | 東京リージョン |\n| 310         | 石狩          | 石狩リージョン |"
+        },
+        "Name": {
+          "type": "string",
+          "description": "リージョン名"
+        }
+      }
+    },
+    "Models.Network.Subnet": {
+      "type": "object",
+      "required": [
+        "NetworkAddress",
+        "NetworkMaskLen",
+        "DefaultRoute",
+        "Internet"
+      ],
+      "properties": {
+        "NetworkAddress": {
+          "type": "string",
+          "description": "ネットワークアドレス"
+        },
+        "NetworkMaskLen": {
+          "type": "integer",
+          "format": "int32",
+          "description": "ネットマスク長"
+        },
+        "DefaultRoute": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "デフォルトルート"
+        },
+        "Internet": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Models.Network.InternetInfo"
+            }
+          ],
+          "description": "インターネット接続情報"
+        }
+      }
+    },
+    "Models.Network.Switch": {
+      "type": "object",
+      "required": [
+        "ID",
+        "Name",
+        "Internet",
+        "Scope",
+        "Availability",
+        "Zone"
+      ],
+      "properties": {
+        "ID": {
+          "type": "string",
+          "description": "スイッチID"
+        },
+        "Name": {
+          "type": "string",
+          "description": "スイッチ名"
+        },
+        "Internet": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Models.Network.InternetInfo"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "インターネット接続情報"
+        },
+        "Scope": {
+          "type": "string",
+          "enum": [
+            "user",
+            "shared"
+          ],
+          "description": "スイッチのスコープ"
+        },
+        "Availability": {
+          "type": "string",
+          "enum": [
+            "available",
+            "unavailable"
+          ],
+          "description": "稼働状態"
+        },
+        "Zone": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Models.Network.Zone"
+            }
+          ],
+          "description": "スイッチのゾーン情報"
+        }
+      }
+    },
+    "Models.Network.UserSubnet": {
+      "type": "object",
+      "required": [
+        "DefaultRoute",
+        "NetworkMaskLen"
+      ],
+      "properties": {
+        "DefaultRoute": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "デフォルトルート"
+        },
+        "NetworkMaskLen": {
+          "type": "integer",
+          "format": "int32",
+          "description": "ネットマスク長"
+        }
+      }
+    },
+    "Models.Network.Zone": {
+      "type": "object",
+      "required": [
+        "ID",
+        "Name",
+        "Region"
+      ],
+      "properties": {
+        "ID": {
+          "type": "integer",
+          "format": "int32",
+          "description": "ゾーンID\n\nゾーンIDとゾーン名の対応表は以下の通りです。\n\n| ゾーンID | ゾーン名 | 説明 |\n|---------|---------|------|\n| 21001   | tk1a    | 東京第1ゾーン |\n| 21002   | tk1b    | 東京第2ゾーン |\n| 29001   | tk1v    | サンドボックスゾーン名 |\n| 31001   | is1a    | 石狩第1ゾーン |\n| 31002   | is1b    | 石狩第2ゾーン |\n| 31003   | is1c    | 石狩第3ゾーン |"
+        },
+        "Name": {
+          "type": "string",
+          "description": "ゾーン名"
+        },
+        "Region": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Models.Network.Region"
+            }
+          ],
+          "description": "リージョン情報"
+        }
+      }
+    },
+    "Models.Plan.Plan": {
+      "type": "object",
+      "required": [
+        "ID"
+      ],
+      "properties": {
+        "ID": {
+          "type": "number",
+          "enum": [
+            1
+          ],
+          "description": "プランID"
+        }
+      }
+    },
+    "Models.Remark.ApplianceRemark": {
+      "type": "object",
+      "required": [
+        "Switch",
+        "Network",
+        "Servers",
+        "Zone"
+      ],
+      "properties": {
+        "Switch": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Models.Remark.SwitchRemark"
+            }
+          ],
+          "description": "スイッチ情報"
+        },
+        "Network": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Models.Remark.NetworkRemark"
+            }
+          ],
+          "description": "ネットワーク情報"
+        },
+        "Servers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Models.Remark.ServerRemark"
+          },
+          "description": "サーバー情報"
+        },
+        "Zone": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Models.Remark.ZoneRemark"
+            }
+          ],
+          "description": "ゾーン情報"
+        }
+      }
+    },
+    "Models.Remark.NetworkRemark": {
+      "type": "object",
+      "required": [
+        "NetworkMaskLen"
+      ],
+      "properties": {
+        "NetworkMaskLen": {
+          "type": "integer",
+          "format": "int32",
+          "description": "ネットワークマスク長"
+        }
+      }
+    },
+    "Models.Remark.ServerRemark": {
+      "type": "object",
+      "required": [
+        "IPAddress"
+      ],
+      "properties": {
+        "IPAddress": {
+          "type": "string",
+          "description": "サーバーIPアドレス"
+        }
+      }
+    },
+    "Models.Remark.SwitchRemark": {
+      "type": "object",
+      "required": [
+        "ID"
+      ],
+      "properties": {
+        "ID": {
+          "type": "string",
+          "description": "スイッチID"
+        }
+      }
+    },
+    "Models.Remark.ZoneRemark": {
+      "type": "object",
+      "required": [
+        "ID"
+      ],
+      "properties": {
+        "ID": {
+          "type": "string",
+          "description": "ゾーンID\n\nゾーンIDとゾーン名の対応表は以下の通りです。\n| ゾーンID | ゾーン名 | 説明 |\n|----------|----------|------|\n| 21001    | tk1a     | 東京第1ゾーン |\n| 21002    | tk1b     | 東京第2ゾーン |\n| 29001    | tk1v     | サンドボックスゾーン |\n| 31001    | is1a     | 石狩第1ゾーン |\n| 31002    | is1b     | 石狩第2ゾーン |\n| 31003    | is1c     | 石狩第3ゾーン |"
+        }
+      }
+    },
+    "Models.Settings.ApplianceSettings": {
+      "type": "object",
+      "required": [
+        "ServiceEndpointGateway"
+      ],
+      "properties": {
+        "ServiceEndpointGateway": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Models.Settings.ServiceEndpointGatewaySettings"
+            }
+          ],
+          "description": "サービスエンドポイントゲートウェイの設定情報"
+        }
+      }
+    },
+    "Models.Settings.DNSForwardingSettings": {
+      "type": "object",
+      "required": [
+        "Enabled"
+      ],
+      "properties": {
+        "Enabled": {
+          "type": "string",
+          "enum": [
+            "True",
+            "False"
+          ],
+          "description": "有効化・無効化の選択"
+        },
+        "PrivateHostedZone": {
+          "type": "string",
+          "description": "ゾーン名"
+        },
+        "UpstreamDNS1": {
+          "type": "string",
+          "description": "フォワード先のDNSサーバ(1)"
+        },
+        "UpstreamDNS2": {
+          "type": "string",
+          "description": "フォワード先のDNSサーバ(2)"
+        }
+      }
+    },
+    "Models.Settings.EnabledService": {
+      "type": "object",
+      "required": [
+        "Type",
+        "Config"
+      ],
+      "properties": {
+        "Type": {
+          "type": "string",
+          "enum": [
+            "ObjectStorage",
+            "ContainerRegistry",
+            "MonitoringSuite",
+            "AIEngine",
+            "SimpleAI",
+            "AppRunDedicatedControlPlane"
+          ],
+          "description": "接続先マネージドサービス\n\n| Type | 説明 |\n|---|---|\n| ObjectStorage | オブジェクトストレージ |\n| ContainerRegistry | コンテナレジストリ |\n| MonitoringSuite | モニタリングスイート |\n| AIEngine | AI Engine |\n| SimpleAI | シンプルAI |\n| AppRunDedicatedControlPlane | AppRun専有型コントロールプレーン |"
+        },
+        "Config": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Models.Settings.ServiceConfig"
+            }
+          ],
+          "description": "接続先マネージドサービスの設定"
+        }
+      }
+    },
+    "Models.Settings.MonitoringSuiteSettings": {
+      "type": "object",
+      "required": [
+        "Enabled"
+      ],
+      "properties": {
+        "Enabled": {
+          "type": "string",
+          "enum": [
+            "True",
+            "False"
+          ],
+          "description": "有効化・無効化の選択"
+        }
+      }
+    },
+    "Models.Settings.ServiceConfig": {
+      "type": "object",
+      "properties": {
+        "Endpoints": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "### ObjectStorage Type\nエンドポイントは以下に限定されます。\n\n| 名前 | エンドポイント |\n|---|---|\n| 石狩第1サイト | `s3.isk01.sakurastorage.jp` |\n| 東京第1サイト | `s3.tky01.sakurastorage.jp` |\n| 東京第1サイト（アーカイブプラン） | `s3.arc02.sakurastorage.jp` |\n\n### ContainerRegistry Type\nsakuracr.jp のサブドメインを指定してください。\n\n### MonitoringSuite Type\nモニタリングスイートのログストレージ・メトリクスストレージのエンドポイントを指定してください。\n\n| ストレージ | エンドポイントの形式 |\n|---|---|\n| ログストレージ | `[0-9]{12}.logs.monitoring.global.api.sacloud.jp` |\n| メトリクスストレージ | `[0-9]{12}.metrics.monitoring.global.api.sacloud.jp` |\n\n### AIEngine Type\nエンドポイントは以下に限定されます。\n\n- api.ai.sakura.ad.jp\n\n### SimpleAI Type\nエンドポイントは以下に限定されます。\n\n- simpleai.is1.api.sacloud.jp\n\n### AppRunDedicatedControlPlane Type\nエンドポイントは指定できません。"
+        },
+        "Mode": {
+          "type": "string",
+          "enum": [
+            "Managed",
+            ""
+          ],
+          "description": "接続先マネージドサービスのエンドポイントの自動設定モード。\n\nAppRunDedicatedControlPlaneのみ利用できます。"
+        }
+      }
+    },
+    "Models.Settings.ServiceEndpointGatewaySettings": {
+      "type": "object",
+      "required": [
+        "EnabledServices"
+      ],
+      "properties": {
+        "EnabledServices": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Models.Settings.EnabledService"
+          },
+          "description": "接続先マネージドサービスの設定"
+        },
+        "MonitoringSuite": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Models.Settings.MonitoringSuiteSettings"
+            }
+          ],
+          "description": "モニタリングスイート連携の設定"
+        },
+        "DNSForwarding": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Models.Settings.DNSForwardingSettings"
+            }
+          ],
+          "description": "DNSプライベートホストゾーンの設定"
+        }
+      }
+    }
+  }
+}

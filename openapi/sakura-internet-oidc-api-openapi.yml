@@ -1,0 +1,346 @@
+openapi: 3.2.0
+info:
+  title: Sakura Internet OIDC認証 API
+  version: 2.1.0
+  contact:
+    name: SAKURA internet Inc.
+  license:
+    name: Copyright(C) SAKURA internet Inc. all rights reserved.
+  description: 'Operations tagged OIDC認証 across 2 of this provider''s published API definitions: apigw-api.yaml, sakura-internet-apigw-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://secure.sakura.ad.jp/cloud/api/apigw/1.0/
+tags:
+- name: OIDC認証
+paths:
+  /oidc:
+    post:
+      tags:
+      - OIDC認証
+      summary: OIDC認証登録API
+      description: OIDC認証の設定値を登録します。
+      operationId: addOidc
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Oidc'
+        required: true
+      responses:
+        '201':
+          description: 成功時のレスポンス
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - apigw
+                properties:
+                  apigw:
+                    type: object
+                    properties:
+                      oidc:
+                        $ref: '#/components/schemas/Oidc'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntityResponse'
+        '500':
+          $ref: '#/components/responses/ServerErrorResponse'
+    get:
+      tags:
+      - OIDC認証
+      summary: OIDC認証一覧照会API
+      description: 登録した OIDC認証 の一覧を取得します。
+      operationId: getOidc
+      responses:
+        '200':
+          description: 成功時のレスポンス
+          content:
+            application/json:
+              schema:
+                required:
+                - apigw
+                properties:
+                  apigw:
+                    properties:
+                      oidcs:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Oidc'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/ServerErrorResponse'
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/apigw/1.0/
+  /oidc/{oidcId}:
+    get:
+      tags:
+      - OIDC認証
+      summary: OIDC認証詳細照会API
+      description: 登録した OIDC認証 の詳細を取得します。
+      operationId: getOidcById
+      parameters:
+      - $ref: '#/components/parameters/OidcID'
+      responses:
+        '200':
+          description: 成功時のレスポンス
+          content:
+            application/json:
+              schema:
+                required:
+                - apigw
+                properties:
+                  apigw:
+                    properties:
+                      oidc:
+                        $ref: '#/components/schemas/OidcDetail'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/ServerErrorResponse'
+    put:
+      tags:
+      - OIDC認証
+      summary: OIDC認証更新API
+      description: 登録した OIDC認証 を更新します。
+      operationId: updateOidc
+      parameters:
+      - $ref: '#/components/parameters/OidcID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Oidc'
+        required: true
+      responses:
+        '204':
+          description: 成功時の返却値はありません。
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictResponse'
+        '500':
+          $ref: '#/components/responses/ServerErrorResponse'
+    delete:
+      tags:
+      - OIDC認証
+      summary: OIDC認証削除API
+      description: 登録した OIDC認証 を削除します。
+      operationId: deleteOidc
+      parameters:
+      - $ref: '#/components/parameters/OidcID'
+      responses:
+        '204':
+          description: 成功時の返却値はありません。
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '409':
+          $ref: '#/components/responses/ConflictResponse'
+        '500':
+          $ref: '#/components/responses/ServerErrorResponse'
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/apigw/1.0/
+components:
+  responses:
+    ServerErrorResponse:
+      description: サーバーエラー
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorSchema'
+    ConflictResponse:
+      description: リソースが競合している
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorSchema'
+    UnprocessableEntityResponse:
+      description: Request自体は正しいが、処理できない
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorSchema'
+    BadRequestResponse:
+      description: Requestエラー
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorSchema'
+    NotFoundResponse:
+      description: リソースが存在しない
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorSchema'
+    UnauthorizedResponse:
+      description: 認証エラー
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorSchema'
+  schemas:
+    Name:
+      type: string
+      description: Unicode文字、数字、ハイフン、アンダースコア、ピリオドのみ許可
+      minLength: 1
+      maxLength: 255
+      example: name
+      pattern: ^[\p{L}\p{N}._\-]+$
+    AuthenticationMethods:
+      type: array
+      description: OIDC認証フロー
+      items:
+        type: string
+        enum:
+        - authorizationCodeFlow
+        - accessToken
+        example: accessToken
+    Oidc:
+      description: Oidc認証情報
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Model'
+      - properties:
+          name:
+            $ref: '#/components/schemas/Name'
+            description: 認証名<br>認証名は半角英数字およびアンダースコアのみを許可
+            example: name
+          authenticationMethods:
+            $ref: '#/components/schemas/AuthenticationMethods'
+          issuer:
+            type: string
+            description: IdPに紐づくエンドポイント
+            example: http://example.com
+          clientId:
+            type: string
+            description: IdPに紐づくクライアントID
+            example: abc123xyz456def789ghi012jkl345mno678pqr
+            x-oapi-codegen-extra-tags:
+              mask: 'true'
+          clientSecret:
+            type: string
+            description: IdPに紐づくクライアントシークレット
+            example: s3cr3tK3y!@12345vWxz67890uYz@Qp
+            x-oapi-codegen-extra-tags:
+              mask: 'true'
+          scopes:
+            type: array
+            description: IdPに要求するスコープ
+            items:
+              type: string
+            example: openid
+          hideCredentials:
+            type: boolean
+            description: 認証情報のサービス（アップストリームサーバ）への転送を有効にするかどうか
+            default: false
+          tokenAudiences:
+            type: array
+            description: トークンaudクレーム検証値
+            items:
+              type: string
+              example: value1
+          useSession:
+            type: boolean
+            description: 認証情報をセッションとしてAPIゲートウェイへの保存を有効にするかどうか
+            default: false
+          refreshTokenParamName:
+            type: string
+            description: この項目は現在、指定することができない<br>リフレッシュトークンパラメータ名<br>指定がない場合は"refresh_token"が設定される<br>※authenticationMethodsに"refreshToken"が含まれる場合に使用される
+            example: refreshToken
+            deprecated: true
+        required:
+        - name
+        - authenticationMethods
+        - issuer
+        - clientId
+        - clientSecret
+    OidcDetail:
+      description: OIDC詳細情報
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Oidc'
+      - properties:
+          services:
+            type: array
+            description: OIDC認証を使用するServiceの要約情報
+            items:
+              $ref: '#/components/schemas/ServiceSummary'
+    Model:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: b69f7bfe-1d8f-48bb-8b85-b47359366e48
+          description: Entityを識別するためのID
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+          description: 作成日時
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+          description: 更新日時
+      description: 各Entity共通のモデル
+    ServiceSummary:
+      description: Service要約情報
+      type: object
+      allOf:
+      - properties:
+          id:
+            type: string
+            format: uuid
+            readOnly: true
+            description: Entityを識別するためのID
+            example: b69f7bfe-1d8f-48bb-8b85-b47359366e48
+          name:
+            $ref: '#/components/schemas/Name'
+            description: Service名<br>Service名は半角英数字およびアンダースコアのみを許可
+            example: serviceName
+    ErrorSchema:
+      type: object
+      properties:
+        message:
+          type: string
+          description: 各エラーに対応したメッセージが返却される
+          example: Bad Request
+  parameters:
+    OidcID:
+      in: path
+      name: oidcId
+      description: OidcID
+      schema:
+        type: string
+        format: uuid
+        example: 7c8d78bc-e4a3-4600-b70a-f5fe802dc1ba
+      required: true
+      example: 7c8d78bc-e4a3-4600-b70a-f5fe802dc1ba
+x-refined-from:
+- apigw-api.yaml
+- sakura-internet-apigw-openapi.yml

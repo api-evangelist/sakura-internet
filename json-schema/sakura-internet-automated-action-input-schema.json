@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-automated-action-input-schema.json",
+  "title": "AutomatedActionInput",
+  "description": "自動アクションを作成または更新する際に使用するリクエストボディ。",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-security-control-openapi.yml#/components/schemas/AutomatedActionInput",
+  "type": "object",
+  "required": [
+    "name",
+    "action",
+    "executionCondition",
+    "isEnabled"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "自動アクションの名称。"
+    },
+    "description": {
+      "type": "string",
+      "description": "自動アクションの説明。"
+    },
+    "action": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ActionDefinition"
+        }
+      ],
+      "description": "アクションの定義（アクションタイプごとに異なる）。"
+    },
+    "executionCondition": {
+      "type": "string",
+      "description": "どのような条件で自動アクションを実行するかの条件式。\nこの条件式を満たした場合にのみ、自動アクションが実行される。\nCEL（Common Expression Language）形式で記述する。"
+    },
+    "isEnabled": {
+      "type": "boolean",
+      "description": "自動アクションが有効かどうか。"
+    }
+  },
+  "$defs": {
+    "ActionDefinition": {
+      "type": "object",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/ActionDefinitionSimpleNotification"
+        },
+        {
+          "$ref": "#/$defs/ActionDefinitionWorkflows"
+        }
+      ]
+    },
+    "ActionDefinitionSimpleNotification": {
+      "type": "object",
+      "required": [
+        "actionType",
+        "actionParameter"
+      ],
+      "properties": {
+        "actionType": {
+          "type": "string",
+          "enum": [
+            "simpleNotification"
+          ]
+        },
+        "actionParameter": {
+          "$ref": "#/$defs/SakuraSimpleNotification"
+        }
+      }
+    },
+    "ActionDefinitionWorkflows": {
+      "type": "object",
+      "required": [
+        "actionType",
+        "actionParameter"
+      ],
+      "properties": {
+        "actionType": {
+          "type": "string",
+          "enum": [
+            "workflows"
+          ]
+        },
+        "actionParameter": {
+          "$ref": "#/$defs/SakuraWorkflows"
+        }
+      }
+    },
+    "SakuraSimpleNotification": {
+      "type": "object",
+      "required": [
+        "servicePrincipalId",
+        "notificationGroupId"
+      ],
+      "properties": {
+        "servicePrincipalId": {
+          "type": "string",
+          "description": "さくらのクラウドの作成・削除権限を持つサービスプリンシパルID。\n\nこのサービスプリンシパルには `作成・削除` ロールが付与されている必要がある。\n付与されていない場合、自動アクションの実行に失敗する。"
+        },
+        "notificationGroupId": {
+          "type": "string",
+          "description": "通知先グループID"
+        }
+      }
+    },
+    "SakuraWorkflows": {
+      "type": "object",
+      "required": [
+        "servicePrincipalId",
+        "workflowId"
+      ],
+      "properties": {
+        "servicePrincipalId": {
+          "type": "string",
+          "description": "さくらのクラウドの作成・削除権限を持つサービスプリンシパルID。\n\nこのサービスプリンシパルには `ワークフロー` ロールが付与されている必要がある。\n付与されていない場合、自動アクションの実行に失敗する。"
+        },
+        "workflowId": {
+          "type": "string",
+          "description": "ワークフローID"
+        },
+        "revisionId": {
+          "type": "integer",
+          "description": "実行したいワークフローのリビジョンID。\n指定しない場合は最新のリビジョンが使用される。"
+        },
+        "revisionAlias": {
+          "type": "string",
+          "description": "実行したいリビジョンのエイリアス。\n指定しない場合は最新のリビジョンが使用される。"
+        },
+        "args": {
+          "type": "string",
+          "description": "実行時にワークフローへ渡す引数（JSON文字列）。\n引数を要求するワークフローの場合は指定が必須。\n例: `{\\\"server_id\\\": 12345}`"
+        },
+        "name": {
+          "type": "string",
+          "description": "ワークフロー実行名。"
+        }
+      }
+    }
+  }
+}

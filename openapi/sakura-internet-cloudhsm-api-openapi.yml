@@ -1,0 +1,1372 @@
+openapi: 3.2.0
+info:
+  title: Sakura Internet Cloudhsm API
+  version: 1.2.0
+  description: 'Operations tagged cloudhsm across 2 of this provider''s published API definitions: security-encryption-api.yaml, sakura-internet-security-encryption-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://secure.sakura.ad.jp/cloud/zone/is1a/api/cloud/1.1
+  description: 石狩第1ゾーン
+- url: https://secure.sakura.ad.jp/cloud/zone/is1b/api/cloud/1.1
+  description: 石狩第2ゾーン
+- url: https://secure.sakura.ad.jp/cloud/zone/is1c/api/cloud/1.1
+  description: 石狩第3ゾーン
+- url: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1
+  description: 東京第1ゾーン
+- url: https://secure.sakura.ad.jp/cloud/zone/tk1b/api/cloud/1.1
+  description: 東京第2ゾーン
+security:
+- basicAuth: []
+tags:
+- name: cloudhsm
+paths:
+  /cloudhsm/cloudhsms:
+    get:
+      operationId: listCloudHSMs
+      parameters:
+      - name: Count
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: From
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      tags:
+      - cloudhsm
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCloudHSMList'
+          description: ''
+      summary: List cloud HSMs
+      x-summary-source: derived
+    post:
+      operationId: createCloudHSM
+      tags:
+      - cloudhsm
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WrappedCreateCloudHSMRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WrappedCreateCloudHSM'
+          description: ''
+      summary: Create cloud HSM
+      x-summary-source: derived
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1a/api/cloud/1.1
+      description: 石狩第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1b/api/cloud/1.1
+      description: 石狩第2ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1c/api/cloud/1.1
+      description: 石狩第3ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1
+      description: 東京第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1b/api/cloud/1.1
+      description: 東京第2ゾーン
+  /cloudhsm/cloudhsms/{cloudhsm_resource_id}/clients:
+    get:
+      operationId: listCloudHSMClients
+      parameters:
+      - name: Count
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: From
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - in: path
+        name: cloudhsm_resource_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - cloudhsm
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCloudHSMClientList'
+          description: ''
+      summary: List cloud HSM clients
+      x-summary-source: derived
+    post:
+      operationId: createCloudHSMClient
+      parameters:
+      - in: path
+        name: cloudhsm_resource_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - cloudhsm
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WrappedCreateCloudHSMClientRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WrappedCreateCloudHSMClient'
+          description: ''
+      summary: Create cloud HSM client
+      x-summary-source: derived
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1a/api/cloud/1.1
+      description: 石狩第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1b/api/cloud/1.1
+      description: 石狩第2ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1c/api/cloud/1.1
+      description: 石狩第3ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1
+      description: 東京第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1b/api/cloud/1.1
+      description: 東京第2ゾーン
+  /cloudhsm/cloudhsms/{cloudhsm_resource_id}/clients/{id}:
+    get:
+      operationId: readCloudHSMClient
+      parameters:
+      - in: path
+        name: cloudhsm_resource_id
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: A unique value identifying this CloudHSMクライアント.
+        required: true
+      tags:
+      - cloudhsm
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WrappedCloudHSMClient'
+          description: ''
+      summary: Read cloud HSM client
+      x-summary-source: derived
+    put:
+      operationId: updateCloudHSMClient
+      parameters:
+      - in: path
+        name: cloudhsm_resource_id
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: A unique value identifying this CloudHSMクライアント.
+        required: true
+      tags:
+      - cloudhsm
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WrappedCloudHSMClientRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WrappedCloudHSMClient'
+          description: ''
+      summary: Update cloud HSM client
+      x-summary-source: derived
+    delete:
+      operationId: deleteCloudHSMClient
+      parameters:
+      - in: path
+        name: cloudhsm_resource_id
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: A unique value identifying this CloudHSMクライアント.
+        required: true
+      tags:
+      - cloudhsm
+      responses:
+        '204':
+          description: No response body
+      summary: Delete cloud HSM client
+      x-summary-source: derived
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1a/api/cloud/1.1
+      description: 石狩第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1b/api/cloud/1.1
+      description: 石狩第2ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1c/api/cloud/1.1
+      description: 石狩第3ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1
+      description: 東京第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1b/api/cloud/1.1
+      description: 東京第2ゾーン
+  /cloudhsm/cloudhsms/{resource_id}:
+    get:
+      operationId: readCloudHSM
+      parameters:
+      - in: path
+        name: resource_id
+        schema:
+          type: string
+          title: リソースID
+        required: true
+      tags:
+      - cloudhsm
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WrappedCloudHSM'
+          description: ''
+      summary: Read cloud HSM
+      x-summary-source: derived
+    put:
+      operationId: updateCloudHSM
+      parameters:
+      - in: path
+        name: resource_id
+        schema:
+          type: string
+          title: リソースID
+        required: true
+      tags:
+      - cloudhsm
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WrappedCloudHSMRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WrappedCloudHSM'
+          description: ''
+      summary: Update cloud HSM
+      x-summary-source: derived
+    delete:
+      operationId: deleteCloudHSM
+      parameters:
+      - in: path
+        name: resource_id
+        schema:
+          type: string
+          title: リソースID
+        required: true
+      tags:
+      - cloudhsm
+      responses:
+        '204':
+          description: No response body
+      summary: Delete cloud HSM
+      x-summary-source: derived
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1a/api/cloud/1.1
+      description: 石狩第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1b/api/cloud/1.1
+      description: 石狩第2ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1c/api/cloud/1.1
+      description: 石狩第3ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1
+      description: 東京第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1b/api/cloud/1.1
+      description: 東京第2ゾーン
+  /cloudhsm/cloudhsms/{resource_id}/peers:
+    get:
+      operationId: listCloudHSMPeers
+      parameters:
+      - in: path
+        name: resource_id
+        schema:
+          type: string
+          title: リソースID
+        required: true
+      tags:
+      - cloudhsm
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WrappedPeerList'
+          description: ''
+      summary: List cloud HSM peers
+      x-summary-source: derived
+    post:
+      operationId: createCloudHSMPeer
+      parameters:
+      - in: path
+        name: resource_id
+        schema:
+          type: string
+          title: リソースID
+        required: true
+      tags:
+      - cloudhsm
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WrappedPeerRequest'
+        required: true
+      responses:
+        '204':
+          description: No response body
+      summary: Create cloud HSM peer
+      x-summary-source: derived
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1a/api/cloud/1.1
+      description: 石狩第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1b/api/cloud/1.1
+      description: 石狩第2ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1c/api/cloud/1.1
+      description: 石狩第3ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1
+      description: 東京第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1b/api/cloud/1.1
+      description: 東京第2ゾーン
+  /cloudhsm/cloudhsms/{resource_id}/peers/{peer_id}:
+    delete:
+      operationId: deleteCloudHSMPeer
+      parameters:
+      - in: path
+        name: peer_id
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: resource_id
+        schema:
+          type: string
+          title: リソースID
+        required: true
+      tags:
+      - cloudhsm
+      responses:
+        '204':
+          description: No response body
+      summary: Delete cloud HSM peer
+      x-summary-source: derived
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1a/api/cloud/1.1
+      description: 石狩第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1b/api/cloud/1.1
+      description: 石狩第2ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1c/api/cloud/1.1
+      description: 石狩第3ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1
+      description: 東京第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1b/api/cloud/1.1
+      description: 東京第2ゾーン
+  /cloudhsm/licenses:
+    get:
+      operationId: listCloudHSMLicenses
+      parameters:
+      - name: Count
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: From
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      tags:
+      - cloudhsm
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCloudHSMSoftwareLicenseList'
+          description: ''
+      summary: List cloud HSM licenses
+      x-summary-source: derived
+    post:
+      operationId: createCloudHSMLicense
+      tags:
+      - cloudhsm
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WrappedCreateCloudHSMSoftwareLicenseRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WrappedCreateCloudHSMSoftwareLicense'
+          description: ''
+      summary: Create cloud HSM license
+      x-summary-source: derived
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1a/api/cloud/1.1
+      description: 石狩第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1b/api/cloud/1.1
+      description: 石狩第2ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1c/api/cloud/1.1
+      description: 石狩第3ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1
+      description: 東京第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1b/api/cloud/1.1
+      description: 東京第2ゾーン
+  /cloudhsm/licenses/{license_resource_id}/documents:
+    get:
+      operationId: listCloudHSMDocuments
+      parameters:
+      - name: Count
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: From
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - in: path
+        name: license_resource_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - cloudhsm
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCloudHSMDocumentList'
+          description: ''
+      summary: List cloud HSM documents
+      x-summary-source: derived
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1a/api/cloud/1.1
+      description: 石狩第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1b/api/cloud/1.1
+      description: 石狩第2ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1c/api/cloud/1.1
+      description: 石狩第3ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1
+      description: 東京第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1b/api/cloud/1.1
+      description: 東京第2ゾーン
+  /cloudhsm/licenses/{license_resource_id}/documents/{id}/download:
+    post:
+      operationId: downloadCloudHSMDocument
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: A unique value identifying this CloudHSMドキュメント.
+        required: true
+      - in: path
+        name: license_resource_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - cloudhsm
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WrappedCloudHSMDocumentDownload'
+          description: ''
+      summary: Download cloud HSM document
+      x-summary-source: derived
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1a/api/cloud/1.1
+      description: 石狩第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1b/api/cloud/1.1
+      description: 石狩第2ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1c/api/cloud/1.1
+      description: 石狩第3ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1
+      description: 東京第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1b/api/cloud/1.1
+      description: 東京第2ゾーン
+  /cloudhsm/licenses/{resource_id}:
+    get:
+      operationId: readCloudHSMLicense
+      parameters:
+      - in: path
+        name: resource_id
+        schema:
+          type: string
+          title: リソースID
+        required: true
+      tags:
+      - cloudhsm
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WrappedCloudHSMSoftwareLicense'
+          description: ''
+      summary: Read cloud HSM license
+      x-summary-source: derived
+    put:
+      operationId: updateCloudHSMLicense
+      parameters:
+      - in: path
+        name: resource_id
+        schema:
+          type: string
+          title: リソースID
+        required: true
+      tags:
+      - cloudhsm
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WrappedCloudHSMSoftwareLicenseRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WrappedCloudHSMSoftwareLicense'
+          description: ''
+      summary: Update cloud HSM license
+      x-summary-source: derived
+    delete:
+      operationId: deleteCloudHSMLicense
+      parameters:
+      - in: path
+        name: resource_id
+        schema:
+          type: string
+          title: リソースID
+        required: true
+      tags:
+      - cloudhsm
+      responses:
+        '204':
+          description: No response body
+      summary: Delete cloud HSM license
+      x-summary-source: derived
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1a/api/cloud/1.1
+      description: 石狩第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1b/api/cloud/1.1
+      description: 石狩第2ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1c/api/cloud/1.1
+      description: 石狩第3ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1
+      description: 東京第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1b/api/cloud/1.1
+      description: 東京第2ゾーン
+components:
+  schemas:
+    WrappedCreateCloudHSM:
+      type: object
+      properties:
+        CloudHSM:
+          $ref: '#/components/schemas/CreateCloudHSM'
+        is_ok:
+          type: boolean
+          example: true
+      required:
+      - CloudHSM
+      - is_ok
+    WrappedCreateCloudHSMClientRequest:
+      type: object
+      properties:
+        Client:
+          $ref: '#/components/schemas/CreateCloudHSMClientRequest'
+      required:
+      - Client
+    CreateCloudHSM:
+      type: object
+      properties:
+        ID:
+          type: string
+          readOnly: true
+          example: '110000000000'
+        CreatedAt:
+          $ref: '#/components/schemas/DateTime'
+        ModifiedAt:
+          $ref: '#/components/schemas/DateTime'
+        ServiceClass:
+          enum:
+          - cloud/cloudhsm/partition
+          type: string
+          description: '* `cloud/cloudhsm/partition` - Type-L7'
+          x-spec-enum-id: aec33bb088a5c108
+          readOnly: true
+          title: サービスクラス
+        Availability:
+          enum:
+          - precreate
+          - available
+          - discontinued
+          type: string
+          description: '* `precreate` - 準備中
+
+            * `available` - 利用可能
+
+            * `discontinued` - 廃止'
+          x-spec-enum-id: 329069c36229258c
+          readOnly: true
+          title: 状態
+        Name:
+          type: string
+          title: 名前
+          maxLength: 255
+        Description:
+          type: string
+          title: 説明
+        Tags:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            minLength: 1
+        IPv4NetworkAddress:
+          type: string
+          title: IPv4ネットワークアドレス
+          example: 192.168.100.0
+        IPv4PrefixLength:
+          type: integer
+          title: IPv4プレフィックス長
+          example: 24
+        IPv4Address:
+          type: string
+          readOnly: true
+          example: 192.168.100.11
+      required:
+      - IPv4NetworkAddress
+      - IPv4PrefixLength
+      - Name
+    CreateCloudHSMRequest:
+      type: object
+      properties:
+        Name:
+          type: string
+          minLength: 1
+          title: 名前
+          maxLength: 255
+        Description:
+          type: string
+          title: 説明
+        Tags:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            minLength: 1
+        IPv4NetworkAddress:
+          type: string
+          minLength: 1
+          title: IPv4ネットワークアドレス
+          example: 192.168.100.0
+        IPv4PrefixLength:
+          type: integer
+          title: IPv4プレフィックス長
+          example: 24
+      required:
+      - IPv4NetworkAddress
+      - IPv4PrefixLength
+      - Name
+    WrappedCloudHSM:
+      type: object
+      properties:
+        CloudHSM:
+          $ref: '#/components/schemas/CloudHSM'
+        is_ok:
+          type: boolean
+          example: true
+      required:
+      - CloudHSM
+      - is_ok
+    LocalRouter:
+      type: object
+      properties:
+        ResourceID:
+          type: string
+          example: '110000000000'
+        SecretKey:
+          type: string
+          example: PAIRINGSECRETKEY
+    PaginatedCloudHSMDocumentList:
+      type: object
+      required:
+      - Count
+      - From
+      - Total
+      - CloudHSMDocuments
+      - is_ok
+      properties:
+        Count:
+          type: integer
+          example: 10
+        From:
+          type: integer
+          example: 0
+        Total:
+          type: integer
+          example: 10
+        CloudHSMDocuments:
+          type: array
+          items:
+            $ref: '#/components/schemas/CloudHSMDocument'
+        is_ok:
+          type: boolean
+          example: true
+    CloudHSMDocumentDownload:
+      type: object
+      properties:
+        URL:
+          type: string
+          format: uri
+      required:
+      - URL
+    CreateCloudHSMClient:
+      type: object
+      properties:
+        ID:
+          type: string
+          readOnly: true
+          example: '110000000000'
+        CreatedAt:
+          $ref: '#/components/schemas/DateTime'
+        ModifiedAt:
+          $ref: '#/components/schemas/DateTime'
+        Availability:
+          enum:
+          - precreate
+          - available
+          - discontinued
+          type: string
+          description: '* `precreate` - 準備中
+
+            * `available` - 利用可能
+
+            * `discontinued` - 廃止'
+          x-spec-enum-id: 329069c36229258c
+          readOnly: true
+          title: 状態
+        Name:
+          type: string
+          title: 名前
+          maxLength: 255
+        Certificate:
+          type: string
+          example: '-----BEGIN CERTIFICATE-----\nMIIC0DCCAbigAwIBAgIJAJ.....\n-----END CERTIFICATE-----'
+      required:
+      - Certificate
+      - Name
+    PaginatedCloudHSMList:
+      type: object
+      required:
+      - Count
+      - From
+      - Total
+      - CloudHSMs
+      - is_ok
+      properties:
+        Count:
+          type: integer
+          example: 10
+        From:
+          type: integer
+          example: 0
+        Total:
+          type: integer
+          example: 10
+        CloudHSMs:
+          type: array
+          items:
+            $ref: '#/components/schemas/CloudHSM'
+        is_ok:
+          type: boolean
+          example: true
+    PaginatedCloudHSMSoftwareLicenseList:
+      type: object
+      required:
+      - Count
+      - From
+      - Total
+      - Licenses
+      - is_ok
+      properties:
+        Count:
+          type: integer
+          example: 10
+        From:
+          type: integer
+          example: 0
+        Total:
+          type: integer
+          example: 10
+        Licenses:
+          type: array
+          items:
+            $ref: '#/components/schemas/CloudHSMSoftwareLicense'
+        is_ok:
+          type: boolean
+          example: true
+    WrappedPeerRequest:
+      type: object
+      properties:
+        Peer:
+          $ref: '#/components/schemas/PeerRequest'
+      required:
+      - Peer
+    WrappedCloudHSMClientRequest:
+      type: object
+      properties:
+        Client:
+          $ref: '#/components/schemas/CloudHSMClientRequest'
+      required:
+      - Client
+    CloudHSMRequest:
+      type: object
+      properties:
+        Name:
+          type: string
+          minLength: 1
+          title: 名前
+          maxLength: 255
+        Description:
+          type: string
+          title: 説明
+        Tags:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            minLength: 1
+        IPv4NetworkAddress:
+          type: string
+          minLength: 1
+          title: IPv4ネットワークアドレス
+          example: 192.168.100.0
+        IPv4PrefixLength:
+          type: integer
+          title: IPv4プレフィックス長
+          example: 24
+      required:
+      - IPv4NetworkAddress
+      - IPv4PrefixLength
+      - Name
+    WrappedCloudHSMSoftwareLicenseRequest:
+      type: object
+      properties:
+        License:
+          $ref: '#/components/schemas/CloudHSMSoftwareLicenseRequest'
+      required:
+      - License
+    WrappedCloudHSMSoftwareLicense:
+      type: object
+      properties:
+        License:
+          $ref: '#/components/schemas/CloudHSMSoftwareLicense'
+        is_ok:
+          type: boolean
+          example: true
+      required:
+      - License
+      - is_ok
+    PeerRequest:
+      type: object
+      properties:
+        ID:
+          type: string
+          minLength: 1
+          example: '110000000000'
+        SecretKey:
+          type: string
+          minLength: 1
+          example: PAIRINGSECRETKEY
+      required:
+      - ID
+      - SecretKey
+    CloudHSMClient:
+      type: object
+      properties:
+        ID:
+          type: string
+          readOnly: true
+          example: 01JP9500000000000000000000
+        CreatedAt:
+          $ref: '#/components/schemas/DateTime'
+        ModifiedAt:
+          $ref: '#/components/schemas/DateTime'
+        Availability:
+          enum:
+          - precreate
+          - available
+          - discontinued
+          type: string
+          description: '* `precreate` - 準備中
+
+            * `available` - 利用可能
+
+            * `discontinued` - 廃止'
+          x-spec-enum-id: 329069c36229258c
+          readOnly: true
+          title: 状態
+        Name:
+          type: string
+          title: 名前
+          maxLength: 255
+        Certificate:
+          type: string
+          readOnly: true
+          title: 証明書
+          example: '-----BEGIN CERTIFICATE-----\nMIIC0DCCAbigAwIBAgIJAJ.....\n-----END CERTIFICATE-----'
+      required:
+      - Availability
+      - Certificate
+      - CreatedAt
+      - ID
+      - ModifiedAt
+      - Name
+    WrappedCloudHSMRequest:
+      type: object
+      properties:
+        CloudHSM:
+          $ref: '#/components/schemas/CloudHSMRequest'
+      required:
+      - CloudHSM
+    WrappedCreateCloudHSMClient:
+      type: object
+      properties:
+        Client:
+          $ref: '#/components/schemas/CreateCloudHSMClient'
+        is_ok:
+          type: boolean
+          example: true
+      required:
+      - Client
+      - is_ok
+    CreateCloudHSMClientRequest:
+      type: object
+      properties:
+        Name:
+          type: string
+          minLength: 1
+          title: 名前
+          maxLength: 255
+        Certificate:
+          type: string
+          minLength: 1
+          example: '-----BEGIN CERTIFICATE-----\nMIIC0DCCAbigAwIBAgIJAJ.....\n-----END CERTIFICATE-----'
+      required:
+      - Certificate
+      - Name
+    CloudHSMClientRequest:
+      type: object
+      properties:
+        Name:
+          type: string
+          minLength: 1
+          title: 名前
+          maxLength: 255
+      required:
+      - Name
+    WrappedCloudHSMDocumentDownload:
+      type: object
+      properties:
+        Document:
+          $ref: '#/components/schemas/CloudHSMDocumentDownload'
+        is_ok:
+          type: boolean
+          example: true
+      required:
+      - Document
+      - is_ok
+    CloudHSMSoftwareLicense:
+      type: object
+      properties:
+        ID:
+          type: string
+          readOnly: true
+          example: '110000000000'
+        CreatedAt:
+          $ref: '#/components/schemas/DateTime'
+        ModifiedAt:
+          $ref: '#/components/schemas/DateTime'
+        ServiceClass:
+          enum:
+          - cloud/cloudhsm/license/l7
+          type: string
+          description: '* `cloud/cloudhsm/license/l7` - Type-L7'
+          x-spec-enum-id: a5b49b449aca4a6f
+          readOnly: true
+          title: サービスクラス
+        Name:
+          type: string
+          title: 名前
+          maxLength: 255
+        Description:
+          type: string
+          title: 説明
+        Tags:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            minLength: 1
+      required:
+      - CreatedAt
+      - Description
+      - ID
+      - ModifiedAt
+      - Name
+      - ServiceClass
+      - Tags
+    CloudHSM:
+      type: object
+      properties:
+        ID:
+          type: string
+          readOnly: true
+          example: '110000000000'
+        CreatedAt:
+          $ref: '#/components/schemas/DateTime'
+        ModifiedAt:
+          $ref: '#/components/schemas/DateTime'
+        ServiceClass:
+          enum:
+          - cloud/cloudhsm/partition
+          type: string
+          description: '* `cloud/cloudhsm/partition` - Type-L7'
+          x-spec-enum-id: aec33bb088a5c108
+          readOnly: true
+          title: サービスクラス
+        Availability:
+          enum:
+          - precreate
+          - available
+          - discontinued
+          type: string
+          description: '* `precreate` - 準備中
+
+            * `available` - 利用可能
+
+            * `discontinued` - 廃止'
+          x-spec-enum-id: 329069c36229258c
+          readOnly: true
+          title: 状態
+        Name:
+          type: string
+          title: 名前
+          maxLength: 255
+        Description:
+          type: string
+          title: 説明
+        Tags:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            minLength: 1
+        IPv4NetworkAddress:
+          type: string
+          title: IPv4ネットワークアドレス
+          example: 192.168.100.0
+        IPv4PrefixLength:
+          type: integer
+          title: IPv4プレフィックス長
+          example: 24
+        IPv4Address:
+          type: string
+          readOnly: true
+          example: 192.168.100.11
+        LocalRouter:
+          allOf:
+          - $ref: '#/components/schemas/LocalRouter'
+          readOnly: true
+        InitialData:
+          allOf:
+          - $ref: '#/components/schemas/CloudHSMInitialData'
+          readOnly: true
+      required:
+      - Availability
+      - CreatedAt
+      - Description
+      - ID
+      - InitialData
+      - IPv4Address
+      - IPv4NetworkAddress
+      - IPv4PrefixLength
+      - LocalRouter
+      - ModifiedAt
+      - Name
+      - ServiceClass
+      - Tags
+    WrappedCreateCloudHSMRequest:
+      type: object
+      properties:
+        CloudHSM:
+          $ref: '#/components/schemas/CreateCloudHSMRequest'
+      required:
+      - CloudHSM
+    CloudHSMDocument:
+      type: object
+      properties:
+        ID:
+          type: string
+          example: '110000000000'
+        CreatedAt:
+          $ref: '#/components/schemas/DateTime'
+        ModifiedAt:
+          $ref: '#/components/schemas/DateTime'
+        Name:
+          type: string
+      required:
+      - CreatedAt
+      - ID
+      - ModifiedAt
+      - Name
+    WrappedPeerList:
+      type: object
+      properties:
+        Peers:
+          type: array
+          items:
+            $ref: '#/components/schemas/CloudHSMPeer'
+        is_ok:
+          type: boolean
+          example: true
+      required:
+      - Peers
+      - is_ok
+    CloudHSMSoftwareLicenseRequest:
+      type: object
+      properties:
+        Name:
+          type: string
+          minLength: 1
+          title: 名前
+          maxLength: 255
+        Description:
+          type: string
+          title: 説明
+        Tags:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            minLength: 1
+      required:
+      - Name
+    CloudHSMInitialData:
+      type: object
+      properties:
+        PartitionName:
+          type: string
+          title: HSM 上のパーティション名
+        Certificate:
+          type: string
+          title: HSM のサーバー証明書
+          example: '-----BEGIN CERTIFICATE-----\nMIIC0DCCAbigAwIBAgIJAJ.....\n-----END CERTIFICATE-----'
+        PartitionID:
+          type: string
+          title: HSM 上のパーティション ID
+      required:
+      - Certificate
+      - PartitionID
+      - PartitionName
+    PaginatedCloudHSMClientList:
+      type: object
+      required:
+      - Count
+      - From
+      - Total
+      - Clients
+      - is_ok
+      properties:
+        Count:
+          type: integer
+          example: 10
+        From:
+          type: integer
+          example: 0
+        Total:
+          type: integer
+          example: 10
+        Clients:
+          type: array
+          items:
+            $ref: '#/components/schemas/CloudHSMClient'
+        is_ok:
+          type: boolean
+          example: true
+    CloudHSMPeer:
+      type: object
+      properties:
+        ID:
+          type: string
+          example: '110000000000'
+        SecretKey:
+          type: string
+          example: PAIRINGSECRETKEY
+        Enabled:
+          type: boolean
+        Description:
+          type: string
+      required:
+      - ID
+      - SecretKey
+    DateTime:
+      type: string
+      format: iso8601
+      example: '2025-02-05T12:19:22.551827+09:00'
+    CreateCloudHSMSoftwareLicense:
+      type: object
+      properties:
+        ID:
+          type: string
+          readOnly: true
+          example: '110000000000'
+        CreatedAt:
+          $ref: '#/components/schemas/DateTime'
+        ModifiedAt:
+          $ref: '#/components/schemas/DateTime'
+        ServiceClass:
+          enum:
+          - cloud/cloudhsm/license/l7
+          type: string
+          description: '* `cloud/cloudhsm/license/l7` - Type-L7'
+          x-spec-enum-id: a5b49b449aca4a6f
+          title: サービスクラス
+        Name:
+          type: string
+          title: 名前
+          maxLength: 255
+        Description:
+          type: string
+          title: 説明
+        Tags:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            minLength: 1
+      required:
+      - Name
+      - ServiceClass
+    WrappedCreateCloudHSMSoftwareLicense:
+      type: object
+      properties:
+        License:
+          $ref: '#/components/schemas/CreateCloudHSMSoftwareLicense'
+        is_ok:
+          type: boolean
+          example: true
+      required:
+      - License
+      - is_ok
+    WrappedCreateCloudHSMSoftwareLicenseRequest:
+      type: object
+      properties:
+        License:
+          $ref: '#/components/schemas/CreateCloudHSMSoftwareLicenseRequest'
+      required:
+      - License
+    CreateCloudHSMSoftwareLicenseRequest:
+      type: object
+      properties:
+        ServiceClass:
+          enum:
+          - cloud/cloudhsm/license/l7
+          type: string
+          description: '* `cloud/cloudhsm/license/l7` - Type-L7'
+          x-spec-enum-id: a5b49b449aca4a6f
+          title: サービスクラス
+        Name:
+          type: string
+          minLength: 1
+          title: 名前
+          maxLength: 255
+        Description:
+          type: string
+          title: 説明
+        Tags:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            minLength: 1
+      required:
+      - Name
+      - ServiceClass
+    WrappedCloudHSMClient:
+      type: object
+      properties:
+        Client:
+          $ref: '#/components/schemas/CloudHSMClient'
+        is_ok:
+          type: boolean
+          example: true
+      required:
+      - Client
+      - is_ok
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: APIキーとシークレットをご利用ください
+x-refined-from:
+- security-encryption-api.yaml
+- sakura-internet-security-encryption-openapi.yml

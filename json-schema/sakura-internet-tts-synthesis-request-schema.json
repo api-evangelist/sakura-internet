@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-tts-synthesis-request-schema.json",
+  "title": "TtsSynthesisRequest",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-ai-engine-inference-openapi.yml#/components/schemas/TtsSynthesisRequest",
+  "type": "object",
+  "required": [
+    "accent_phrases",
+    "speedScale",
+    "pitchScale",
+    "intonationScale",
+    "volumeScale",
+    "prePhonemeLength",
+    "postPhonemeLength",
+    "outputSamplingRate",
+    "outputStereo",
+    "kana"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "accent_phrases": {
+      "type": "array",
+      "description": "アクセント句のリスト",
+      "items": {
+        "type": "object",
+        "description": "Accent Phrase",
+        "additionalProperties": true
+      }
+    },
+    "speedScale": {
+      "type": "number",
+      "description": "全体の話速"
+    },
+    "pitchScale": {
+      "type": "number",
+      "description": "全体の音高"
+    },
+    "intonationScale": {
+      "type": "number",
+      "description": "全体の抑揚"
+    },
+    "volumeScale": {
+      "type": "number",
+      "description": "全体の音量"
+    },
+    "prePhonemeLength": {
+      "type": "number",
+      "description": "音声の前の無音時間"
+    },
+    "postPhonemeLength": {
+      "type": "number",
+      "description": "音声の後の無音時間"
+    },
+    "pauseLength": {
+      "description": "句読点などの無音時間。nullのときは無視される。デフォルト値はnull\n",
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "pauseLengthScale": {
+      "type": "number",
+      "description": "句読点などの無音時間（倍率）。デフォルト値は1",
+      "default": 1
+    },
+    "outputSamplingRate": {
+      "type": "integer",
+      "description": "音声データの出力サンプリングレート"
+    },
+    "outputStereo": {
+      "type": "boolean",
+      "description": "音声データをステレオ出力するか否か"
+    },
+    "kana": {
+      "type": "string",
+      "description": "読み（かな）。\n[読み取り専用] AquesTalk風記法によるテキスト。音声合成用のクエリとしては無視される\n"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+generated: '2026-10-09'
+method: searched
+source: https://manual.sakura.ad.jp/cloud/ismap/index.html
+standards:
+- id: ismap
+  conforms: true
+  evidence: manual.sakura.ad.jp/cloud/ismap/index.html lists さくらのクラウド (IaaS) services registered under ISMAP (政府情報システムのためのセキュリティ評価制度), covering
+    Tokyo zones 1-2 and Ishikari zones 1-2, including クラウドAPI under 基本機能.
+- id: rfc9457
+  conforms: partial
+  evidence: openapi/sakura-internet-phy-openapi.yml declares problem_details_* schemas (type/title/detail/status, e.g. problem_details_429 title
+    'throttled'); openapi/sakura-internet-security-control-openapi.yml declares application/problem+json responses. The IaaS 1.1 API uses is_ok/Success
+    envelopes instead.
+- id: openapi-3.0
+  conforms: true
+  evidence: the document declares 3.0.0
+- id: openapi-3.0
+  conforms: true
+  evidence: the document declares 3.0.3
+- id: openapi-3.0
+  conforms: true
+  evidence: the document declares 3.0.4
+- id: openapi-3.1
+  conforms: true
+  evidence: the document declares 3.1.0
+- id: oauth2
+  conforms: false
+  evidence: 'securitySchemes: ApiKeyAuth (http), BasicAuth (http), BearerAuth (http), ProjectApiKeyAuth (http), ServicePrincipalAuth (http), account_api_key
+    (http), basicAuth (http)'
+- id: idempotency
+  conforms: false
+  evidence: no idempotency key parameter on mutating operations
+- id: pagination
+  conforms: true
+  evidence: list operations take cursor, limit, offset, page, page_num, page_size
+- id: ratelimit-headers
+  conforms: true
+  evidence: responses declare Retry-After

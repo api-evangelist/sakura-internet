@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-models-appliance-appliance-apply-response-body-schema.json",
+  "title": "Models.Appliance.ApplianceApplyResponseBody",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-seg-openapi.yml#/components/schemas/Models.Appliance.ApplianceApplyResponseBody",
+  "type": "object",
+  "required": [
+    "Success",
+    "ReturnCode",
+    "ResponseHeaders",
+    "Out",
+    "is_ok"
+  ],
+  "properties": {
+    "Success": {
+      "type": "boolean",
+      "description": "Apply結果"
+    },
+    "ReturnCode": {
+      "type": "integer",
+      "format": "int32",
+      "description": "実行時のリターンコード"
+    },
+    "ResponseHeaders": {
+      "type": "object",
+      "properties": {
+        "Status": {
+          "type": "string",
+          "description": "レスポンスのステータスコード"
+        },
+        "Cause": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "レスポンスの原因"
+        }
+      },
+      "required": [
+        "Status",
+        "Cause"
+      ],
+      "description": "レスポンスヘッダー情報"
+    },
+    "Out": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "出力情報"
+    },
+    "is_ok": {
+      "type": "boolean",
+      "description": "操作結果"
+    }
+  }
+}

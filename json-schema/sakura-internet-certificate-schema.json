@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-certificate-schema.json",
+  "title": "Certificate",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-apigw-openapi.yml#/components/schemas/Certificate",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "#/$defs/Model"
+    },
+    {
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/Name",
+          "description": "証明書の識別名<br>証明書名はUnicode文字、数字、ハイフン、アンダースコア、ピリオドのみ許可"
+        },
+        "rsa": {
+          "type": "object",
+          "description": "RSA証明書情報",
+          "allOf": [
+            {
+              "$ref": "#/$defs/CertificateDetails"
+            }
+          ]
+        },
+        "ecdsa": {
+          "type": "object",
+          "description": "ECDSA証明書情報",
+          "allOf": [
+            {
+              "$ref": "#/$defs/CertificateDetails"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "anyOf": [
+        {
+          "type": "object",
+          "required": [
+            "name",
+            "rsa"
+          ]
+        },
+        {
+          "type": "object",
+          "required": [
+            "name",
+            "ecdsa"
+          ]
+        },
+        {
+          "type": "object",
+          "required": [
+            "name",
+            "rsa",
+            "ecdsa"
+          ]
+        }
+      ]
+    }
+  ],
+  "$defs": {
+    "CertificateDetails": {
+      "type": "object",
+      "properties": {
+        "cert": {
+          "type": "string",
+          "description": "証明書<br>改行コード（\\n）はエスケープ文字に変換して指定する",
+          "pattern": "^-----BEGIN CERTIFICATE-----\\r?\\n(?:[A-Za-z0-9+/=\\r\\n]+)-----END CERTIFICATE-----\\r?\\n?$",
+          "writeOnly": true,
+          "x-oapi-codegen-extra-tags": {
+            "mask": "true"
+          }
+        },
+        "key": {
+          "type": "string",
+          "description": "秘密鍵<br>改行コード（\\n）はエスケープ文字に変換して指定する",
+          "writeOnly": true,
+          "x-oapi-codegen-extra-tags": {
+            "mask": "true"
+          }
+        },
+        "expiredAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "証明書の有効期限",
+          "readOnly": true
+        }
+      }
+    },
+    "Model": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true,
+          "description": "Entityを識別するためのID"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "作成日時"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "更新日時"
+        }
+      },
+      "description": "各Entity共通のモデル"
+    },
+    "Name": {
+      "type": "string",
+      "description": "Unicode文字、数字、ハイフン、アンダースコア、ピリオドのみ許可",
+      "minLength": 1,
+      "maxLength": 255,
+      "pattern": "^[\\p{L}\\p{N}._\\-]+$"
+    }
+  }
+}

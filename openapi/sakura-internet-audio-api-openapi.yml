@@ -1,0 +1,215 @@
+openapi: 3.2.0
+info:
+  title: Sakura Internet Audio API
+  version: 1.0.1
+  description: 'Operations tagged Audio across 2 of this provider''s published API definitions: ai-engine-inference-api.yaml, sakura-internet-ai-engine-inference-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.ai.sakura.ad.jp
+security:
+- BearerAuth: []
+tags:
+- name: Audio
+paths:
+  /v1/audio/transcriptions:
+    post:
+      summary: Create a transcription
+      operationId: createTranscription
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+              - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: 'Audio file to transcribe. Common formats: aac, m4a, mp3, mp4, ogg, wav etc.
+
+                    '
+                model:
+                  type: string
+                  description: Transcription model identifier served by vLLM.
+                  enum:
+                  - whisper-large-v3-turbo
+                language:
+                  type: string
+                  default: ja
+                  description: 'Source language hint (BCP-47, e.g. "ja", "en-US").
+
+                    '
+                prompt:
+                  type: string
+                  description: Optional decoding/prompt bias (proper nouns, style hints).
+                temperature:
+                  type: number
+                  minimum: 0
+                  maximum: 1
+                  default: 0
+                  description: Decoding temperature.
+                stream:
+                  type: boolean
+                  default: false
+      responses:
+        '200':
+          description: Transcription created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TranscriptionResponse'
+              examples:
+                exampleOk:
+                  summary: Successful transcription
+                  value:
+                    model: whisper-large-v3-turbo
+                    text: 本日はご利用いただきありがとうございます。
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '429':
+          description: Rate limited
+        '500':
+          description: Server error
+        '504':
+          description: Server error
+      tags:
+      - Audio
+    servers:
+    - url: https://api.ai.sakura.ad.jp
+  /v1/audio/speech:
+    post:
+      summary: Create speech (text-to-speech)
+      operationId: createSpeech
+      description: 'テキストから音声を生成します（TTS）。
+
+        - 必須: input, model
+
+        - instructionsは指定できますが現在は無視されます
+
+        - response_formatは指定できますが現在は常にwavを返します
+
+        - streamは非対応です（stream_formatを指定してもストリーミングにはなりません）'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SpeechRequest'
+            examples:
+              exampleWav:
+                summary: Generate wav speech (response_format is ignored)
+                value:
+                  model: zundamon
+                  voice: normal
+                  input: こんにちは。
+                  instructions: 落ち着いたトーンで話して
+                  response_format: wav
+                  stream_format: sse
+      responses:
+        '200':
+          description: Speech audio generated (always wav)
+          headers:
+            Content-Type:
+              description: Always `audio/wav`.
+              schema:
+                type: string
+                example: audio/wav
+          content:
+            audio/wav:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '429':
+          description: Rate limited
+        '500':
+          description: Server error
+        '504':
+          description: Server error
+      tags:
+      - Audio
+    servers:
+    - url: https://api.ai.sakura.ad.jp
+components:
+  schemas:
+    TranscriptionResponse:
+      type: object
+      required:
+      - model
+      - text
+      properties:
+        model:
+          type: string
+          description: Model used.
+        text:
+          type: string
+          description: Full transcription (plain text).
+    SpeechRequest:
+      type: object
+      required:
+      - model
+      - input
+      properties:
+        model:
+          type: string
+          description: '音声合成モデル識別子(例：zundamon)
+
+            利用可能なmodelはコントロールパネル等をご確認ください。
+
+            '
+        input:
+          type: string
+          description: 音声合成するテキスト（最大1000文字程度）
+          minLength: 1
+          maxLength: 1000
+        voice:
+          type: string
+          description: '話者/スタイル(例：normal)
+
+            利用可能なvoiceはコントロールパネル等をご確認ください。
+
+            '
+        instructions:
+          type: string
+          description: '追加指示(例： 話し方のトーンなど)。
+
+            ※現在は指定できますが無視されます。
+
+            '
+        response_format:
+          type: string
+          description: '出力フォーマット。
+
+            ※現在は指定できますが常にwavを返します。
+
+            '
+          default: wav
+          enum:
+          - wav
+          - mp3
+          - ogg
+          - aac
+          - flac
+        stream_format:
+          type: string
+          description: 'ストリーム形式。
+
+            ※現在は指定できますが無視されます。
+
+            '
+          enum:
+          - sse
+          - jsonl
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+x-refined-from:
+- ai-engine-inference-api.yaml
+- sakura-internet-ai-engine-inference-openapi.yml

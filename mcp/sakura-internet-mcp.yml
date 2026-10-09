@@ -1,0 +1,257 @@
+generated: '2026-10-09'
+method: searched
+status: archived
+source: https://github.com/sacloud/sacloud-mcp
+evidence:
+- 'https://raw.githubusercontent.com/sacloud/sacloud-mcp/main/README.md (HTTP 200): CAUTION banner — archived 2026-04-13,
+  no further features, fixes or security updates; new or continued use not recommended.'
+- 'https://api.github.com/search/repositories?q=mcp+user:sacloud (HTTP 200): sacloud/sacloud-mcp archived=true,
+  pushed_at 2026-04-13, description "さくらのクラウド向けMCP".'
+- Tool names read from mcp.tool(name=...) registrations in the repo source via https://cdn.jsdelivr.net/gh/sacloud/sacloud-mcp@main/src/
+  (HTTP 200).
+server:
+  name: sacloud
+  framework: FastMCP (Python)
+  repository: https://github.com/sacloud/sacloud-mcp
+  license: Apache-2.0
+  official: true
+  publisher: sacloud (SAKURA internet GitHub org)
+  maintained: false
+  archived: '2026-04-13'
+auth:
+  type: api-key
+  env:
+  - ACCESS_TOKEN
+  - ACCESS_TOKEN_SECRET
+  - OBJECTSTORAGE_ACCESS_KEY_ID
+  - OBJECTSTORAGE_SECRET_ACCESS_KEY
+  docs: https://manual.sakura.ad.jp/cloud/api/apikey.html
+  note: Cloud API key (access token + secret) sent as HTTP Basic; Object Storage uses a separate key pair.
+deployment:
+  mode: local-stdio
+  install: uv --directory <MCPサーバーのルートディレクトリ>/src run main.py
+  package: https://github.com/sacloud/sacloud-mcp
+  auth: api-key
+  verified: searched
+  note: 'Run from a git clone with uv (claude_desktop_config "command": "${HOME}/.local/bin/uv"). No hosted/remote
+    endpoint is published; no npm/PyPI package. Archived 2026-04-13.'
+tool_count: 43
+tools:
+- name: get_detabases
+  category: appliance
+  source_file: src/appliance/handlers/database.py
+  backing: Cloud API 1.1 /appliance (database class)
+  documented: source
+- name: get_loadbalancer
+  category: appliance
+  source_file: src/appliance/handlers/loadbalancer.py
+  backing: Cloud API 1.1 /appliance
+  documented: source
+- name: create_loadbalancer
+  category: appliance
+  source_file: src/appliance/handlers/loadbalancer.py
+  backing: Cloud API 1.1 /appliance
+  documented: source
+- name: attach_servers
+  category: appliance
+  source_file: src/appliance/handlers/loadbalancer.py
+  backing: Cloud API 1.1 /appliance/{id}/config
+  documented: source
+- name: get_vpn_router_list
+  category: appliance
+  source_file: src/appliance/handlers/vpn_router.py
+  backing: Cloud API 1.1 /appliance (vpcrouter class)
+  documented: source
+- name: get_vpn_monitor
+  category: appliance
+  source_file: src/appliance/handlers/vpn_router.py
+  backing: Cloud API 1.1 /appliance/{id}/interface/monitor
+  documented: source
+- name: get_bill_list
+  category: billing
+  source_file: src/bill/handlers/bill.py
+  backing: System API 1.0 /bill/by-contract/{account_id}
+  documented: source
+- name: get_bill_list_by_month
+  category: billing
+  source_file: src/bill/handlers/bill.py
+  backing: System API 1.0 /bill/by-contract/{account_id}/{year}/{month}
+  documented: source
+- name: get_coupon_list
+  category: billing
+  source_file: src/bill/handlers/bill.py
+  backing: System API 1.0 /coupon/{account_id}
+  documented: source
+- name: get_interface_list
+  category: compute
+  source_file: src/compute/handlers/interface.py
+  backing: Cloud API 1.1 /interface
+  documented: source
+- name: get_packet_filter_list
+  category: compute
+  source_file: src/compute/handlers/interface.py
+  backing: Cloud API 1.1 /packetfilter
+  documented: source
+- name: get_server_list
+  category: compute
+  source_file: src/compute/handlers/server.py
+  backing: Cloud API 1.1 /server
+  documented: source
+- name: get_server_plan
+  category: compute
+  source_file: src/compute/handlers/server.py
+  backing: Cloud API 1.1 /product/server
+  documented: source
+- name: create_server
+  category: compute
+  source_file: src/compute/handlers/server.py
+  backing: Cloud API 1.1 /server
+  documented: source
+- name: get_server_power_status
+  category: compute
+  source_file: src/compute/handlers/server.py
+  backing: Cloud API 1.1 /server/{id}/power
+  documented: source
+- name: stop_server
+  category: compute
+  source_file: src/compute/handlers/server.py
+  backing: Cloud API 1.1 /server/{id}/power
+  documented: source
+- name: start_server
+  category: compute
+  source_file: src/compute/handlers/server.py
+  backing: Cloud API 1.1 /server/{id}/power
+  documented: source
+- name: get_icon_list
+  category: controlpanel
+  source_file: src/controlpanel/handlers/icon.py
+  backing: Cloud API 1.1 /icon
+  documented: source
+- name: get_icon_tag_list
+  category: controlpanel
+  source_file: src/controlpanel/handlers/icon.py
+  backing: Cloud API 1.1 /icon/tag
+  documented: source
+- name: get_region_list
+  category: core
+  source_file: src/core/handlers/region.py
+  backing: Cloud API 1.1 /region
+  documented: source
+- name: get_zone_list
+  category: core
+  source_file: src/core/handlers/zone.py
+  backing: Cloud API 1.1 /zone
+  documented: source
+- name: get_api_manual_outline
+  category: docs
+  source_file: src/docs/handlers/api_documents.py
+  backing: reads https://manual.sakura.ad.jp/cloud-api/1.1/ (documentation, not an API operation)
+  documented: source
+- name: read_api_manual
+  category: docs
+  source_file: src/docs/handlers/api_documents.py
+  backing: reads https://manual.sakura.ad.jp/cloud-api/1.1/ pages
+  documented: source
+- name: read_object_storage_api_manual
+  category: docs
+  source_file: src/docs/handlers/api_documents.py
+  backing: reads https://manual.sakura.ad.jp/api/cloud/objectstorage/
+  documented: source
+- name: get_manual_outline
+  category: docs
+  source_file: src/docs/handlers/documents.py
+  backing: bundled docs/materials/outline.json
+  documented: source
+- name: read_manual
+  category: docs
+  source_file: src/docs/handlers/documents.py
+  backing: reads manual.sakura.ad.jp pages
+  documented: source
+- name: get_price
+  category: docs
+  source_file: src/docs/handlers/documents.py
+  backing: https://secure.sakura.ad.jp/cloud/zone/is1a/api/cloud/1.1/public/price.json
+  documented: source
+- name: get_bridge_list
+  category: networking
+  source_file: src/networking/handlers/bridge.py
+  backing: Cloud API 1.1 /bridge
+  documented: source
+- name: create_bridge
+  category: networking
+  source_file: src/networking/handlers/bridge.py
+  backing: Cloud API 1.1 /bridge
+  documented: source
+- name: delete_bridge
+  category: networking
+  source_file: src/networking/handlers/bridge.py
+  backing: Cloud API 1.1 /bridge/{id}
+  documented: source
+- name: get_router_list
+  category: networking
+  source_file: src/networking/handlers/router.py
+  backing: Cloud API 1.1 /internet
+  documented: source
+- name: get_router_monitor
+  category: networking
+  source_file: src/networking/handlers/router.py
+  backing: Cloud API 1.1 /internet/{id}/monitor
+  documented: source
+- name: create_router
+  category: networking
+  source_file: src/networking/handlers/router.py
+  backing: Cloud API 1.1 /internet
+  documented: source
+- name: delete_router
+  category: networking
+  source_file: src/networking/handlers/router.py
+  backing: Cloud API 1.1 /internet/{id}
+  documented: source
+- name: get_switch_list
+  category: networking
+  source_file: src/networking/handlers/switch.py
+  backing: Cloud API 1.1 /switch
+  documented: source
+- name: create_switch
+  category: networking
+  source_file: src/networking/handlers/switch.py
+  backing: Cloud API 1.1 /switch
+  documented: source
+- name: get_objectstorage_site_list
+  category: objectstorage
+  source_file: src/objectstorage/handlers/objectstorage.py
+  backing: objectstorage/1.0/fed/v1/clusters
+  documented: source
+- name: get_objectstorage_accesskey_list
+  category: objectstorage
+  source_file: src/objectstorage/handlers/objectstorage.py
+  backing: objectstorage/1.0/{site_id}/v2/account/keys
+  documented: source
+- name: get_objectstorage_bucket_list
+  category: objectstorage
+  source_file: src/objectstorage/handlers/objectstorage.py
+  backing: S3-compatible ListBuckets via boto3 (s3.isk01.sakurastorage.jp)
+  documented: source
+- name: get_archive_list
+  category: storage
+  source_file: src/storage/handlers/archive.py
+  backing: Cloud API 1.1 /archive
+  documented: source
+- name: get_disk
+  category: storage
+  source_file: src/storage/handlers/disk.py
+  backing: Cloud API 1.1 /disk
+  documented: source
+- name: create_disk
+  category: storage
+  source_file: src/storage/handlers/disk.py
+  backing: Cloud API 1.1 /disk
+  documented: source
+- name: get_disk_plan
+  category: storage
+  source_file: src/storage/handlers/disk.py
+  backing: Cloud API 1.1 /product/disk
+  documented: source
+notes: Tool names are taken verbatim from the server source (including the misspelled `get_detabases`); no live
+  tools/list was called because the server is local-stdio only. A third-party TypeScript server (hidenorigoto/sacloud-mcp)
+  exists but is not published by SAKURA and is not recorded here.

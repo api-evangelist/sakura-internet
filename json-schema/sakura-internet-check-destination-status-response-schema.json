@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-check-destination-status-response-schema.json",
+  "title": "CheckDestinationStatusResponse",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-simple-notification-openapi.yml#/components/schemas/CheckDestinationStatusResponse",
+  "type": "object",
+  "properties": {
+    "NotificationStatus": {
+      "type": "object",
+      "properties": {
+        "IsValid": {
+          "type": "boolean"
+        },
+        "ModifiedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "IsValid",
+        "ModifiedAt"
+      ]
+    }
+  },
+  "required": [
+    "NotificationStatus"
+  ]
+}

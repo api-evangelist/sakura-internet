@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-auth-conditions-schema.json",
+  "title": "AuthConditions",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-iam-openapi.yml#/components/schemas/AuthConditions",
+  "type": "object",
+  "required": [
+    "ip_restriction",
+    "require_two_factor_auth",
+    "datetime_restriction"
+  ],
+  "properties": {
+    "ip_restriction": {
+      "type": "object",
+      "required": [
+        "mode"
+      ],
+      "description": "認証を許可するIPサブネットワーク (デフォルトはすべて許可)",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "type": "string",
+              "enum": [
+                "allow_all"
+              ],
+              "description": "allow_all = すべて許可\nallow_list = source_networkで許可リスト指定\n"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "type": "string",
+              "enum": [
+                "allow_list"
+              ],
+              "description": "allow_all = すべて許可\nallow_list = source_networkで許可リスト指定\n"
+            },
+            "source_network": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "description": "IPv4のCIDR表記"
+              },
+              "description": "modeがallow_listの場合のみ必須"
+            }
+          }
+        }
+      ]
+    },
+    "require_two_factor_auth": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "2要素認証によるログインを必須とするかどうか (デフォルトは `false`)"
+        }
+      },
+      "required": [
+        "enabled"
+      ]
+    },
+    "datetime_restriction": {
+      "type": "object",
+      "required": [
+        "after",
+        "before"
+      ],
+      "properties": {
+        "after": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "description": "日時がこの時間より後であることを要求 (ISO 8601形式; デフォルトは未設定 (`null`))"
+        },
+        "before": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "description": "日時がこの時間より前であることを要求 (ISO 8601形式; デフォルトは未設定 (`null`))"
+        }
+      }
+    }
+  }
+}

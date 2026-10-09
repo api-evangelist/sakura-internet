@@ -1,0 +1,220 @@
+openapi: 3.2.0
+info:
+  title: Sakura Internet Chunks API
+  version: '2026-06-29'
+  description: 'Operations tagged chunks across 2 of this provider''s published API definitions: ai-engine-rag-api.yaml, sakura-internet-ai-engine-rag-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: ' https://api.ai.sakura.ad.jp'
+tags:
+- name: Chunks
+paths:
+  /v1/documents/{document_pk}/chunks/:
+    get:
+      operationId: document_chunks_list
+      description: 'ドキュメント配下のチャンク一覧/単体取得用 ViewSet。
+
+
+        - list: /documents/{document_id}/chunks/
+
+        - retrieve: /documents/{document_id}/chunks/{index}/ ← index で取得'
+      parameters:
+      - in: path
+        name: document_pk
+        schema:
+          type: string
+        required: true
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - Chunks
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDocumentChunkList'
+          description: ''
+      summary: Document chunks list
+      x-summary-source: derived
+    servers:
+    - url: ' https://api.ai.sakura.ad.jp'
+  /v1/documents/{document_pk}/chunks/{index}/:
+    get:
+      operationId: document_chunks_retrieve
+      description: 'ドキュメント配下のチャンク一覧/単体取得用 ViewSet。
+
+
+        - list: /documents/{document_id}/chunks/
+
+        - retrieve: /documents/{document_id}/chunks/{index}/ ← index で取得'
+      parameters:
+      - in: path
+        name: document_pk
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: index
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - Chunks
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentChunk'
+          description: ''
+      summary: Document chunks retrieve
+      x-summary-source: derived
+    servers:
+    - url: ' https://api.ai.sakura.ad.jp'
+components:
+  schemas:
+    StatusEnum:
+      enum:
+      - pending
+      - processing
+      - available
+      - deleted
+      - error
+      type: string
+      description: '* `pending` - Pending
+
+        * `processing` - Processing
+
+        * `available` - Available
+
+        * `deleted` - Deleted
+
+        * `error` - Error'
+    PaginatedDocumentChunkList:
+      type: object
+      properties:
+        meta:
+          type: object
+          properties:
+            page:
+              type: integer
+            page_size:
+              type: integer
+            total_pages:
+              type: integer
+            count:
+              type: integer
+            next:
+              type:
+              - string
+              - 'null'
+              format: uri
+            previous:
+              type:
+              - string
+              - 'null'
+              format: uri
+          required:
+          - page
+          - page_size
+          - total_pages
+          - count
+          - next
+          - previous
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentChunk'
+      required:
+      - meta
+      - results
+    DocumentList:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          readOnly: true
+          title: ステータス
+        name:
+          type: string
+          maxLength: 255
+        model:
+          type: string
+          readOnly: true
+        chunk_size:
+          type: integer
+          readOnly: true
+        chunk_count:
+          type: integer
+          readOnly: true
+        tags:
+          type: array
+          items:
+            type: string
+        error_message:
+          type: string
+          readOnly: true
+      required:
+      - chunk_count
+      - chunk_size
+      - created_at
+      - error_message
+      - id
+      - model
+      - name
+      - status
+    DocumentChunk:
+      type: object
+      properties:
+        document:
+          allOf:
+          - $ref: '#/components/schemas/DocumentList'
+          readOnly: true
+        chunk_index:
+          type: integer
+          readOnly: true
+        content:
+          type: string
+          readOnly: true
+        metadata:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+          readOnly: true
+      required:
+      - chunk_index
+      - content
+      - document
+      - metadata
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+x-refined-from:
+- ai-engine-rag-api.yaml
+- sakura-internet-ai-engine-rag-openapi.yml

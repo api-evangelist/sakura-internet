@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-bucket-billing-item-schema.json",
+  "title": "BucketBillingItem",
+  "description": "Bucket usage and charge for metering",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-objectstorage-openapi.yml#/components/schemas/BucketBillingItem",
+  "type": "object",
+  "required": [
+    "year_month",
+    "basic",
+    "storage_usage",
+    "num_objects",
+    "num_transactions",
+    "transfer_amount"
+  ],
+  "properties": {
+    "year_month": {
+      "type": "string",
+      "description": "集計対象の年月"
+    },
+    "basic": {
+      "$ref": "#/$defs/BucketBillingItemDetail",
+      "description": "基本料金"
+    },
+    "storage_usage": {
+      "$ref": "#/$defs/BucketBillingItemDetail",
+      "description": "ストレージ使用量"
+    },
+    "num_objects": {
+      "$ref": "#/$defs/BucketBillingItemDetail",
+      "description": "オブジェクト数"
+    },
+    "num_transactions": {
+      "$ref": "#/$defs/BucketBillingItemDetail",
+      "description": "トランザクション数"
+    },
+    "transfer_amount": {
+      "$ref": "#/$defs/BucketBillingItemDetail",
+      "description": "転送量"
+    }
+  },
+  "$defs": {
+    "BucketBillingItemDetail": {
+      "description": "Charge information",
+      "type": "object",
+      "required": [
+        "found",
+        "usage",
+        "charge",
+        "is_closing",
+        "from",
+        "to"
+      ],
+      "properties": {
+        "found": {
+          "type": "boolean",
+          "description": "Whether billing record was found or not. `false` means that bucket was not found, bucket was owned by other accounts, or error on metering."
+        },
+        "usage": {
+          "type": "number",
+          "format": "double",
+          "description": "Usage for calculating charge"
+        },
+        "charge": {
+          "type": "integer",
+          "description": "Amount billed including tax"
+        },
+        "is_closing": {
+          "type": "boolean",
+          "description": "Result of monthly closing or not"
+        },
+        "from": {
+          "type": "string",
+          "format": "date",
+          "description": "The first day of metering range"
+        },
+        "to": {
+          "type": "string",
+          "format": "date",
+          "description": "The last day of metering range"
+        }
+      }
+    }
+  }
+}

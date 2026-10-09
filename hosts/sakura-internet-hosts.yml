@@ -1,0 +1,225 @@
+generated: '2026-10-09'
+method: derived
+source: the pre-flight dossier, apis.yml pointers, spec servers, well-known, vendors -- nothing fetched here
+generator: derive-hosts.py
+summary:
+  hosts: 18
+  own: 15
+  other_domain: 1
+  platform: 2
+  roles:
+  - api
+  - identity
+  - marketing
+  - other
+  - portal
+  - security
+  - source
+  - status
+  - support
+  - website
+hosts:
+- host: api.ad.jp
+  found_by:
+  - contract-discovery
+  types: []
+  serves: []
+  registrable_domain: ad.jp
+  role: api
+  relation: own
+- host: api.ai.sakura.ad.jp
+  found_by:
+  - apis[]
+  types: []
+  serves:
+  - api
+  registrable_domain: ad.jp
+  role: api
+  relation: own
+- host: case.sakura.ad.jp
+  found_by:
+  - probed
+  - site-links
+  - well-known
+  types: []
+  serves: []
+  registrable_domain: ad.jp
+  role: other
+  relation: own
+- host: cdn.sakura.ad.jp
+  found_by:
+  - probed
+  - site-links
+  types: []
+  serves: []
+  registrable_domain: ad.jp
+  role: other
+  relation: own
+- host: cloud.sakura.ad.jp
+  found_by:
+  - pointer
+  - probed
+  - contract-discovery
+  - well-known
+  types:
+  - Website
+  - Pricing
+  - Newsroom
+  - TermsOfService
+  serves: []
+  registrable_domain: ad.jp
+  role: website
+  relation: own
+- host: cybersec.sakura.ad.jp
+  found_by:
+  - probed
+  - site-links
+  types: []
+  serves: []
+  registrable_domain: ad.jp
+  role: other
+  relation: own
+- host: github.com
+  found_by:
+  - pointer
+  - apis[]
+  types:
+  - SpectralRules
+  - GitHubOrganization
+  serves:
+  - docs
+  registrable_domain: github.com
+  role: source
+  relation: platform
+- host: help.sakura.ad.jp
+  found_by:
+  - pointer
+  - probed
+  - site-links
+  - docs-index
+  - contract-discovery
+  - well-known
+  types:
+  - Support
+  serves:
+  - docs
+  registrable_domain: ad.jp
+  role: support
+  relation: own
+- host: imageflux.sakura.ad.jp
+  found_by:
+  - probed
+  - site-links
+  types: []
+  serves: []
+  registrable_domain: ad.jp
+  role: other
+  relation: own
+- host: iot.sakura.ad.jp
+  found_by:
+  - probed
+  - site-links
+  types: []
+  serves: []
+  registrable_domain: ad.jp
+  role: other
+  relation: own
+- host: knowledge.sakura.ad.jp
+  found_by:
+  - pointer
+  - probed
+  - well-known
+  types:
+  - Blog
+  serves: []
+  registrable_domain: ad.jp
+  role: marketing
+  relation: own
+- host: manual.sakura.ad.jp
+  found_by:
+  - pointer
+  - apis[]
+  - probed
+  - site-links
+  - docs-index
+  - spec-found
+  - contract-discovery
+  - well-known
+  types:
+  - DeveloperPortal
+  - Documentation
+  - APIReference
+  serves:
+  - docs
+  - spec
+  registrable_domain: ad.jp
+  role: portal
+  relation: own
+- host: secure.sakura.ad.jp
+  found_by:
+  - pointer
+  - apis[]
+  - probed
+  - site-links
+  - contract-discovery
+  - well-known
+  types:
+  - SignUp
+  - Login
+  serves:
+  - api
+  registrable_domain: ad.jp
+  role: identity
+  relation: own
+- host: simplemq.tk1b.api.sacloud.jp
+  found_by:
+  - apis[]
+  types: []
+  serves:
+  - api
+  registrable_domain: sacloud.jp
+  role: api
+  relation: other-domain
+- host: ssl.sakura.ad.jp
+  found_by:
+  - probed
+  - site-links
+  types: []
+  serves: []
+  registrable_domain: ad.jp
+  role: other
+  relation: own
+- host: status.cloud.sakura.ad.jp
+  found_by:
+  - pointer
+  - probed
+  - site-links
+  - well-known
+  types:
+  - StatusPage
+  serves: []
+  registrable_domain: ad.jp
+  role: status
+  relation: own
+- host: twitter.com
+  found_by:
+  - pointer
+  types:
+  - Twitter
+  serves: []
+  registrable_domain: twitter.com
+  role: other
+  relation: platform
+- host: www.sakura.ad.jp
+  found_by:
+  - pointer
+  - probed
+  - well-known
+  types:
+  - PrivacyPolicy
+  - Security
+  - CorporateWebsite
+  serves: []
+  registrable_domain: ad.jp
+  role: security
+  relation: own

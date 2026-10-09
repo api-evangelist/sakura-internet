@@ -1,0 +1,55 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist overlay for EventBus さくらのクラウドAPI
+  version: 1.0.0
+extends: ../openapi/_original/sakura-internet-eventbus-openapi.yml
+x-generated: '2026-10-09'
+x-method: generated
+x-source: openapi/sakura-internet-eventbus-openapi.yml
+x-rationale: 'Enhancements captured without mutating the original: derives tags for 6 untagged operations
+  from the first path segment; links the provider-hosted docs as externalDocs.'
+actions:
+- target: $.paths['/commonserviceitem'].get
+  description: Derived tags (missing in original; derived from method + path).
+  update:
+    tags:
+    - commonserviceitem
+- target: $.paths['/commonserviceitem'].post
+  description: Derived tags (missing in original; derived from method + path).
+  update:
+    tags:
+    - commonserviceitem
+- target: $.paths['/commonserviceitem/{id}'].get
+  description: Derived tags (missing in original; derived from method + path).
+  update:
+    tags:
+    - commonserviceitem
+- target: $.paths['/commonserviceitem/{id}'].put
+  description: Derived tags (missing in original; derived from method + path).
+  update:
+    tags:
+    - commonserviceitem
+- target: $.paths['/commonserviceitem/{id}'].delete
+  description: Derived tags (missing in original; derived from method + path).
+  update:
+    tags:
+    - commonserviceitem
+- target: $.paths['/commonserviceitem/{id}/eventbus/processconfiguration/set-secret'].put
+  description: Derived tags (missing in original; derived from method + path).
+  update:
+    tags:
+    - commonserviceitem
+- target: $
+  description: Link the provider-hosted human documentation.
+  update:
+    externalDocs:
+      url: https://manual.sakura.ad.jp/api/cloud/portal/eventbus-api/index.html
+      description: SAKURA internet documentation
+- target: $.info
+  description: Agent-surface hints from the API Evangelist profile.
+  update:
+    x-api-evangelist:
+      provider: sakura-internet
+      mcp: mcp/sakura-internet-mcp.yml
+      tool_crosswalk: mcp/sakura-internet-tool-crosswalk.yml
+      llms: llms/sakura-internet-llms.txt

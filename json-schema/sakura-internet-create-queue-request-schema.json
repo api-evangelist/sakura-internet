@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-create-queue-request-schema.json",
+  "title": "CreateQueueRequest",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-simplemq-sacloud-openapi.yml#/components/schemas/CreateQueueRequest",
+  "type": "object",
+  "required": [
+    "CommonServiceItem"
+  ],
+  "properties": {
+    "CommonServiceItem": {
+      "type": "object",
+      "required": [
+        "Name",
+        "Provider"
+      ],
+      "properties": {
+        "Name": {
+          "$ref": "#/$defs/QueueName"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "Provider": {
+          "type": "object",
+          "required": [
+            "Class"
+          ],
+          "properties": {
+            "Class": {
+              "type": "string",
+              "enum": [
+                "simplemq"
+              ]
+            }
+          }
+        },
+        "Tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "Icon": {
+          "$ref": "#/$defs/Icon"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "Icon": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "ID": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ],
+              "description": "0を指定することでIconなしに設定することが出来ます"
+            },
+            "URL": {
+              "type": "string"
+            },
+            "Name": {
+              "type": "string"
+            },
+            "Scope": {
+              "type": "string"
+            },
+            "Tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "QueueName": {
+      "description": "キュー名 (アカウント内で一意の値)",
+      "type": "string",
+      "minLength": 5,
+      "maxLength": 64,
+      "pattern": "^[0-9a-zA-Z]+(-[0-9a-zA-Z]+)*$"
+    }
+  }
+}

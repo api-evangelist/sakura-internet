@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-project-schema.json",
+  "title": "Project",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-iam-openapi.yml#/components/schemas/Project",
+  "type": "object",
+  "required": [
+    "id",
+    "code",
+    "name",
+    "description",
+    "status",
+    "created_at",
+    "updated_at",
+    "parent_folder_id"
+  ],
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "プロジェクトID",
+      "readOnly": true
+    },
+    "code": {
+      "type": "string",
+      "description": "プロジェクトコード",
+      "maxLength": 64
+    },
+    "name": {
+      "type": "string",
+      "description": "プロジェクトの名前"
+    },
+    "description": {
+      "type": "string",
+      "description": "プロジェクトの説明"
+    },
+    "status": {
+      "type": "string",
+      "description": "プロジェクトのステータス",
+      "enum": [
+        "available"
+      ],
+      "readOnly": true
+    },
+    "parent_folder_id": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "親フォルダID",
+      "readOnly": true
+    },
+    "created_at": {
+      "type": "string",
+      "description": "作成日時"
+    },
+    "updated_at": {
+      "type": "string",
+      "description": "更新日時"
+    }
+  }
+}

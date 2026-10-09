@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-plan-schema.json",
+  "title": "Plan",
+  "description": "料金プラン",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-apigw-openapi.yml#/components/schemas/Plan",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "#/$defs/Model"
+    },
+    {
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "プラン名"
+        },
+        "price": {
+          "type": "string",
+          "description": "価格"
+        },
+        "description": {
+          "type": "string",
+          "description": "プランの説明"
+        },
+        "maxServices": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "作成できるServiceの最大数"
+        },
+        "maxRequests": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "追加料金なしで利用できるリクエスト数"
+        },
+        "maxRequestsUnit": {
+          "type": "string",
+          "enum": [
+            "second",
+            "minute",
+            "hour",
+            "day",
+            "month",
+            "year"
+          ],
+          "description": "maxRequestsの上限が適用される期間の単位"
+        },
+        "overage": {
+          "$ref": "#/$defs/Overage"
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "Model": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true,
+          "description": "Entityを識別するためのID"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "作成日時"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "更新日時"
+        }
+      },
+      "description": "各Entity共通のモデル"
+    },
+    "Overage": {
+      "type": "object",
+      "properties": {
+        "unitRequests": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "超過リクエスト数単位"
+        },
+        "unitPrice": {
+          "type": "string",
+          "description": "超過リクエスト数単位の価格"
+        }
+      }
+    }
+  }
+}

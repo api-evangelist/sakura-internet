@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-chat-query-request-schema.json",
+  "title": "ChatQueryRequest",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-ai-engine-rag-openapi.yml#/components/schemas/ChatQueryRequest",
+  "type": "object",
+  "properties": {
+    "distance_type": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/DistanceTypeEnum"
+        }
+      ],
+      "default": "cosine",
+      "description": "類似度計算に使用する距離メトリクスです。\n* `cosine`: コサイン距離\n* `l2`: L2距離（ユークリッド距離）\n\n* `cosine` - cosine\n* `l2` - l2"
+    },
+    "model": {
+      "type": "string",
+      "default": "multilingual-e5-large",
+      "description": "検索時に使用する埋め込みモデルを指定します。\n指定したモデルでクエリおよびドキュメントの埋め込みを生成し、\n類似度検索を行います。(利用可能なモデルはコントロールパネル等をご確認ください。)",
+      "maxLength": 255
+    },
+    "chat_model": {
+      "type": "string",
+      "description": "回答生成に使用するチャットモデルを指定します。\n検索結果をもとに、このモデルを用いて回答文を生成します。(利用可能なモデルはコントロールパネル等をご確認ください。)",
+      "maxLength": 255
+    },
+    "query": {
+      "type": "string",
+      "description": "質問文を指定します。\n指定されたクエリは検索および回答生成の両方に使用されます。",
+      "maxLength": 1000
+    },
+    "prompt": {
+      "type": "string",
+      "description": "回答生成時の`system_prompt`に追加されるカスタム指示文を指定します。\n口調の指定や回答形式の制御などに利用できます。\n未指定の場合は、デフォルトのsystem_promptが使用されます。",
+      "maxLength": 2000
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 255
+      },
+      "description": "検索対象にするタグを指定します。\n指定したタグが含まれるドキュメントのみが検索対象となります。\n複数指定した場合はすべてのタグが指定されているドキュメントのみ対象となります。"
+    },
+    "top_k": {
+      "type": "integer",
+      "maximum": 100,
+      "minimum": 1,
+      "default": 5,
+      "description": "検索結果として取得する最大件数を指定します。\n類似度の高いドキュメントから順に、この件数分が使用されます。"
+    },
+    "threshold": {
+      "type": "number",
+      "format": "double",
+      "maximum": 2.0,
+      "minimum": 0.0,
+      "default": 0.3,
+      "description": "ベクトル距離のしきい値。この值よりも距離が大きいドキュメントは検索結果から除外されます。"
+    },
+    "use_full_content": {
+      "type": "boolean",
+      "default": false,
+      "description": "trueの場合は、ドキュメント全文をコンテキストとして使用します。\nfalseの場合は、分割されたチャンク単位で検索・回答生成を行います。"
+    }
+  },
+  "required": [
+    "chat_model",
+    "query"
+  ],
+  "$defs": {
+    "DistanceTypeEnum": {
+      "enum": [
+        "cosine",
+        "l2"
+      ],
+      "type": "string",
+      "description": "* `cosine` - cosine\n* `l2` - l2"
+    }
+  }
+}

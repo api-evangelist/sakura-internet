@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-reorder-notification-routing-request-schema.json",
+  "title": "ReorderNotificationRoutingRequest",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-simple-notification-openapi.yml#/components/schemas/ReorderNotificationRoutingRequest",
+  "properties": {
+    "Orders": {
+      "items": {
+        "properties": {
+          "PriorityRank": {
+            "maximum": 100,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "RoutingID": {
+            "pattern": "^[0-9]{1,12}$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "RoutingID",
+          "PriorityRank"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "Orders"
+  ],
+  "type": "object"
+}

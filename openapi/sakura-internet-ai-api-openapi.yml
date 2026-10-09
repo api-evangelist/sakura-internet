@@ -1,0 +1,419 @@
+openapi: 3.2.0
+info:
+  title: Sakura Internet AI API
+  version: 1.1.1
+  contact:
+    name: SAKURA internet Inc.
+  license:
+    name: Copyright(C) SAKURA internet Inc. all rights reserved.
+  description: 'Operations tagged AI across 2 of this provider''s published API definitions: addon-api.yaml, sakura-internet-addon-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://secure.sakura.ad.jp/cloud/api/addon/1.0/
+tags:
+- name: AI
+paths:
+  /ai:
+    get:
+      tags:
+      - AI
+      summary: AI機能リソースの一覧を取得します。
+      description: アドオンのAI機能リソースの一覧を取得します。
+      operationId: list_AZ0501
+      responses:
+        '200':
+          description: AI機能リソースの取得に成功しました。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListResourcesResponse'
+        '400':
+          description: リクエストが不正です。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: AI機能リソースが見つかりませんでした。
+    post:
+      tags:
+      - AI
+      summary: AI機能リソースを作成します。
+      description: アドオンのAI機能リソースを作成します。
+      operationId: create_AZ0501
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AiRequestBody'
+        required: true
+      responses:
+        '202':
+          description: AI機能リソースの作成を開始しました。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostDeploymentResponse'
+        '400':
+          description: リクエストが不正です。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/addon/1.0/
+  /ai/{resourceGroupName}:
+    get:
+      tags:
+      - AI
+      summary: 指定されたAI機能リソースを取得します。
+      description: アドオンの指定されたAI機能リソースを取得します。
+      operationId: get_AZ0501
+      parameters:
+      - name: resourceGroupName
+        in: path
+        description: リソースグループ名
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: AI機能リソースの取得に成功しました。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetResourceResponse'
+        '400':
+          description: リクエストが不正です。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: AI機能リソースが見つかりませんでした。
+    delete:
+      tags:
+      - AI
+      summary: 指定されたAI機能リソースを削除します。
+      description: アドオンの指定されたAI機能リソースを削除します。
+      operationId: delete_AZ0501
+      parameters:
+      - name: resourceGroupName
+        in: path
+        description: リソースグループ名
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: AI機能リソースの削除を開始しました。
+        '400':
+          description: リクエストが不正です。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: AI機能リソースが見つかりませんでした。
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/addon/1.0/
+  /ai/status/{resourceGroupName}/{deploymentName}:
+    get:
+      tags:
+      - AI
+      summary: 指定されたAI機能リソースのステータスを取得します。
+      description: アドオンの指定されたAI機能リソースのステータスを取得します。
+      operationId: status_AZ0501
+      parameters:
+      - name: resourceGroupName
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: deploymentName
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: AI機能リソースの取得に成功しました。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeploymentStatus'
+        '400':
+          description: リクエストが不正です。
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/addon/1.0/
+components:
+  schemas:
+    AiServiceSku:
+      enum:
+      - 1
+      type: integer
+      description: 'AI Servicesリソースで使用するSKUを指定します。指定値とSKUの対応は次の通りです。
+
+        - 1: S0'
+      format: int32
+    CreatedByType:
+      type: object
+      additionalProperties: false
+    ResourceType:
+      type: object
+      properties:
+        namespace:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        type:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+      additionalProperties: false
+    DeploymentStatus:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: デプロイメントの一意の識別子。
+        name:
+          type:
+          - string
+          - 'null'
+          description: デプロイメントの名前。
+        type:
+          type:
+          - string
+          - 'null'
+          description: デプロイメントのタイプ。
+        properties:
+          $ref: '#/components/schemas/DeploymentStatusProperties'
+      additionalProperties: false
+      description: デプロイメントステータスのレスポンスを表します。
+    AiRequestBody:
+      required:
+      - location
+      - sku
+      type: object
+      properties:
+        location:
+          minLength: 1
+          enum:
+          - japaneast
+          type: string
+          description: デプロイ先のリージョン
+          example: japaneast
+        sku:
+          $ref: '#/components/schemas/AiServiceSku'
+      additionalProperties: false
+      description: 機械学習関連機能の作成APIで受信するリクエストボディを表します。
+    ResourceGroupResource:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/ResourceIdentifier'
+        hasData:
+          type: boolean
+          readOnly: true
+        data:
+          $ref: '#/components/schemas/ResourceGroupData'
+      additionalProperties: false
+    SystemData:
+      type: object
+      properties:
+        createdBy:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        createdByType:
+          $ref: '#/components/schemas/CreatedByType'
+        createdOn:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        lastModifiedBy:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        lastModifiedByType:
+          $ref: '#/components/schemas/CreatedByType'
+        lastModifiedOn:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+      additionalProperties: false
+    ResourceIdentifier:
+      type: object
+      properties:
+        resourceType:
+          $ref: '#/components/schemas/ResourceType'
+        name:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        parent:
+          $ref: '#/components/schemas/ResourceIdentifier'
+        subscriptionId:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        provider:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        location:
+          $ref: '#/components/schemas/AzureLocation'
+        resourceGroupName:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+      additionalProperties: false
+    AzureLocation:
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        displayName:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+      additionalProperties: false
+    DeploymentStatusProperties:
+      type: object
+      properties:
+        provisioningState:
+          type:
+          - string
+          - 'null'
+          description: リソースのプロビジョニング状態。
+        timestamp:
+          type: string
+          description: デプロイメントステータスのタイムスタンプ。
+          format: date-time
+      additionalProperties: false
+      description: デプロイメントステータスのプロパティを表します。
+    ErrorInfo:
+      type: object
+      properties:
+        code:
+          type:
+          - string
+          - 'null'
+          description: エラーコード
+        message:
+          type:
+          - string
+          - 'null'
+          description: エラーメッセージ
+      additionalProperties: false
+      description: エラー情報
+    ListResourcesResponse:
+      type: object
+      properties:
+        resources:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ResourceGroupResource'
+          description: リソースグループ一覧
+      additionalProperties: false
+    ResourceGroupData:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/ResourceIdentifier'
+        name:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        resourceType:
+          $ref: '#/components/schemas/ResourceType'
+        systemData:
+          $ref: '#/components/schemas/SystemData'
+        tags:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type:
+            - string
+            - 'null'
+          readOnly: true
+        location:
+          $ref: '#/components/schemas/AzureLocation'
+        resourceGroupProvisioningState:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        managedBy:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    PostDeploymentResponse:
+      type: object
+      properties:
+        resourceGroupName:
+          type:
+          - string
+          - 'null'
+          description: リソースグループ名を取得します。
+        deploymentName:
+          type:
+          - string
+          - 'null'
+          description: デプロイメント名を取得します。
+      additionalProperties: false
+      description: デプロイメントが投稿された後に受け取るレスポンスを表します。
+    GetResourceResponse:
+      type: object
+      properties:
+        data:
+          description: データ
+        url:
+          type:
+          - string
+          - 'null'
+          description: 管理ポータルのURL
+      additionalProperties: false
+      description: リソース個別取得APIのレスポンス
+    ErrorResponse:
+      type: object
+      properties:
+        errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ErrorInfo'
+          description: エラーリスト
+      additionalProperties: false
+      description: エラーレスポンス
+x-refined-from:
+- addon-api.yaml
+- sakura-internet-addon-openapi.yml

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-streaming-request-body-schema.json",
+  "title": "StreamingRequestBody",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-addon-openapi.yml#/components/schemas/StreamingRequestBody",
+  "required": [
+    "location",
+    "unitCount"
+  ],
+  "type": "object",
+  "properties": {
+    "location": {
+      "minLength": 1,
+      "enum": [
+        "japaneast"
+      ],
+      "type": "string",
+      "description": "デプロイ先のリージョン"
+    },
+    "unitCount": {
+      "minLength": 1,
+      "type": "string",
+      "description": "Stream Analyticsのストリーミングユニット数を指定します。\r\n指定値と実際のユニット数の対応は次の通りです。\r\n- 3: 1/3ユニット\r\n- 7: 2/3ユニット\r\n- 10 ～ 660: 1 ～ 66ユニット（※）\r\n\r\n※ 10 以上を指定する場合は、作成したいユニット数 × 10 の値を指定してください。指定できるのは 10 の倍数のみです。11 など 10 の倍数でない値を指定した場合はエラーとなります。"
+    }
+  },
+  "additionalProperties": false
+}

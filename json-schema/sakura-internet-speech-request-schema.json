@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-speech-request-schema.json",
+  "title": "SpeechRequest",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-ai-engine-inference-openapi.yml#/components/schemas/SpeechRequest",
+  "type": "object",
+  "required": [
+    "model",
+    "input"
+  ],
+  "properties": {
+    "model": {
+      "type": "string",
+      "description": "音声合成モデル識別子(例：zundamon)\n利用可能なmodelはコントロールパネル等をご確認ください。\n"
+    },
+    "input": {
+      "type": "string",
+      "description": "音声合成するテキスト（最大1000文字程度）",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "voice": {
+      "type": "string",
+      "description": "話者/スタイル(例：normal)\n利用可能なvoiceはコントロールパネル等をご確認ください。\n"
+    },
+    "instructions": {
+      "type": "string",
+      "description": "追加指示(例： 話し方のトーンなど)。\n※現在は指定できますが無視されます。\n"
+    },
+    "response_format": {
+      "type": "string",
+      "description": "出力フォーマット。\n※現在は指定できますが常にwavを返します。\n",
+      "default": "wav",
+      "enum": [
+        "wav",
+        "mp3",
+        "ogg",
+        "aac",
+        "flac"
+      ]
+    },
+    "stream_format": {
+      "type": "string",
+      "description": "ストリーム形式。\n※現在は指定できますが無視されます。\n",
+      "enum": [
+        "sse",
+        "jsonl"
+      ]
+    }
+  }
+}

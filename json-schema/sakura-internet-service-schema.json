@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-service-schema.json",
+  "title": "service",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-phy-openapi.yml#/components/schemas/service",
+  "type": "object",
+  "properties": {
+    "service_id": {
+      "type": "string"
+    },
+    "nickname": {
+      "type": "string",
+      "description": "名称：サーバーやネットワークなどの表示名"
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "メモ：サーバーやネットワークなどの説明"
+    },
+    "activated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "利用開始日時"
+    },
+    "product_category": {
+      "type": "string",
+      "enum": [
+        "server",
+        "dedicated_subnet",
+        "private_network",
+        "firewall",
+        "load_balancer"
+      ],
+      "description": "サービスの種類\n\n* `server` - サーバー\n* `dedicated_subnet` - 専用グローバルネットワーク\n* `private_network` - ローカルネットワーク\n* `firewall` - ファイアウォール\n* `load_balancer` - ロードバランサー"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/tag"
+      }
+    },
+    "plan": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "プラン情報(ローカルネットワークの場合は`null`)",
+      "properties": {
+        "plan_id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "option_plans": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "plan_id": {
+            "type": "string",
+            "description": "プランID"
+          },
+          "name": {
+            "type": "string",
+            "description": "プラン名称"
+          },
+          "option_class": {
+            "type": "string",
+            "enum": [
+              "upgrade_memory",
+              "upgrade_storage",
+              "additional_storage1",
+              "additional_storage2",
+              "additional_storage3",
+              "additional_nvme_storage1",
+              "additional_nvme_storage2",
+              "os",
+              "global_bandwidth",
+              "local_bandwidth"
+            ],
+            "description": "オプション申込区分\n\n* `upgrade_memory` - 拡張メモリ\n* `upgrade_storage` - ストレージ変更\n* `additional_storage1` - 追加ストレージ1\n* `additional_storage2` - 追加ストレージ2\n* `additional_storage3` - 追加ストレージ3\n* `additional_nvme_storage1` - 追加NVMeストレージ1\n* `additional_nvme_storage2` - 追加NVMeストレージ2\n* `os` - 有償OS\n* `global_bandwidth` - インターネット帯域オプション\n* `local_bandwidth` - ローカルネットワーク帯域オプション"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "tag": {
+      "type": "object",
+      "properties": {
+        "tag_id": {
+          "type": "integer",
+          "description": "タグID"
+        },
+        "label": {
+          "type": "string",
+          "description": "タグの名称"
+        },
+        "color": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "タグの色"
+        }
+      }
+    }
+  }
+}

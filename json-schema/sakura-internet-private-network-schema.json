@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-private-network-schema.json",
+  "title": "private_network",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-phy-openapi.yml#/components/schemas/private_network",
+  "type": "object",
+  "properties": {
+    "private_network_id": {
+      "description": "ローカルネットワークのID",
+      "type": "string"
+    },
+    "service": {
+      "$ref": "#/$defs/service_quiet"
+    },
+    "zone": {
+      "type": "object",
+      "properties": {
+        "zone_id": {
+          "type": "integer",
+          "description": "ネットワークゾーンID"
+        },
+        "region": {
+          "type": "string",
+          "description": "地域名"
+        }
+      }
+    },
+    "vlan_id": {
+      "type": "integer",
+      "description": "VLAN ID"
+    },
+    "hybrid": {
+      "type": "object",
+      "properties": {
+        "service_id": {
+          "type": "string",
+          "description": "ハイブリッド接続のサービスコード"
+        },
+        "destinations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "destination_side_id": {
+                "type": "string",
+                "description": "接続先サービスでの一意なネットワーク識別子"
+              },
+              "service_name": {
+                "type": "string",
+                "description": "接続先を分類する名称"
+              },
+              "bridge_service_id": {
+                "type": "string",
+                "description": "接続先別ハイブリッド接続のサービスコード"
+              }
+            }
+          }
+        }
+      }
+    },
+    "server_count": {
+      "type": "integer",
+      "description": "接続済みサーバー数"
+    }
+  },
+  "$defs": {
+    "service_quiet": {
+      "type": "object",
+      "description": "サービス情報",
+      "properties": {
+        "service_id": {
+          "type": "string",
+          "description": "サービスコード"
+        },
+        "nickname": {
+          "type": "string",
+          "description": "名称：サーバーやネットワークなどの表示名"
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "メモ：サーバーやネットワークなどの説明"
+        },
+        "activated": {
+          "type": "string",
+          "format": "date-time",
+          "description": "利用開始日時"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/tag"
+          }
+        }
+      }
+    },
+    "tag": {
+      "type": "object",
+      "properties": {
+        "tag_id": {
+          "type": "integer",
+          "description": "タグID"
+        },
+        "label": {
+          "type": "string",
+          "description": "タグの名称"
+        },
+        "color": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "タグの色"
+        }
+      }
+    }
+  }
+}

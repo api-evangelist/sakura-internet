@@ -1,0 +1,283 @@
+openapi: 3.2.0
+info:
+  title: Sakura Internet Documents API
+  version: '2026-06-29'
+  description: 'Operations tagged Documents across 2 of this provider''s published API definitions: ai-engine-rag-api.yaml, sakura-internet-ai-engine-rag-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: ' https://api.ai.sakura.ad.jp'
+tags:
+- name: Documents
+paths:
+  /v1/documents/:
+    get:
+      operationId: documents_list
+      parameters:
+      - in: query
+        name: model
+        schema:
+          type: string
+      - in: query
+        name: name
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: tag
+        schema:
+          type: string
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDocumentListList'
+          description: ''
+      tags:
+      - Documents
+      summary: Documents list
+      x-summary-source: derived
+    servers:
+    - url: ' https://api.ai.sakura.ad.jp'
+  /v1/documents/{id}/:
+    get:
+      operationId: documents_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this document.
+        required: true
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+          description: ''
+      tags:
+      - Documents
+      summary: Documents retrieve
+      x-summary-source: derived
+    put:
+      operationId: documents_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this document.
+        required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Document'
+        required: true
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+          description: ''
+      tags:
+      - Documents
+      summary: Documents update
+      x-summary-source: derived
+    delete:
+      operationId: documents_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this document.
+        required: true
+      security:
+      - BearerAuth: []
+      responses:
+        '204':
+          description: No response body
+      tags:
+      - Documents
+      summary: Documents destroy
+      x-summary-source: derived
+    servers:
+    - url: ' https://api.ai.sakura.ad.jp'
+components:
+  schemas:
+    StatusEnum:
+      enum:
+      - pending
+      - processing
+      - available
+      - deleted
+      - error
+      type: string
+      description: '* `pending` - Pending
+
+        * `processing` - Processing
+
+        * `available` - Available
+
+        * `deleted` - Deleted
+
+        * `error` - Error'
+    Document:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          readOnly: true
+          title: ステータス
+        name:
+          type: string
+          maxLength: 255
+        model:
+          type: string
+          readOnly: true
+        chunk_size:
+          type: integer
+          readOnly: true
+        chunk_count:
+          type: integer
+          readOnly: true
+        tags:
+          type: array
+          items:
+            type: string
+        content:
+          type: string
+          readOnly: true
+        error_message:
+          type: string
+          readOnly: true
+      required:
+      - chunk_count
+      - chunk_size
+      - content
+      - created_at
+      - error_message
+      - id
+      - model
+      - name
+      - status
+    PaginatedDocumentListList:
+      type: object
+      properties:
+        meta:
+          type: object
+          properties:
+            page:
+              type: integer
+            page_size:
+              type: integer
+            total_pages:
+              type: integer
+            count:
+              type: integer
+            next:
+              type:
+              - string
+              - 'null'
+              format: uri
+            previous:
+              type:
+              - string
+              - 'null'
+              format: uri
+          required:
+          - page
+          - page_size
+          - total_pages
+          - count
+          - next
+          - previous
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentList'
+      required:
+      - meta
+      - results
+    DocumentList:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          readOnly: true
+          title: ステータス
+        name:
+          type: string
+          maxLength: 255
+        model:
+          type: string
+          readOnly: true
+        chunk_size:
+          type: integer
+          readOnly: true
+        chunk_count:
+          type: integer
+          readOnly: true
+        tags:
+          type: array
+          items:
+            type: string
+        error_message:
+          type: string
+          readOnly: true
+      required:
+      - chunk_count
+      - chunk_size
+      - created_at
+      - error_message
+      - id
+      - model
+      - name
+      - status
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+x-refined-from:
+- ai-engine-rag-api.yaml
+- sakura-internet-ai-engine-rag-openapi.yml

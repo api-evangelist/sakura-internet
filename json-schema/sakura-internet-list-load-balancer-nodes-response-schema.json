@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-list-load-balancer-nodes-response-schema.json",
+  "title": "ListLoadBalancerNodesResponse",
+  "description": "ロードバランサノードの一覧レスポンス",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-apprun-dedicated-openapi.yml#/components/schemas/ListLoadBalancerNodesResponse",
+  "type": "object",
+  "required": [
+    "loadBalancerNodes"
+  ],
+  "properties": {
+    "loadBalancerNodes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/LoadBalancerNode"
+      },
+      "description": "ロードバランサノードの一覧"
+    },
+    "nextCursor": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/LoadBalancerNodeID"
+        }
+      ],
+      "description": "次ページのカーソル。次のリクエストでcursorとして指定する。データが残っていなければnull。"
+    }
+  },
+  "$defs": {
+    "LoadBalancerNode": {
+      "type": "object",
+      "required": [
+        "loadBalancerNodeID",
+        "resourceID",
+        "status",
+        "interfaces",
+        "created"
+      ],
+      "properties": {
+        "loadBalancerNodeID": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/LoadBalancerNodeID"
+            }
+          ],
+          "description": "ID"
+        },
+        "resourceID": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "リソースID"
+        },
+        "status": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/LoadBalancerNodeStatus"
+            }
+          ],
+          "description": "ノードの状態"
+        },
+        "interfaces": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/LoadBalancerNodeInterface"
+          },
+          "description": "インターフェース情報"
+        },
+        "archiveVersion": {
+          "type": "string",
+          "description": "ノードにインストールされているアーカイブのバージョン"
+        },
+        "createErrorMessage": {
+          "type": "string",
+          "description": "ノードの作成に関するエラーメッセージ"
+        },
+        "created": {
+          "type": "integer",
+          "format": "unixtime",
+          "description": "作成日時：UNIX時間（秒）"
+        }
+      }
+    },
+    "LoadBalancerNodeID": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "LoadBalancerNodeInterface": {
+      "type": "object",
+      "required": [
+        "interfaceIndex",
+        "addresses"
+      ],
+      "properties": {
+        "interfaceIndex": {
+          "type": "integer",
+          "format": "int16",
+          "minimum": 0,
+          "description": "インターフェース番号。eth0 なら 0。eth1 なら 1。"
+        },
+        "addresses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/LoadBalancerNodeInterfaceAddress"
+          },
+          "description": "ロードバランサノードのアドレス"
+        }
+      }
+    },
+    "LoadBalancerNodeInterfaceAddress": {
+      "type": "object",
+      "required": [
+        "address",
+        "vip"
+      ],
+      "properties": {
+        "address": {
+          "type": "string",
+          "description": "アドレス"
+        },
+        "vip": {
+          "type": "boolean",
+          "description": "VIPかどうか"
+        }
+      }
+    },
+    "LoadBalancerNodeStatus": {
+      "type": "string",
+      "enum": [
+        "healthy",
+        "unhealthy",
+        "creating",
+        "starting"
+      ],
+      "description": "ロードバランサノードの状態を表す列挙型"
+    }
+  }
+}

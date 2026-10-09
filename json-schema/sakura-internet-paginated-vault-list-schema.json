@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-paginated-vault-list-schema.json",
+  "title": "PaginatedVaultList",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-security-encryption-openapi.yml#/components/schemas/PaginatedVaultList",
+  "type": "object",
+  "required": [
+    "Count",
+    "From",
+    "Total",
+    "Vaults",
+    "is_ok"
+  ],
+  "properties": {
+    "Count": {
+      "type": "integer"
+    },
+    "From": {
+      "type": "integer"
+    },
+    "Total": {
+      "type": "integer"
+    },
+    "Vaults": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Vault"
+      }
+    },
+    "is_ok": {
+      "type": "boolean"
+    }
+  },
+  "$defs": {
+    "DateTime": {
+      "type": "string",
+      "format": "iso8601"
+    },
+    "Vault": {
+      "type": "object",
+      "properties": {
+        "ID": {
+          "type": "string",
+          "readOnly": true
+        },
+        "CreatedAt": {
+          "$ref": "#/$defs/DateTime"
+        },
+        "ModifiedAt": {
+          "$ref": "#/$defs/DateTime"
+        },
+        "Name": {
+          "type": "string",
+          "title": "名前",
+          "maxLength": 255
+        },
+        "Description": {
+          "type": "string",
+          "title": "説明"
+        },
+        "KmsKeyID": {
+          "type": "string",
+          "readOnly": true,
+          "title": "KMS 鍵ID"
+        },
+        "Tags": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": [
+        "CreatedAt",
+        "Description",
+        "ID",
+        "KmsKeyID",
+        "ModifiedAt",
+        "Name",
+        "Tags"
+      ]
+    }
+  }
+}

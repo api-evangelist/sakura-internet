@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-plan-change-req-body-schema.json",
+  "title": "PlanChangeReqBody",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-objectstorage-openapi.yml#/components/schemas/PlanChangeReqBody",
+  "type": "object",
+  "required": [
+    "previous_contract",
+    "new_plan"
+  ],
+  "properties": {
+    "previous_contract": {
+      "type": "object",
+      "required": [
+        "resource_id"
+      ],
+      "properties": {
+        "resource_id": {
+          "description": "Current contract resource ID. This is for validation to avoid recontracting from an unexpected state.\n",
+          "$ref": "#/$defs/ResourceID"
+        }
+      }
+    },
+    "new_plan": {
+      "type": "object",
+      "required": [
+        "type",
+        "service_class_path"
+      ],
+      "description": "New plan to recontract to.",
+      "properties": {
+        "type": {
+          "$ref": "#/$defs/model.PlanType"
+        },
+        "service_class_path": {
+          "$ref": "#/$defs/ServiceClassPath"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "ResourceID": {
+      "description": "Resource ID",
+      "type": "string",
+      "pattern": "^\\d{1,12}$"
+    },
+    "ServiceClassPath": {
+      "type": "string",
+      "description": "Plan identifier (service class path). Attributes such as capacity are resolved by the server based on this value."
+    },
+    "model.PlanType": {
+      "type": "string",
+      "description": "Plan type enum",
+      "enum": [
+        "standard",
+        "archive"
+      ]
+    }
+  }
+}

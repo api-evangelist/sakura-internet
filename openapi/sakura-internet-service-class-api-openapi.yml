@@ -1,0 +1,165 @@
+openapi: 3.2.0
+info:
+  title: Sakura Internet Service Class API
+  version: 1.4.0
+  contact:
+    name: SAKURA internet Inc.
+  license:
+    name: Copyright(C) SAKURA internet Inc. all rights reserved.
+  description: 'Operations tagged service_class across 2 of this provider''s published API definitions: apprun-dedicated-api.yaml, sakura-internet-apprun-dedicated-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://secure.sakura.ad.jp/cloud/api/apprun-dedicated/1.0
+  description: AppRun専有型 API エンドポイント
+  variables: {}
+security:
+- BasicAuth: []
+tags:
+- name: service_class
+paths:
+  /service_classes/lb:
+    get:
+      operationId: listLoadBalancerServiceClasses
+      summary: ロードバランササービスクラスの一覧を取得
+      description: ロードバランササービスクラスの一覧を返します。
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListLoadBalancerServiceClassesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - service_class
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/apprun-dedicated/1.0
+      description: AppRun専有型 API エンドポイント
+      variables: {}
+  /service_classes/worker:
+    get:
+      operationId: listWorkerServiceClasses
+      summary: ワーカノードサービスクラスの一覧を取得
+      description: ワーカノードサービスクラスの一覧を返します。
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListWorkerServiceClassesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - service_class
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/apprun-dedicated/1.0
+      description: AppRun専有型 API エンドポイント
+      variables: {}
+components:
+  schemas:
+    Error:
+      type: object
+      required:
+      - status
+      - title
+      properties:
+        status:
+          type: integer
+          format: int32
+        title:
+          type: string
+    WorkerServiceClass:
+      type: object
+      required:
+      - path
+      - name
+      properties:
+        path:
+          type: string
+          description: サービスクラスのパス
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: サービスクラスの名前
+    ListWorkerServiceClassesResponse:
+      type: object
+      required:
+      - workerServiceClasses
+      properties:
+        workerServiceClasses:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkerServiceClass'
+          description: ワーカノードサービスクラスの一覧
+      example:
+        workerServiceClasses:
+        - name: 1vCPU / 2GB メモリ
+          path: cloud/apprun/dedicated/worker/1vcpu_2gb
+        - name: 2vCPU / 2GB メモリ
+          path: cloud/apprun/dedicated/worker/2vcpu_2gb
+        - name: 2vCPU / 4GB メモリ
+          path: cloud/apprun/dedicated/worker/2vcpu_4gb
+        - name: 4vCPU / 8GB メモリ
+          path: cloud/apprun/dedicated/worker/4vcpu_8gb
+    ListLoadBalancerServiceClassesResponse:
+      type: object
+      required:
+      - lbServiceClasses
+      properties:
+        lbServiceClasses:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoadBalancerServiceClass'
+          description: ロードバランササービスクラスの一覧
+      example:
+        lbServiceClasses:
+        - name: 1vCPU / 2GB メモリ * 1 (非冗長構成)
+          nodeCount: 1
+          path: cloud/apprun/dedicated/lb/1vcpu_2gb_1
+        - name: 1vCPU / 2GB メモリ * 2 (冗長構成)
+          nodeCount: 2
+          path: cloud/apprun/dedicated/lb/1vcpu_2gb_2
+        - name: 4vCPU / 4GB メモリ * 2 (冗長構成)
+          nodeCount: 2
+          path: cloud/apprun/dedicated/lb/4vcpu_4gb_2
+    LoadBalancerServiceClass:
+      type: object
+      required:
+      - path
+      - nodeCount
+      - name
+      properties:
+        path:
+          type: string
+          description: サービスクラスのパス
+        nodeCount:
+          type: integer
+          format: int16
+          description: 割り当てられるノード数
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: サービスクラスの名前
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: Basic
+externalDocs:
+  url: https://manual.sakura.ad.jp/cloud/apprun-dedicated/releasenote.html
+  description: リリースノート | さくらのクラウド マニュアル
+x-refined-from:
+- apprun-dedicated-api.yaml
+- sakura-internet-apprun-dedicated-openapi.yml

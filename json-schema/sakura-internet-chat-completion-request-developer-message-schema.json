@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-chat-completion-request-developer-message-schema.json",
+  "title": "Developer message",
+  "description": "モデルに対する開発者からの指示メッセージ。",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-ai-engine-inference-openapi.yml#/components/schemas/ChatCompletionRequestDeveloperMessage",
+  "type": "object",
+  "required": [
+    "content",
+    "role"
+  ],
+  "properties": {
+    "content": {
+      "anyOf": [
+        {
+          "type": "string",
+          "description": "メッセージの内容。"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ChatCompletionRequestMessageContentPartText"
+          },
+          "minItems": 1
+        }
+      ]
+    },
+    "role": {
+      "type": "string",
+      "description": "メッセージの発言者の役割。",
+      "enum": [
+        "developer"
+      ]
+    }
+  },
+  "$defs": {
+    "ChatCompletionRequestMessageContentPartText": {
+      "type": "object",
+      "description": "テキストコンテンツ。",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "text"
+          ]
+        },
+        "text": {
+          "type": "string",
+          "description": "メッセージの内容。"
+        }
+      },
+      "required": [
+        "type",
+        "text"
+      ]
+    }
+  }
+}

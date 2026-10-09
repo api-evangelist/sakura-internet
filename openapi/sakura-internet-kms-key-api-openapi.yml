@@ -1,0 +1,837 @@
+openapi: 3.2.0
+info:
+  title: Sakura Internet Kms Key API
+  version: 1.2.0
+  description: 'Operations tagged kms-key across 2 of this provider''s published API definitions: security-encryption-api.yaml, sakura-internet-security-encryption-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://secure.sakura.ad.jp/cloud/zone/is1a/api/cloud/1.1
+  description: 石狩第1ゾーン
+- url: https://secure.sakura.ad.jp/cloud/zone/is1b/api/cloud/1.1
+  description: 石狩第2ゾーン
+- url: https://secure.sakura.ad.jp/cloud/zone/is1c/api/cloud/1.1
+  description: 石狩第3ゾーン
+- url: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1
+  description: 東京第1ゾーン
+- url: https://secure.sakura.ad.jp/cloud/zone/tk1b/api/cloud/1.1
+  description: 東京第2ゾーン
+security:
+- basicAuth: []
+tags:
+- name: kms-key
+paths:
+  /kms/keys:
+    get:
+      operationId: listKeys
+      parameters:
+      - name: Count
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: From
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      tags:
+      - kms-key
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedKeyList'
+          description: ''
+      summary: List keys
+      x-summary-source: derived
+    post:
+      operationId: createKey
+      tags:
+      - kms-key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WrappedCreateKeyRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WrappedCreateKeyResponse'
+          description: ''
+      summary: Create key
+      x-summary-source: derived
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1a/api/cloud/1.1
+      description: 石狩第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1b/api/cloud/1.1
+      description: 石狩第2ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1c/api/cloud/1.1
+      description: 石狩第3ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1
+      description: 東京第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1b/api/cloud/1.1
+      description: 東京第2ゾーン
+  /kms/keys/{resource_id}:
+    get:
+      operationId: readKey
+      parameters:
+      - in: path
+        name: resource_id
+        schema:
+          type: string
+          title: リソースID
+        required: true
+      tags:
+      - kms-key
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WrappedKey'
+          description: ''
+      summary: Read key
+      x-summary-source: derived
+    put:
+      operationId: updateKey
+      parameters:
+      - in: path
+        name: resource_id
+        schema:
+          type: string
+          title: リソースID
+        required: true
+      tags:
+      - kms-key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WrappedKeyRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WrappedKey'
+          description: ''
+      summary: Update key
+      x-summary-source: derived
+    delete:
+      operationId: deleteKey
+      parameters:
+      - in: path
+        name: resource_id
+        schema:
+          type: string
+          title: リソースID
+        required: true
+      tags:
+      - kms-key
+      responses:
+        '204':
+          description: No response body
+      summary: Delete key
+      x-summary-source: derived
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1a/api/cloud/1.1
+      description: 石狩第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1b/api/cloud/1.1
+      description: 石狩第2ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1c/api/cloud/1.1
+      description: 石狩第3ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1
+      description: 東京第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1b/api/cloud/1.1
+      description: 東京第2ゾーン
+  /kms/keys/{resource_id}/decrypt:
+    post:
+      operationId: decryptDataWithKey
+      parameters:
+      - in: path
+        name: resource_id
+        schema:
+          type: string
+          title: リソースID
+        required: true
+      tags:
+      - kms-key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WrappedDecryptionRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WrappedKeyPlain'
+          description: ''
+      summary: Decrypt data with key
+      x-summary-source: derived
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1a/api/cloud/1.1
+      description: 石狩第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1b/api/cloud/1.1
+      description: 石狩第2ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1c/api/cloud/1.1
+      description: 石狩第3ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1
+      description: 東京第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1b/api/cloud/1.1
+      description: 東京第2ゾーン
+  /kms/keys/{resource_id}/encrypt:
+    post:
+      operationId: encryptDataWithKey
+      parameters:
+      - in: path
+        name: resource_id
+        schema:
+          type: string
+          title: リソースID
+        required: true
+      tags:
+      - kms-key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WrappedEncryptionRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WrappedKeyCipher'
+          description: ''
+      summary: Encrypt data with key
+      x-summary-source: derived
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1a/api/cloud/1.1
+      description: 石狩第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1b/api/cloud/1.1
+      description: 石狩第2ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1c/api/cloud/1.1
+      description: 石狩第3ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1
+      description: 東京第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1b/api/cloud/1.1
+      description: 東京第2ゾーン
+  /kms/keys/{resource_id}/rotate:
+    post:
+      operationId: rotateKey
+      parameters:
+      - in: path
+        name: resource_id
+        schema:
+          type: string
+          title: リソースID
+        required: true
+      tags:
+      - kms-key
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WrappedKey'
+          description: ''
+      summary: Rotate key
+      x-summary-source: derived
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1a/api/cloud/1.1
+      description: 石狩第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1b/api/cloud/1.1
+      description: 石狩第2ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1c/api/cloud/1.1
+      description: 石狩第3ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1
+      description: 東京第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1b/api/cloud/1.1
+      description: 東京第2ゾーン
+  /kms/keys/{resource_id}/schedule-destruction:
+    post:
+      operationId: scheduleKeyDestruction
+      parameters:
+      - in: path
+        name: resource_id
+        schema:
+          type: string
+          title: リソースID
+        required: true
+      tags:
+      - kms-key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WrappedScheduleDestructionKeyRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WrappedKeyScheduledDestruction'
+          description: ''
+      summary: Schedule key destruction
+      x-summary-source: derived
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1a/api/cloud/1.1
+      description: 石狩第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1b/api/cloud/1.1
+      description: 石狩第2ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1c/api/cloud/1.1
+      description: 石狩第3ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1
+      description: 東京第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1b/api/cloud/1.1
+      description: 東京第2ゾーン
+  /kms/keys/{resource_id}/status:
+    post:
+      operationId: changeKeyStatus
+      parameters:
+      - in: path
+        name: resource_id
+        schema:
+          type: string
+          title: リソースID
+        required: true
+      tags:
+      - kms-key
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WrappedChangeKeyStateRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WrappedChangeKeyState'
+          description: ''
+      summary: Change key status
+      x-summary-source: derived
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1a/api/cloud/1.1
+      description: 石狩第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1b/api/cloud/1.1
+      description: 石狩第2ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/is1c/api/cloud/1.1
+      description: 石狩第3ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1
+      description: 東京第1ゾーン
+    - url: https://secure.sakura.ad.jp/cloud/zone/tk1b/api/cloud/1.1
+      description: 東京第2ゾーン
+components:
+  schemas:
+    WrappedChangeKeyState:
+      type: object
+      properties:
+        Key:
+          $ref: '#/components/schemas/ChangeKeyState'
+        is_ok:
+          type: boolean
+          example: true
+      required:
+      - Key
+      - is_ok
+    WrappedCreateKeyResponse:
+      type: object
+      properties:
+        Key:
+          $ref: '#/components/schemas/CreateKeyResponse'
+        is_ok:
+          type: boolean
+          example: true
+      required:
+      - Key
+      - is_ok
+    WrappedKey:
+      type: object
+      properties:
+        Key:
+          $ref: '#/components/schemas/Key'
+        is_ok:
+          type: boolean
+          example: true
+      required:
+      - Key
+      - is_ok
+    CreateKeyResponse:
+      type: object
+      description: 鍵の作成結果
+      properties:
+        ID:
+          type: string
+          readOnly: true
+          example: '110000000000'
+        CreatedAt:
+          $ref: '#/components/schemas/DateTime'
+        ModifiedAt:
+          $ref: '#/components/schemas/DateTime'
+        ServiceClass:
+          enum:
+          - cloud/kms/key
+          - cloud/kms/key/legacy
+          type: string
+          description: '* `cloud/kms/key` - 通常
+
+            * `cloud/kms/key/legacy` - レガシー'
+          x-spec-enum-id: cdc4cc214c741297
+          readOnly: true
+          title: サービスクラス
+        Name:
+          type: string
+          title: 名前
+          maxLength: 255
+        Description:
+          type: string
+          title: 説明
+        KeyOrigin:
+          enum:
+          - generated
+          - imported
+          type: string
+          description: '* `generated` - 生成
+
+            * `imported` - インポート'
+          x-spec-enum-id: ce5bfb1ae3eae901
+          readOnly: true
+          title: 鍵の生成元
+        LatestVersion:
+          type: integer
+          readOnly: true
+          example: 0
+        Status:
+          enum:
+          - active
+          - restricted
+          - suspended
+          - pending_destruction
+          - destroyed
+          type: string
+          description: '* `active` - 有効
+
+            * `restricted` - 制限付き
+
+            * `suspended` - 一時停止
+
+            * `pending_destruction` - 削除保留
+
+            * `destroyed` - 削除済み'
+          x-spec-enum-id: 16d501464180eaec
+          readOnly: true
+          title: 鍵の状態
+        DeletionScheduledAfter:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+          title: 削除予定日時
+          description: この日時以降に削除される予定です
+          example: '2025-02-05T12:19:22.551827+09:00'
+        Tags:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            minLength: 1
+      required:
+      - CreatedAt
+      - Description
+      - ID
+      - KeyOrigin
+      - LatestVersion
+      - ModifiedAt
+      - Name
+      - ServiceClass
+      - Status
+      - Tags
+    PaginatedKeyList:
+      type: object
+      required:
+      - Count
+      - From
+      - Total
+      - Keys
+      - is_ok
+      properties:
+        Count:
+          type: integer
+          example: 10
+        From:
+          type: integer
+          example: 0
+        Total:
+          type: integer
+          example: 10
+        Keys:
+          type: array
+          items:
+            $ref: '#/components/schemas/Key'
+        is_ok:
+          type: boolean
+          example: true
+    WrappedCreateKeyRequest:
+      type: object
+      properties:
+        Key:
+          $ref: '#/components/schemas/CreateKeyRequest'
+      required:
+      - Key
+    CreateKeyRequest:
+      type: object
+      properties:
+        Name:
+          type: string
+          minLength: 1
+          title: 名前
+          maxLength: 255
+        Description:
+          type: string
+          title: 説明
+        Tags:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            minLength: 1
+        PlainKey:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - Name
+    KeyRequest:
+      type: object
+      properties:
+        Name:
+          type: string
+          minLength: 1
+          title: 名前
+          maxLength: 255
+        Description:
+          type: string
+          title: 説明
+        Tags:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            minLength: 1
+      required:
+      - Name
+    KeyCipher:
+      type: object
+      properties:
+        Cipher:
+          type: string
+          description: Base64 エンコードされた暗号文
+      required:
+      - Cipher
+    WrappedChangeKeyStateRequest:
+      type: object
+      properties:
+        Key:
+          $ref: '#/components/schemas/ChangeKeyStateRequest'
+      required:
+      - Key
+    WrappedScheduleDestructionKeyRequest:
+      type: object
+      properties:
+        Key:
+          $ref: '#/components/schemas/ScheduleDestructionKeyRequest'
+      required:
+      - Key
+    ChangeKeyStateRequest:
+      type: object
+      description: 鍵の状態変更
+      properties:
+        Status:
+          enum:
+          - active
+          - restricted
+          - suspended
+          type: string
+          description: '* `active` - 有効
+
+            * `restricted` - 制限付き
+
+            * `suspended` - 一時停止'
+          x-spec-enum-id: c07b47aad4f4d40c
+      required:
+      - Status
+    ChangeKeyState:
+      type: object
+      description: 鍵の状態変更
+      properties:
+        Status:
+          enum:
+          - active
+          - restricted
+          - suspended
+          type: string
+          description: '* `active` - 有効
+
+            * `restricted` - 制限付き
+
+            * `suspended` - 一時停止'
+          x-spec-enum-id: c07b47aad4f4d40c
+      required:
+      - Status
+    WrappedKeyScheduledDestruction:
+      type: object
+      properties:
+        Key:
+          $ref: '#/components/schemas/KeyScheduledDestruction'
+        is_ok:
+          type: boolean
+          example: true
+      required:
+      - Key
+      - is_ok
+    WrappedKeyRequest:
+      type: object
+      properties:
+        Key:
+          $ref: '#/components/schemas/KeyRequest'
+      required:
+      - Key
+    WrappedDecryptionRequest:
+      type: object
+      properties:
+        Key:
+          $ref: '#/components/schemas/DecryptionRequest'
+      required:
+      - Key
+    WrappedKeyPlain:
+      type: object
+      properties:
+        Key:
+          $ref: '#/components/schemas/KeyPlain'
+        is_ok:
+          type: boolean
+          example: true
+      required:
+      - Key
+      - is_ok
+    DateTime:
+      type: string
+      format: iso8601
+      example: '2025-02-05T12:19:22.551827+09:00'
+    ScheduleDestructionKeyRequest:
+      type: object
+      description: 鍵の削除スケジュール設定
+      properties:
+        PendingDays:
+          type: integer
+          maximum: 90
+          minimum: 7
+          default: 7
+          description: 削除をスケジュールする日数
+          example: 7
+    WrappedEncryptionRequest:
+      type: object
+      properties:
+        Key:
+          $ref: '#/components/schemas/EncryptionRequest'
+      required:
+      - Key
+    KeyScheduledDestruction:
+      type: object
+      properties:
+        Status:
+          enum:
+          - active
+          - restricted
+          - suspended
+          - pending_destruction
+          - destroyed
+          type: string
+          description: '* `active` - 有効
+
+            * `restricted` - 制限付き
+
+            * `suspended` - 一時停止
+
+            * `pending_destruction` - 削除保留
+
+            * `destroyed` - 削除済み'
+          x-spec-enum-id: 16d501464180eaec
+        DeletionScheduledAfter:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2025-02-05T12:19:22.551827+09:00'
+      required:
+      - DeletionScheduledAfter
+      - Status
+    DecryptionRequest:
+      type: object
+      properties:
+        Cipher:
+          type: string
+          minLength: 1
+          description: Base64 エンコードされた暗号文
+          maxLength: 3072
+      required:
+      - Cipher
+    WrappedKeyCipher:
+      type: object
+      properties:
+        Key:
+          $ref: '#/components/schemas/KeyCipher'
+        is_ok:
+          type: boolean
+          example: true
+      required:
+      - Key
+      - is_ok
+    Key:
+      type: object
+      properties:
+        ID:
+          type: string
+          readOnly: true
+          example: '110000000000'
+        CreatedAt:
+          $ref: '#/components/schemas/DateTime'
+        ModifiedAt:
+          $ref: '#/components/schemas/DateTime'
+        ServiceClass:
+          enum:
+          - cloud/kms/key
+          - cloud/kms/key/legacy
+          type: string
+          description: '* `cloud/kms/key` - 通常
+
+            * `cloud/kms/key/legacy` - レガシー'
+          x-spec-enum-id: cdc4cc214c741297
+          readOnly: true
+          title: サービスクラス
+        Name:
+          type: string
+          title: 名前
+          maxLength: 255
+        Description:
+          type: string
+          title: 説明
+        KeyOrigin:
+          enum:
+          - generated
+          - imported
+          type: string
+          description: '* `generated` - 生成
+
+            * `imported` - インポート'
+          x-spec-enum-id: ce5bfb1ae3eae901
+          readOnly: true
+          title: 鍵の生成元
+        LatestVersion:
+          type: integer
+          readOnly: true
+          example: 0
+        Status:
+          enum:
+          - active
+          - restricted
+          - suspended
+          - pending_destruction
+          - destroyed
+          type: string
+          description: '* `active` - 有効
+
+            * `restricted` - 制限付き
+
+            * `suspended` - 一時停止
+
+            * `pending_destruction` - 削除保留
+
+            * `destroyed` - 削除済み'
+          x-spec-enum-id: 16d501464180eaec
+          readOnly: true
+          title: 鍵の状態
+        DeletionScheduledAfter:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+          title: 削除予定日時
+          description: この日時以降に削除される予定です
+          example: '2025-02-05T12:19:22.551827+09:00'
+        Tags:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            minLength: 1
+      required:
+      - CreatedAt
+      - Description
+      - ID
+      - KeyOrigin
+      - LatestVersion
+      - ModifiedAt
+      - Name
+      - ServiceClass
+      - Status
+      - Tags
+    EncryptionRequest:
+      type: object
+      properties:
+        Plain:
+          type: string
+          description: Base64 エンコードされた平文
+        Algo:
+          enum:
+          - aes-256-gcm
+          - aes-256-cbc
+          - aes-256-kw
+          type: string
+          x-spec-enum-id: 1aa04582035002e4
+          default: aes-256-gcm
+          description: '暗号化アルゴリズム
+
+
+            * `aes-256-gcm` - AES256-GCM（default）
+
+            * `aes-256-cbc` - AES256-CBC
+
+            * `aes-256-kw` - AES256-KW'
+      required:
+      - Plain
+    KeyPlain:
+      type: object
+      properties:
+        Plain:
+          type: string
+          description: Base64 エンコードされた平文
+      required:
+      - Plain
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: APIキーとシークレットをご利用ください
+x-refined-from:
+- security-encryption-api.yaml
+- sakura-internet-security-encryption-openapi.yml

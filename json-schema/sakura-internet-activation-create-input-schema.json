@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-activation-create-input-schema.json",
+  "title": "ActivationCreateInput",
+  "description": "新規プロジェクトのセキュリティコントロール有効化時に使用するリクエストボディ。",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-security-control-openapi.yml#/components/schemas/ActivationCreateInput",
+  "type": "object",
+  "required": [
+    "servicePrincipalId"
+  ],
+  "properties": {
+    "servicePrincipalId": {
+      "type": "string",
+      "description": "プロジェクトに紐づくサービスプリンシパルID（評価対象リソースへのアクセス権限付与）。"
+    }
+  }
+}

@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-wrapped-log-storage-schema.json",
+  "title": "WrappedLogStorage",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-monitoring-suite-openapi.yml#/components/schemas/WrappedLogStorage",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "format": "int64",
+      "title": "Cloud resource id",
+      "readOnly": true
+    },
+    "name": {
+      "type": "string",
+      "maxLength": 64
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 512
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "readOnly": true
+    },
+    "icon": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "readOnly": true
+    },
+    "expire_day": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true,
+      "title": "Register datetime"
+    },
+    "endpoints": {
+      "type": "object",
+      "properties": {
+        "ingester": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "type": "string"
+            },
+            "insecure": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "address"
+          ]
+        }
+      },
+      "required": [
+        "ingester"
+      ],
+      "readOnly": true
+    },
+    "account_id": {
+      "type": "string",
+      "readOnly": true,
+      "title": "Cloud account id"
+    },
+    "resource_id": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "readOnly": true,
+      "title": "Cloud resource id",
+      "format": "int64",
+      "minimum": 0,
+      "maximum": 999999999999
+    },
+    "is_system": {
+      "type": "boolean",
+      "readOnly": true
+    },
+    "classification": {
+      "type": "string",
+      "enum": [
+        "shared",
+        "dedicated"
+      ],
+      "readOnly": true
+    },
+    "kms_key_id": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "readOnly": true,
+      "format": "int64",
+      "minimum": 0,
+      "maximum": 999999999999
+    },
+    "service_principal_id": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "int64"
+    },
+    "usage": {
+      "type": "object",
+      "properties": {
+        "log_routings": {
+          "type": "integer"
+        },
+        "log_measure_rules": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "log_routings",
+        "log_measure_rules"
+      ],
+      "readOnly": true
+    },
+    "is_ok": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "account_id",
+    "classification",
+    "created_at",
+    "endpoints",
+    "expire_day",
+    "icon",
+    "id",
+    "is_ok",
+    "is_system",
+    "kms_key_id",
+    "resource_id",
+    "tags",
+    "usage"
+  ]
+}

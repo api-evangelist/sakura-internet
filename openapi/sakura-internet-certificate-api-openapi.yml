@@ -1,0 +1,384 @@
+openapi: 3.2.0
+info:
+  title: Sakura Internet Certificate API
+  version: 1.4.0
+  contact:
+    name: SAKURA internet Inc.
+  license:
+    name: Copyright(C) SAKURA internet Inc. all rights reserved.
+  description: 'Operations tagged certificate across 2 of this provider''s published API definitions: apprun-dedicated-api.yaml, sakura-internet-apprun-dedicated-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://secure.sakura.ad.jp/cloud/api/apprun-dedicated/1.0
+  description: AppRun専有型 API エンドポイント
+  variables: {}
+security:
+- BasicAuth: []
+tags:
+- name: Certificate
+paths:
+  /clusters/{clusterID}/certificates:
+    post:
+      operationId: createCertificate
+      summary: 証明書の作成
+      description: 新しい証明書を作成します。
+      parameters:
+      - name: clusterID
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/ClusterID'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCertificateResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Certificate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCertificateRequest'
+    get:
+      operationId: listCertificates
+      summary: 証明書の一覧を取得
+      description: クラスタ内の証明書一覧を返します。ページネーションに対応します。
+      parameters:
+      - name: clusterID
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/ClusterID'
+      - name: cursor
+        in: query
+        required: false
+        description: 前ページの最後のID。これ以降のデータを取得するためのカーソル。
+        schema:
+          $ref: '#/components/schemas/CertificateID'
+        explode: false
+      - name: maxItems
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int64
+          minimum: 5
+          maximum: 30
+          default: 20
+        explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCertificatesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Certificate
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/apprun-dedicated/1.0
+      description: AppRun専有型 API エンドポイント
+      variables: {}
+  /clusters/{clusterID}/certificates/{certificateID}:
+    get:
+      operationId: readCertificate
+      summary: 証明書の詳細を取得
+      description: 指定した証明書の詳細を返します。
+      parameters:
+      - name: clusterID
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/ClusterID'
+      - name: certificateID
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/CertificateID'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadCertificateResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Certificate
+    delete:
+      operationId: deleteCertificate
+      summary: 証明書の削除
+      description: 指定した証明書を削除します。
+      parameters:
+      - name: clusterID
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/ClusterID'
+      - name: certificateID
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/CertificateID'
+      responses:
+        '204':
+          description: 'There is no content to send for this request, but the headers may be useful. '
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Certificate
+    put:
+      operationId: updateCertificate
+      summary: 証明書の更新
+      description: 指定した証明書を更新します。
+      parameters:
+      - name: clusterID
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/ClusterID'
+      - name: certificateID
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/CertificateID'
+      responses:
+        '204':
+          description: 'There is no content to send for this request, but the headers may be useful. '
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Certificate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCertificateRequest'
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/apprun-dedicated/1.0
+      description: AppRun専有型 API エンドポイント
+      variables: {}
+components:
+  schemas:
+    CreateCertificateRequest:
+      type: object
+      required:
+      - name
+      - certificatePem
+      - privatekeyPem
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 20
+          pattern: ^[a-zA-Z0-9_.-]+$
+          description: 証明書の名前。クラスタ内でユニーク。英数字、アンダースコア、ハイフン、ドットのみ使用可能
+        certificatePem:
+          type: string
+          maxLength: 1000000
+          description: 証明書のPEM形式の文字列
+        privatekeyPem:
+          type: string
+          maxLength: 1000000
+          description: 証明書の秘密鍵のPEM形式の文字列
+        intermediateCertificatePem:
+          type: string
+          maxLength: 1000000
+          description: 証明書のチェーン証明書のPEM形式の文字列
+    UpdateCertificateRequest:
+      type: object
+      required:
+      - name
+      - certificatePem
+      - privatekeyPem
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 20
+          pattern: ^[a-zA-Z0-9_.-]+$
+          description: 証明書の名前。クラスタ内でユニーク。英数字、アンダースコア、ハイフン、ドットのみ使用可能
+        certificatePem:
+          type: string
+          maxLength: 1000000
+          description: 証明書のPEM形式の文字列
+        privatekeyPem:
+          type: string
+          maxLength: 1000000
+          description: 証明書の秘密鍵のPEM形式の文字列
+        intermediateCertificatePem:
+          type: string
+          maxLength: 1000000
+          description: 証明書のチェーン証明書のPEM形式の文字列
+    Error:
+      type: object
+      required:
+      - status
+      - title
+      properties:
+        status:
+          type: integer
+          format: int32
+        title:
+          type: string
+    ListCertificatesResponse:
+      type: object
+      required:
+      - certificates
+      properties:
+        certificates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReadCertificate'
+          description: 証明書の一覧
+        nextCursor:
+          allOf:
+          - $ref: '#/components/schemas/CertificateID'
+          description: 次ページのカーソル。次のリクエストでcursorとして指定する。データが残っていなければnull。
+      example:
+        certificates:
+        - certificateID: 13B9EA83-DDB0-4385-9533-3D693A6A310F
+          name: example-certificate
+          commonName: example.com
+          subjectAlternativeNames:
+          - www.example.com
+          - api.example.com
+          notBeforeSec: 1577836800
+          notAfterSec: 1640995200
+          created: 1577836800
+          updated: 1577836800
+    CertificateIdentifier:
+      type: object
+      required:
+      - certificateID
+      properties:
+        certificateID:
+          allOf:
+          - $ref: '#/components/schemas/CertificateID'
+          description: 証明書ID
+          readOnly: true
+    CertificateID:
+      type: string
+      format: uuid
+      example: 13B9EA83-DDB0-4385-9533-3D693A6A310F
+    ClusterID:
+      type: string
+      format: uuid
+      description: クラスタID
+      example: 13B9EA83-DDB0-4385-9533-3D693A6A310F
+    ReadCertificateResponse:
+      type: object
+      required:
+      - certificate
+      properties:
+        certificate:
+          allOf:
+          - $ref: '#/components/schemas/ReadCertificate'
+          description: 証明書の情報
+      example:
+        certificate:
+          certificateID: 83B9EA83-DDB0-4385-9533-3D693A6A310F
+          name: my-certificate
+          commonName: example.com
+          subjectAlternativeNames:
+          - www.example.com
+          - api.example.com
+          notBeforeSec: 1577836800
+          notAfterSec: 1640995200
+          created: 1577836800
+          updated: 1577836800
+    ReadCertificate:
+      type: object
+      required:
+      - certificateID
+      - name
+      - commonName
+      - subjectAlternativeNames
+      - notBeforeSec
+      - notAfterSec
+      - created
+      - updated
+      properties:
+        certificateID:
+          allOf:
+          - $ref: '#/components/schemas/CertificateID'
+          description: 証明書ID
+        name:
+          type: string
+          minLength: 1
+          maxLength: 20
+          pattern: ^[a-zA-Z0-9_.-]+$
+          description: 証明書の名前。クラスタ内でユニーク。英数字、アンダースコア、ハイフン、ドットのみ使用可能
+        commonName:
+          type: string
+          maxLength: 255
+          description: 証明書の共通名
+        subjectAlternativeNames:
+          type: array
+          items:
+            type: string
+          description: 証明書のサブジェクト代替名（SAN）のリスト
+        notBeforeSec:
+          type: integer
+          format: unixtime
+          description: 証明書の有効開始日時：UNIX時間（秒）
+        notAfterSec:
+          type: integer
+          format: unixtime
+          description: 証明書の有効終了日時：UNIX時間（秒）
+        created:
+          type: integer
+          format: unixtime
+          description: 作成日時：UNIX時間（秒）
+        updated:
+          type: integer
+          format: unixtime
+          description: 更新日時：UNIX時間（秒）
+    CreateCertificateResponse:
+      type: object
+      required:
+      - certificate
+      properties:
+        certificate:
+          allOf:
+          - $ref: '#/components/schemas/CertificateIdentifier'
+          description: 作成された証明書の情報
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: Basic
+externalDocs:
+  url: https://manual.sakura.ad.jp/cloud/apprun-dedicated/releasenote.html
+  description: リリースノート | さくらのクラウド マニュアル
+x-refined-from:
+- apprun-dedicated-api.yaml
+- sakura-internet-apprun-dedicated-openapi.yml

@@ -1,0 +1,194 @@
+generated: '2026-10-09'
+method: searched
+source: https://manual.sakura.ad.jp/cloud/tool/terraform/index.html
+sources:
+- https://manual.sakura.ad.jp/cloud/tool/usacloud/index.html
+- https://manual.sakura.ad.jp/cloud/tool/usacloud/installation/index.html
+- https://manual.sakura.ad.jp/cloud/tool/terraform/index.html
+- https://proxy.golang.org
+- https://registry.terraform.io/v1/providers/sacloud/sakura
+- https://pypi.org/pypi/saklient/json
+description: >-
+  Client tooling for さくらのクラウド (SAKURA Cloud). The manual names usacloud as the official CLI
+  ("usacloud はさくらのクラウドの公式CLIクライアントです") and Terraform for さくらのクラウド as an official tool,
+  both hosted in the github.com/sacloud organization, which also publishes Go API client modules for the
+  per-service APIs in the API portal. Versions/dates read from proxy.golang.org, registry.terraform.io and
+  pypi.org on 2026-10-09.
+packages:
+- name: github.com/sacloud/usacloud
+  registry: go
+  url: https://github.com/sacloud/usacloud
+  language: go
+  official: true
+  kind: cli
+  version: v1.22.8
+  published: '2026-07-24'
+  note: Official CLI per manual; also distributed via Homebrew cask (sacloud/usacloud tap), install.sh from GitHub Releases, and Docker image ghcr.io/sacloud/usacloud.
+- name: sacloud/sakura
+  registry: terraform
+  url: https://registry.terraform.io/providers/sacloud/sakura/latest
+  language: hcl
+  official: true
+  kind: terraform-provider
+  version: 3.14.3
+  published: '2026-10-09'
+  note: Terraform Provider v3 (repo github.com/sacloud/terraform-provider-sakura); recommended for new use per manual.
+- name: sacloud/sakuracloud
+  registry: terraform
+  url: https://registry.terraform.io/providers/sacloud/sakuracloud/latest
+  language: hcl
+  official: true
+  kind: terraform-provider
+  version: 2.36.1
+  published: '2026-06-26'
+  note: Terraform Provider v2, in maintenance phase; maintenance ends end of December 2026 (news 2026-06-23).
+- name: github.com/sacloud/iaas-api-go
+  registry: go
+  url: https://pkg.go.dev/github.com/sacloud/iaas-api-go
+  language: go
+  official: true
+  version: v1.29.3
+  published: '2026-08-03'
+- name: github.com/sacloud/iam-api-go
+  registry: go
+  url: https://pkg.go.dev/github.com/sacloud/iam-api-go
+  language: go
+  official: true
+  version: v0.3.1
+  published: '2026-08-03'
+- name: github.com/sacloud/apprun-api-go
+  registry: go
+  url: https://pkg.go.dev/github.com/sacloud/apprun-api-go
+  language: go
+  official: true
+  version: v0.8.3
+  published: '2026-08-03'
+- name: github.com/sacloud/apprun-dedicated-api-go
+  registry: go
+  url: https://pkg.go.dev/github.com/sacloud/apprun-dedicated-api-go
+  language: go
+  official: true
+  version: v0.2.2
+  published: '2026-08-03'
+- name: github.com/sacloud/apigw-api-go
+  registry: go
+  url: https://pkg.go.dev/github.com/sacloud/apigw-api-go
+  language: go
+  official: true
+  version: v0.3.1
+  published: '2026-08-03'
+- name: github.com/sacloud/nosql-api-go
+  registry: go
+  url: https://pkg.go.dev/github.com/sacloud/nosql-api-go
+  language: go
+  official: true
+  version: v0.3.1
+  published: '2026-08-03'
+- name: github.com/sacloud/eventbus-api-go
+  registry: go
+  url: https://pkg.go.dev/github.com/sacloud/eventbus-api-go
+  language: go
+  official: true
+  version: v0.6.2
+  published: '2026-08-03'
+- name: github.com/sacloud/workflows-api-go
+  registry: go
+  url: https://pkg.go.dev/github.com/sacloud/workflows-api-go
+  language: go
+  official: true
+  version: v0.4.1
+  published: '2026-08-03'
+- name: github.com/sacloud/addon-api-go
+  registry: go
+  url: https://pkg.go.dev/github.com/sacloud/addon-api-go
+  language: go
+  official: true
+  version: v0.1.1
+  published: '2026-08-03'
+- name: github.com/sacloud/monitoring-suite-api-go
+  registry: go
+  url: https://pkg.go.dev/github.com/sacloud/monitoring-suite-api-go
+  language: go
+  official: true
+  version: v0.2.3
+  published: '2026-08-03'
+- name: github.com/sacloud/simplemq-api-go
+  registry: go
+  url: https://pkg.go.dev/github.com/sacloud/simplemq-api-go
+  language: go
+  official: true
+  version: v0.5.2
+  published: '2026-08-03'
+- name: github.com/sacloud/simple-notification-api-go
+  registry: go
+  url: https://pkg.go.dev/github.com/sacloud/simple-notification-api-go
+  language: go
+  official: true
+  version: v0.3.2
+  published: '2026-08-03'
+- name: github.com/sacloud/object-storage-api-go
+  registry: go
+  url: https://pkg.go.dev/github.com/sacloud/object-storage-api-go
+  language: go
+  official: true
+  version: v0.2.1
+  published: '2026-08-03'
+- name: github.com/sacloud/kms-api-go
+  registry: go
+  url: https://pkg.go.dev/github.com/sacloud/kms-api-go
+  language: go
+  official: true
+  version: v0.4.1
+  published: '2026-08-03'
+- name: github.com/sacloud/secretmanager-api-go
+  registry: go
+  url: https://pkg.go.dev/github.com/sacloud/secretmanager-api-go
+  language: go
+  official: true
+  version: v0.4.2
+  published: '2026-08-03'
+- name: github.com/sacloud/webaccel-api-go
+  registry: go
+  url: https://pkg.go.dev/github.com/sacloud/webaccel-api-go
+  language: go
+  official: true
+  version: v1.5.1
+  published: '2026-08-03'
+- name: github.com/sacloud/phy-api-go
+  registry: go
+  url: https://pkg.go.dev/github.com/sacloud/phy-api-go
+  language: go
+  official: true
+  version: v0.1.3
+  published: '2023-12-08'
+  note: Client for the PHY (dedicated server) API; no release since 2023-12-08.
+- name: github.com/sacloud/saclient-go
+  registry: go
+  url: https://pkg.go.dev/github.com/sacloud/saclient-go
+  language: go
+  official: true
+  version: v0.4.1
+  published: '2026-08-03'
+- name: github.com/sacloud/api-client-go
+  registry: go
+  url: https://pkg.go.dev/github.com/sacloud/api-client-go
+  language: go
+  official: true
+  version: v0.3.6
+  published: '2026-08-03'
+- name: github.com/sacloud/libsacloud/v2
+  registry: go
+  url: https://pkg.go.dev/github.com/sacloud/libsacloud/v2
+  language: go
+  official: true
+  version: v2.32.3
+  published: '2022-03-22'
+  note: Legacy Go library; last release 2022-03-22 (superseded in practice by iaas-api-go).
+- name: saklient
+  registry: pypi
+  url: https://pypi.org/project/saklient/
+  language: python
+  official: true
+  version: 0.0.6
+  published: '2016-04-07'
+  note: PyPI author "SAKURA Internet Inc.", homepage cloud.sakura.ad.jp; last upload 2016-04-07 — effectively abandoned.

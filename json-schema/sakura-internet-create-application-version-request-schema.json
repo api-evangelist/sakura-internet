@@ -1,0 +1,269 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-create-application-version-request-schema.json",
+  "title": "CreateApplicationVersionRequest",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-apprun-dedicated-openapi.yml#/components/schemas/CreateApplicationVersionRequest",
+  "type": "object",
+  "required": [
+    "image",
+    "cpu",
+    "memory",
+    "scalingMode",
+    "registryUsername",
+    "registryPassword",
+    "registryPasswordAction",
+    "exposedPorts",
+    "env"
+  ],
+  "properties": {
+    "image": {
+      "type": "string",
+      "maxLength": 512
+    },
+    "cpu": {
+      "type": "integer",
+      "format": "int64",
+      "minimum": 100,
+      "maximum": 64000
+    },
+    "memory": {
+      "type": "integer",
+      "format": "int64",
+      "minimum": 128,
+      "maximum": 131072
+    },
+    "scalingMode": {
+      "$ref": "#/$defs/ScalingMode"
+    },
+    "fixedScale": {
+      "type": "integer",
+      "format": "int32",
+      "minimum": 1,
+      "maximum": 50
+    },
+    "minScale": {
+      "type": "integer",
+      "format": "int32",
+      "minimum": 1,
+      "maximum": 50
+    },
+    "maxScale": {
+      "type": "integer",
+      "format": "int32",
+      "minimum": 1,
+      "maximum": 50
+    },
+    "scaleInThreshold": {
+      "type": "integer",
+      "format": "int32",
+      "minimum": 30,
+      "maximum": 70
+    },
+    "scaleOutThreshold": {
+      "type": "integer",
+      "format": "int32",
+      "minimum": 50,
+      "maximum": 99
+    },
+    "cmd": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 20,
+      "description": "コンテナ起動時に実行するコマンドと引数"
+    },
+    "registryUsername": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 255,
+      "description": "レジストリのユーザ名。未設定の場合はnull。"
+    },
+    "registryPassword": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 255,
+      "description": "レジストリのパスワード。レスポンスではマスクされる。未設定の場合はnull。"
+    },
+    "registryPasswordAction": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/RegistryPasswordAction"
+        }
+      ],
+      "description": "レジストリパスワードの設定方法"
+    },
+    "exposedPorts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ExposedPort"
+      },
+      "maxItems": 5,
+      "description": "アプリケーションが公開するポート番号。同一クラスタ内で、ポートの重複不可。"
+    },
+    "env": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/CreateEnvironmentVariable"
+      },
+      "maxItems": 50,
+      "description": "環境変数"
+    }
+  },
+  "$defs": {
+    "CreateEnvironmentVariable": {
+      "type": "object",
+      "required": [
+        "key",
+        "secret"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "secret": {
+          "type": "boolean",
+          "description": "秘密情報か否か。true の場合、value を API 等で取得することは出来ない。"
+        },
+        "value": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/EnvironmentVariableValue"
+            }
+          ],
+          "description": "環境変数の値。secret が true で、かつ value が指定されていない場合は前のバージョンの値が利用される。"
+        }
+      },
+      "description": "環境変数作成用モデル"
+    },
+    "EnvironmentVariableValue": {
+      "type": "string",
+      "maxLength": 4096
+    },
+    "ExposedPort": {
+      "type": "object",
+      "required": [
+        "targetPort",
+        "loadBalancerPort",
+        "useLetsEncrypt",
+        "healthCheck"
+      ],
+      "properties": {
+        "targetPort": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Port"
+            }
+          ],
+          "description": "アプリケーション内部でリッスンするポート番号。このポートがホストでリッスンされます。同一クラスタ内で、ポートの重複不可。"
+        },
+        "loadBalancerPort": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "allOf": [
+            {
+              "$ref": "#/$defs/Port"
+            }
+          ],
+          "description": "公開先となるロードバランサのポート番号。ロードバランサに設定しない場合は null を指定する。"
+        },
+        "useLetsEncrypt": {
+          "type": "boolean",
+          "description": "Let's Encrypt を利用するかどうか（https の場合のみサポート）"
+        },
+        "host": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Hostname"
+          },
+          "maxItems": 5,
+          "description": "- HTTP/HTTPS のロードバランサポートを利用する場合は **必須**（1〜5件）。\n- TCP または loadBalancerPort = null の場合は **指定不可**。",
+          "title": "ロードバランサでホスト名ルーティングに使用されるホスト名"
+        },
+        "healthCheck": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "allOf": [
+            {
+              "$ref": "#/$defs/HealthCheck"
+            }
+          ],
+          "description": "ロードバランサがアプリケーションの正常性を確認するための設定です。ヘルスチェックが有効な場合、指定したパスにアクセスし、HTTPステータスコードが 2xx または 3xx 以外の場合は、そのノードへのトラフィックが停止されます。これにより、異常なノードへのアクセスを自動的に防止できます。",
+          "title": "ヘルスチェックの設定"
+        }
+      }
+    },
+    "HealthCheck": {
+      "type": "object",
+      "required": [
+        "path",
+        "intervalSeconds",
+        "timeoutSeconds"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "ヘルスチェックのパス（HTTP の場合）"
+        },
+        "intervalSeconds": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 3,
+          "maximum": 60,
+          "description": "ヘルスチェックの間隔（秒）",
+          "default": 30
+        },
+        "timeoutSeconds": {
+          "type": "integer",
+          "format": "int32",
+          "maximum": 60,
+          "description": "ヘルスチェックのタイムアウト（秒）",
+          "default": 5
+        }
+      }
+    },
+    "Hostname": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 253,
+      "pattern": "^(?=.{1,253}$)[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*$",
+      "format": "hostname",
+      "description": "ロードバランサでホスト名ルーティングに使用されるホスト名。\nRFC1123 DNS subdomain names に準拠した形式である必要があります。"
+    },
+    "Port": {
+      "type": "integer",
+      "format": "uint16",
+      "minimum": 1,
+      "maximum": 65535
+    },
+    "RegistryPasswordAction": {
+      "type": "string",
+      "enum": [
+        "keep",
+        "remove",
+        "new"
+      ]
+    },
+    "ScalingMode": {
+      "type": "string",
+      "enum": [
+        "manual",
+        "cpu"
+      ]
+    }
+  }
+}

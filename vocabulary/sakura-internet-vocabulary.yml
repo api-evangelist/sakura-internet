@@ -1,0 +1,417 @@
+generated: '2026-10-09'
+method: derived
+generator: derive-vocabulary.py
+source:
+- openapi/sakura-internet-addon-openapi.yml
+- openapi/sakura-internet-ai-engine-inference-openapi.yml
+- openapi/sakura-internet-ai-engine-rag-openapi.yml
+- openapi/sakura-internet-apigw-openapi.yml
+- openapi/sakura-internet-apprun-dedicated-openapi.yml
+vocabulary:
+  name: SAKURA internet Domain Vocabulary
+  description: 'Terms declared by SAKURA internet''s own API contract: its resource groups, objects and enumerations, with the contract''s definitions.
+    Derived, not authored.'
+  version: '2026-10-09'
+  terms:
+  - term: アプリケーション
+    definition: アプリケーションに関する情報
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-apprun-shared-openapi.yml
+  - term: auth
+    definition: 認証に関する機能
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-iam-openapi.yml
+  - term: user
+    definition: ユーザに関する機能
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-iam-openapi.yml
+  - term: user-2fa
+    definition: ユーザの2要素認証に関する機能
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-iam-openapi.yml
+  - term: group
+    definition: グループに関する機能
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-iam-openapi.yml
+  - term: iam-role
+    definition: IAMロールに関する機能
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-iam-openapi.yml
+  - term: id-role
+    definition: IDロールに関する機能
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-iam-openapi.yml
+  - term: project
+    definition: プロジェクトに関する機能
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-iam-openapi.yml
+  - term: folder
+    definition: フォルダに関する機能
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-iam-openapi.yml
+  - term: iam-policy
+    definition: IAMポリシーに関する機能
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-iam-openapi.yml
+  - term: id-policy
+    definition: IDポリシーに関する機能
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-iam-openapi.yml
+  - term: service-principal
+    definition: サービスプリンシパルに関する機能
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-iam-openapi.yml
+  - term: project-apikey
+    definition: クラウドAPIにアクセスするためのAPIキーに関する機能。
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-iam-openapi.yml
+  - term: sso
+    definition: SSO連携に関する機能
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-iam-openapi.yml
+  - term: organization
+    definition: IAM APIの組織に関する機能
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-iam-openapi.yml
+  - term: service-policy
+    definition: サービスポリシーに関する機能
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-iam-openapi.yml
+  - term: scim
+    definition: ユーザープロビジョニングに関する機能
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-iam-openapi.yml
+  - term: サブネットグループ操作
+    definition: サブネットグループの作成、取得、更新、削除を行います。
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-networking-suite-openapi.yml
+  - term: サブネット操作
+    definition: サブネットの作成、取得、更新、削除を行います。
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-networking-suite-openapi.yml
+  - term: インターフェース操作
+    definition: NIC (インターフェース) をサブネットに接続するためのインターフェースコネクションの作成、削除を行います。
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-networking-suite-openapi.yml
+  - term: アドレス操作
+    definition: サブネットで割り当て済みのIPアドレスの取得を行います。
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-networking-suite-openapi.yml
+  - term: NoSQL
+    definition: NoSQLの作成・ノード追加・更新・削除
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-nosql-openapi.yml
+  - term: 電源
+    definition: NoSQLの起動・停止
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-nosql-openapi.yml
+  - term: バックアップ
+    definition: NoSQLのバックアップ
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-nosql-openapi.yml
+  - term: パラメーター設定
+    definition: NoSQLのパラメーター設定
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-nosql-openapi.yml
+  - term: バージョンアップ
+    definition: NoSQLのバージョンアップ
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-nosql-openapi.yml
+  - term: リペア
+    definition: NoSQLのリペア
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-nosql-openapi.yml
+  - term: サイト
+    definition: サイトに関する情報
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-objectstorage-openapi.yml
+  - term: バケット
+    definition: バケットに関する情報
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-objectstorage-openapi.yml
+  - term: サイトアカウント
+    definition: サイトアカウントに関する情報
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-objectstorage-openapi.yml
+  - term: パーミッション
+    definition: パーミッションに関する情報
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-objectstorage-openapi.yml
+  - term: ステータス
+    definition: ステータスに関する情報
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-objectstorage-openapi.yml
+  - term: インターフェース管理
+    definition: サービスエンドポイントゲートウェイのインターフェースに関する操作をまとめたタグです。
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-seg-openapi.yml
+  - term: 起動状態管理
+    definition: サービスエンドポイントゲートウェイの起動状態に関する操作（起動・停止・リセットなど）をまとめたタグです。
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-seg-openapi.yml
+  - term: ServiceEndpointGateway
+    definition: Service Endpoint Gateway に関する操作（一覧・取得など）をまとめたタグです。
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-seg-openapi.yml
+  - term: 通知送信
+    definition: 通知送信関連のエンドポイント
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-simple-notification-openapi.yml
+  - term: 通知履歴
+    definition: 通知履歴関連のエンドポイント
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-simple-notification-openapi.yml
+  - term: 通知先
+    definition: 通知先関連のエンドポイント
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-simple-notification-openapi.yml
+  - term: 通知先グループ
+    definition: 通知先グループ関連のエンドポイント
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-simple-notification-openapi.yml
+  - term: 通知ルーティング
+    definition: 通知ルーティング関連のエンドポイント
+    tags:
+    - Resource Group
+    source: openapi/sakura-internet-simple-notification-openapi.yml
+  - term: AiRequestBody
+    definition: 機械学習関連機能の作成APIで受信するリクエストボディを表します。
+    tags:
+    - Object
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/AiRequestBody
+  - term: AiServiceSku
+    definition: 'AI Servicesリソースで使用するSKUを指定します。指定値とSKUの対応は次の通りです。 - 1: S0'
+    tags:
+    - Enumeration
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/AiServiceSku
+  - term: AzureLocation
+    definition: 'Object declared by the contract with fields: name, displayName.'
+    tags:
+    - Object
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/AzureLocation
+  - term: DataLakePerformance
+    definition: 'パフォーマンスを指定します。指定値とパフォーマンスの対応は次の通りです。 - 1: Standard - 2: Premium'
+    tags:
+    - Enumeration
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/DataLakePerformance
+  - term: DataLakeRedundancy
+    definition: '冗長性を指定します。指定値と冗長性の対応は次の通りです。 - 1: LRS（ローカル冗長ストレージ） - 2: GRS（geo冗長ストレージ） - 3: ZRS（ゾーン冗長ストレージ） - 4: GZRS（geoゾーン冗長ストレージ）'
+    tags:
+    - Enumeration
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/DataLakeRedundancy
+  - term: DatalakePostRequestBody
+    definition: データレイク機能の作成APIで受信するリクエストボディ
+    tags:
+    - Object
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/DatalakePostRequestBody
+  - term: DatawarehousePostRequestBody
+    definition: 'Object declared by the contract with fields: location.'
+    tags:
+    - Object
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/DatawarehousePostRequestBody
+  - term: DdosRequestBody
+    definition: セキュリティ機能 DDoSサービスの作成APIで受信するリクエストボディを表します。
+    tags:
+    - Object
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/DdosRequestBody
+  - term: DeploymentStatus
+    definition: デプロイメントステータスのレスポンスを表します。
+    tags:
+    - Object
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/DeploymentStatus
+  - term: DeploymentStatusProperties
+    definition: デプロイメントステータスのプロパティを表します。
+    tags:
+    - Object
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/DeploymentStatusProperties
+  - term: ErrorInfo
+    definition: エラー情報
+    tags:
+    - Object
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/ErrorInfo
+  - term: ErrorResponse
+    definition: エラーレスポンス
+    tags:
+    - Object
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/ErrorResponse
+  - term: EtlPostRequestBody
+    definition: 'Object declared by the contract with fields: location.'
+    tags:
+    - Object
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/EtlPostRequestBody
+  - term: FrontDoorEndpoint
+    definition: Front Doorのエンドポイント
+    tags:
+    - Object
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/FrontDoorEndpoint
+  - term: FrontDoorOrigin
+    definition: 配信元
+    tags:
+    - Object
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/FrontDoorOrigin
+  - term: FrontDoorOriginGroup
+    definition: 配信元グループ
+    tags:
+    - Object
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/FrontDoorOriginGroup
+  - term: FrontDoorProfile
+    definition: Front Doorのプロファイル
+    tags:
+    - Object
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/FrontDoorProfile
+  - term: FrontDoorRoute
+    definition: Front Doorルート
+    tags:
+    - Object
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/FrontDoorRoute
+  - term: GetResourceResponse
+    definition: リソース個別取得APIのレスポンス
+    tags:
+    - Object
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/GetResourceResponse
+  - term: ListResourcesResponse
+    definition: 'Object declared by the contract with fields: resources.'
+    tags:
+    - Object
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/ListResourcesResponse
+  - term: NetworkRequestBody
+    definition: ネットワークとCDNの作成APIで受信するリクエストボディを表します。
+    tags:
+    - Object
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/NetworkRequestBody
+  - term: PostDeploymentResponse
+    definition: デプロイメントが投稿された後に受け取るレスポンスを表します。
+    tags:
+    - Object
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/PostDeploymentResponse
+  - term: PricingLevel
+    definition: 'Front Doorリソースの価格レベルを指定します。指定値と価格レベルの対応は次の通りです。 - 1: Standard - 2: Premium'
+    tags:
+    - Enumeration
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/PricingLevel
+  - term: QueryPostRequestBody
+    definition: 'Object declared by the contract with fields: location.'
+    tags:
+    - Object
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/QueryPostRequestBody
+  - term: ResourceGroupData
+    definition: 'Object declared by the contract with fields: id, name, resourceType, systemData, tags, location, resourceGroupProvisioningState,
+      managedBy.'
+    tags:
+    - Object
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/ResourceGroupData
+  - term: ResourceGroupResource
+    definition: 'Object declared by the contract with fields: id, hasData, data.'
+    tags:
+    - Object
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/ResourceGroupResource
+  - term: ResourceIdentifier
+    definition: 'Object declared by the contract with fields: resourceType, name, parent, subscriptionId, provider, location, resourceGroupName.'
+    tags:
+    - Object
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/ResourceIdentifier
+  - term: ResourceType
+    definition: 'Object declared by the contract with fields: namespace, type.'
+    tags:
+    - Object
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/ResourceType
+  - term: SearchPostRequestBody
+    definition: 検索機能の作成APIで受信するリクエストボディ
+    tags:
+    - Object
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/SearchPostRequestBody
+  - term: SearchSku
+    definition: 'AI SearchのSKUを指定します。 指定値とSKUの対応は次の通りです。 - 1: Free - 2: Basic - 3: Standard - 4: Standard2 - 5: Standard3 - 6: Standard3HD - 7:
+      StorageOptimizedL1 - 8: StorageOptimizedL2'
+    tags:
+    - Enumeration
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/SearchSku
+  - term: ServerOsType
+    definition: 'サーバーのOSの種類を指定します。指定値とOSの種類の対応は次の通りです。 - 1: Windows - 2: Linux'
+    tags:
+    - Enumeration
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/ServerOsType
+  - term: StreamingRequestBody
+    definition: 'Object declared by the contract with fields: location, unitCount.'
+    tags:
+    - Object
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/StreamingRequestBody
+  - term: SystemData
+    definition: 'Object declared by the contract with fields: createdBy, createdByType, createdOn, lastModifiedBy, lastModifiedByType, lastModifiedOn.'
+    tags:
+    - Object
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/SystemData
+  - term: VulnerabilityRequestBody
+    definition: セキュリティ機能 脆弱性診断サービスの作成APIで受信するリクエストボディを表します。
+    tags:
+    - Object
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/VulnerabilityRequestBody
+  - term: VulnerabilityResponseBody
+    definition: 脆弱性検出サービスリソース作成APIのレスポンス
+    tags:
+    - Object
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/VulnerabilityResponseBody
+  - term: WafRequestBody
+    definition: セキュリティ機能 WAFサービスの作成APIで受信するリクエストボディを表します。
+    tags:
+    - Object
+    source: openapi/sakura-internet-addon-openapi.yml#/components/schemas/WafRequestBody
+  - term: EmbeddingResponse
+    definition: 'Object declared by the contract with fields: model, data.'
+    tags:
+    - Object
+    source: openapi/sakura-internet-ai-engine-inference-openapi.yml#/components/schemas/EmbeddingResponse
+  - term: TranscriptionResponse
+    definition: 'Object declared by the contract with fields: model, text.'
+    tags:
+    - Object
+    source: openapi/sakura-internet-ai-engine-inference-openapi.yml#/components/schemas/TranscriptionResponse
+  - term: Assistant message
+    definition: モデルからの応答メッセージ。
+    tags:
+    - Object
+    source: openapi/sakura-internet-ai-engine-inference-openapi.yml#/components/schemas/ChatCompletionRequestAssistantMessage
+  - term: Developer message
+    definition: モデルに対する開発者からの指示メッセージ。
+    tags:
+    - Object
+    source: openapi/sakura-internet-ai-engine-inference-openapi.yml#/components/schemas/ChatCompletionRequestDeveloperMessage

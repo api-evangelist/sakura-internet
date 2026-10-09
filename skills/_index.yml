@@ -1,0 +1,69 @@
+generated: '2026-10-09'
+method: generated
+source: Generated from the SAKURA internet OpenAPI files under openapi/; every operationId
+  was asserted present in its spec. No provider-published skills or AGENTS.md were
+  found (sacloud org search returned none).
+skills:
+- file: sakura-internet-chat-completion-with-ai-engine.md
+  name: sakura-internet-chat-completion-with-ai-engine
+  description: Generate a chat completion or embeddings with SAKURA AI Engine
+  api: openapi/sakura-internet-ai-engine-inference-openapi.yml
+  operations:
+  - createChatCompletion
+  - createEmbeddings
+- file: sakura-internet-answer-questions-over-documents.md
+  name: sakura-internet-answer-questions-over-documents
+  description: Upload documents to SAKURA AI Engine RAG and ask questions over them
+  api: openapi/sakura-internet-ai-engine-rag-openapi.yml
+  operations:
+  - documents_upload
+  - documents_retrieve
+  - documents_query
+  - documents_chat
+- file: sakura-internet-send-and-consume-queue-messages.md
+  name: sakura-internet-send-and-consume-queue-messages
+  description: Send, receive, extend and acknowledge messages on a SAKURA Simple MQ
+    queue
+  api: openapi/sakura-internet-simplemq-openapi.yml
+  operations:
+  - sendMessage
+  - receiveMessage
+  - extendMessageTimeout
+  - deleteMessage
+- file: sakura-internet-send-a-notification.md
+  name: sakura-internet-send-a-notification
+  description: Send a message through a SAKURA Simple Notification destination group
+    and check delivery
+  api: openapi/sakura-internet-simple-notification-openapi.yml
+  operations:
+  - listCommonServiceItems
+  - sendNotification
+  - listNotificationHistories
+  - readNotificationHistory
+- file: sakura-internet-provision-a-bucket-with-scoped-keys.md
+  name: sakura-internet-provision-a-bucket-with-scoped-keys
+  description: Create an Object Storage bucket and issue a bucket-scoped access key
+  api: openapi/sakura-internet-objectstorage-openapi.yml
+  operations:
+  - listClusters
+  - createBucket
+  - createPermission
+  - createPermissionKey
+- file: sakura-internet-encrypt-data-with-kms.md
+  name: sakura-internet-encrypt-data-with-kms
+  description: Create a KMS key and encrypt/decrypt data with it
+  api: openapi/sakura-internet-security-encryption-openapi.yml
+  operations:
+  - createKey
+  - readKey
+  - encryptDataWithKey
+  - decryptDataWithKey
+- file: sakura-internet-deploy-an-apprun-application.md
+  name: sakura-internet-deploy-an-apprun-application
+  description: Deploy a container to AppRun (shared) and shift traffic between versions
+  api: openapi/sakura-internet-apprun-shared-openapi.yml
+  operations:
+  - createApplication
+  - readApplicationStatus
+  - listApplicationVersions
+  - updateApplicationTraffic

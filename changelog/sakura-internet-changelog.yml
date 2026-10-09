@@ -1,0 +1,5 @@
+generated: '2026-10-09'
+method: none
+source: https://manual.sakura.ad.jp/api/cloud/portal/
+note: No dated API changelog found on the API portal or the IaaS API 1.1 docs. Product announcements appear on https://cloud.sakura.ad.jp/news/ (not an API changelog); tooling releases are tracked on GitHub (sacloud/usacloud, sacloud/terraform-provider-sakura CHANGES.md).
+entries: []

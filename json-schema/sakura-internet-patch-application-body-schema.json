@@ -1,0 +1,248 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-patch-application-body-schema.json",
+  "title": "patchApplicationBody",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-apprun-shared-openapi.yml#/components/schemas/patchApplicationBody",
+  "type": "object",
+  "properties": {
+    "timeout_seconds": {
+      "description": "アプリケーションの公開URLにアクセスして、インスタンスが起動してからレスポンスが返るまでの時間制限",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 300
+    },
+    "port": {
+      "description": "アプリケーションがリクエストを待ち受けるポート番号。\nただし、8012, 8013, 8022, 9090, 9091, 8008 は予約済みのため設定不可。\n",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 65535
+    },
+    "min_scale": {
+      "description": "アプリケーション全体の最小スケール数",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10
+    },
+    "max_scale": {
+      "description": "アプリケーション全体の最大スケール数",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10
+    },
+    "scale_target_concurrency": {
+      "description": "アプリケーションのスケールの閾値の目安となる同時リクエスト数",
+      "type": "integer",
+      "minimum": 50,
+      "maximum": 200
+    },
+    "components": {
+      "description": "アプリケーションのコンポーネント情報",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "max_cpu",
+          "max_memory",
+          "deploy_source"
+        ],
+        "properties": {
+          "name": {
+            "description": "コンポーネント名",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "max_cpu": {
+            "description": "コンポーネントの最大vCPU数（メモリとの組み合わせで利用できない値もあります）",
+            "type": "string",
+            "enum": [
+              "0.5",
+              "1",
+              "2"
+            ]
+          },
+          "max_memory": {
+            "description": "コンポーネントの最大メモリ（vCPUとの組み合わせで利用できない値もあります）",
+            "type": "string",
+            "enum": [
+              "1Gi",
+              "2Gi",
+              "4Gi"
+            ]
+          },
+          "deploy_source": {
+            "description": "コンポーネントを構成するソース",
+            "type": "object",
+            "properties": {
+              "container_registry": {
+                "description": "コンテナレジストリ  \n以下のレジストリを利用できます。\n* さくらのクラウドで提供中のコンテナレジストリ\n* Docker Hub\n* GitHub Container Registry\n",
+                "type": "object",
+                "required": [
+                  "image"
+                ],
+                "properties": {
+                  "image": {
+                    "description": "コンテナイメージ名",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "server": {
+                    "description": "コンテナレジストリのサーバー名（認証が必要な場合は入力してください）\nDocker Hub利用時は `index.docker.io` を指定してください。\n",
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "username": {
+                    "description": "コンテナレジストリのユーザー名（認証が必要な場合は入力してください）",
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "minLength": 1,
+                    "maxLength": 63
+                  },
+                  "password": {
+                    "description": "コンテナレジストリのパスワード（認証が必要な場合は入力してください）  \n※ 認証にトークンを使用する場合は、この欄に入力してください。\n",
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "minLength": 1,
+                    "maxLength": 63
+                  },
+                  "action": {
+                    "$ref": "#/$defs/containerRegistryAction"
+                  }
+                }
+              }
+            }
+          },
+          "env": {
+            "$ref": "#/$defs/request.env"
+          },
+          "secret": {
+            "description": "コンポーネントに渡す環境変数（機密情報の設定に使用可能）",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "object",
+              "required": [
+                "key"
+              ],
+              "properties": {
+                "key": {
+                  "description": "環境変数名。\nただし、K_SERVICE, K_CONFIGURATION, K_REVISION, PORTは予約済みのため設定不可。\n",
+                  "type": "string"
+                },
+                "value": {
+                  "description": "環境変数の値。valueを指定しない場合は、最新のバージョンで保存された値が使用されます。",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "probe": {
+            "description": "コンポーネントのプローブ設定",
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "http_get": {
+                "description": "HTTP Getプローブタイプ",
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "required": [
+                  "path",
+                  "port"
+                ],
+                "properties": {
+                  "path": {
+                    "description": "HTTPサーバーへアクセスしプローブをチェックする際のパス",
+                    "type": "string"
+                  },
+                  "port": {
+                    "description": "HTTPサーバーへアクセスしプローブをチェックする際のポート番号。\nただし、8012, 8013, 8022, 9090, 9091, 8008 は予約済みのため設定不可。\n",
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 65535
+                  },
+                  "headers": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "description": "ヘッダーフィールド名",
+                          "type": "string"
+                        },
+                        "value": {
+                          "description": "ヘッダーフィールド値",
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "all_traffic_available": {
+      "description": "アプリケーションを最新のバージョンにすべてのトラフィックを割り当てるかどうか",
+      "type": "boolean"
+    }
+  },
+  "$defs": {
+    "containerRegistryAction": {
+      "description": "コンテナレジストリの認証情報の設定方法\n* new: 指定された認証情報を使用します。\n* keep: 最新のバージョンで保存された認証情報を使用します。\n",
+      "type": [
+        "string",
+        "null"
+      ],
+      "default": "new",
+      "enum": [
+        "new",
+        "keep"
+      ]
+    },
+    "request.env": {
+      "description": "コンポーネントに渡す環境変数",
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "object",
+        "required": [
+          "key",
+          "value"
+        ],
+        "properties": {
+          "key": {
+            "description": "環境変数名。\nただし、K_SERVICE, K_CONFIGURATION, K_REVISION, PORTは予約済みのため設定不可。\n",
+            "type": "string"
+          },
+          "value": {
+            "description": "環境変数の値",
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

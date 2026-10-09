@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-paginated-document-list-list-schema.json",
+  "title": "PaginatedDocumentListList",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-ai-engine-rag-openapi.yml#/components/schemas/PaginatedDocumentListList",
+  "type": "object",
+  "properties": {
+    "meta": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "type": "integer"
+        },
+        "page_size": {
+          "type": "integer"
+        },
+        "total_pages": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "next": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "previous": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        }
+      },
+      "required": [
+        "page",
+        "page_size",
+        "total_pages",
+        "count",
+        "next",
+        "previous"
+      ]
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/DocumentList"
+      }
+    }
+  },
+  "required": [
+    "meta",
+    "results"
+  ],
+  "$defs": {
+    "DocumentList": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "status": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/StatusEnum"
+            }
+          ],
+          "readOnly": true,
+          "title": "ステータス"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "model": {
+          "type": "string",
+          "readOnly": true
+        },
+        "chunk_size": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "chunk_count": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "error_message": {
+          "type": "string",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "chunk_count",
+        "chunk_size",
+        "created_at",
+        "error_message",
+        "id",
+        "model",
+        "name",
+        "status"
+      ]
+    },
+    "StatusEnum": {
+      "enum": [
+        "pending",
+        "processing",
+        "available",
+        "deleted",
+        "error"
+      ],
+      "type": "string",
+      "description": "* `pending` - Pending\n* `processing` - Processing\n* `available` - Available\n* `deleted` - Deleted\n* `error` - Error"
+    }
+  }
+}

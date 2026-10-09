@@ -1,0 +1,109 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist overlay for さくらの専用サーバ PHY APIドキュメント
+  version: 1.0.0
+extends: ../openapi/_original/sakura-internet-phy-openapi.yml
+x-generated: '2026-10-09'
+x-method: generated
+x-source: openapi/sakura-internet-phy-openapi.yml
+x-rationale: 'Enhancements captured without mutating the original: derives 21 missing operationIds from
+  method + path; links the provider-hosted docs as externalDocs.'
+actions:
+- target: $.paths['/services/'].get
+  description: Derived operationId (missing in original; derived from method + path).
+  update:
+    operationId: getServices
+- target: $.paths['/services/{service_id}/'].get
+  description: Derived operationId (missing in original; derived from method + path).
+  update:
+    operationId: getServicesByServiceId
+- target: $.paths['/services/{service_id}/'].patch
+  description: Derived operationId (missing in original; derived from method + path).
+  update:
+    operationId: patchServicesByServiceId
+- target: $.paths['/servers/'].get
+  description: Derived operationId (missing in original; derived from method + path).
+  update:
+    operationId: getServers
+- target: $.paths['/servers/{server_id}/'].get
+  description: Derived operationId (missing in original; derived from method + path).
+  update:
+    operationId: getServersByServerId
+- target: $.paths['/servers/{server_id}/raid_status/'].get
+  description: Derived operationId (missing in original; derived from method + path).
+  update:
+    operationId: getServersByServerIdRaidStatus
+- target: $.paths['/servers/{server_id}/os_images/'].get
+  description: Derived operationId (missing in original; derived from method + path).
+  update:
+    operationId: getServersByServerIdOsImages
+- target: $.paths['/servers/{server_id}/os_install/'].post
+  description: Derived operationId (missing in original; derived from method + path).
+  update:
+    operationId: postServersByServerIdOsInstall
+- target: $.paths['/servers/{server_id}/power_status/'].get
+  description: Derived operationId (missing in original; derived from method + path).
+  update:
+    operationId: getServersByServerIdPowerStatus
+- target: $.paths['/servers/{server_id}/power_control/'].post
+  description: Derived operationId (missing in original; derived from method + path).
+  update:
+    operationId: postServersByServerIdPowerControl
+- target: $.paths['/servers/{server_id}/port_channels/{port_channel_id}/'].get
+  description: Derived operationId (missing in original; derived from method + path).
+  update:
+    operationId: getServersByServerIdPortChannelsByPortChannelId
+- target: $.paths['/servers/{server_id}/port_channels/{port_channel_id}/configure_bonding/'].post
+  description: Derived operationId (missing in original; derived from method + path).
+  update:
+    operationId: postServersByServerIdPortChannelsByPortChannelIdConfigureBonding
+- target: $.paths['/servers/{server_id}/ports/{port_id}/'].get
+  description: Derived operationId (missing in original; derived from method + path).
+  update:
+    operationId: getServersByServerIdPortsByPortId
+- target: $.paths['/servers/{server_id}/ports/{port_id}/'].patch
+  description: Derived operationId (missing in original; derived from method + path).
+  update:
+    operationId: patchServersByServerIdPortsByPortId
+- target: $.paths['/servers/{server_id}/ports/{port_id}/traffic_graph/'].get
+  description: Derived operationId (missing in original; derived from method + path).
+  update:
+    operationId: getServersByServerIdPortsByPortIdTrafficGraph
+- target: $.paths['/servers/{server_id}/ports/{port_id}/enable/'].post
+  description: Derived operationId (missing in original; derived from method + path).
+  update:
+    operationId: postServersByServerIdPortsByPortIdEnable
+- target: $.paths['/servers/{server_id}/ports/{port_id}/assign_network/'].post
+  description: Derived operationId (missing in original; derived from method + path).
+  update:
+    operationId: postServersByServerIdPortsByPortIdAssignNetwork
+- target: $.paths['/dedicated_subnets/'].get
+  description: Derived operationId (missing in original; derived from method + path).
+  update:
+    operationId: getDedicatedSubnets
+- target: $.paths['/dedicated_subnets/{dedicated_subnet_id}/'].get
+  description: Derived operationId (missing in original; derived from method + path).
+  update:
+    operationId: getDedicatedSubnetsByDedicatedSubnetId
+- target: $.paths['/private_networks/'].get
+  description: Derived operationId (missing in original; derived from method + path).
+  update:
+    operationId: getPrivateNetworks
+- target: $.paths['/private_networks/{private_network_id}/'].get
+  description: Derived operationId (missing in original; derived from method + path).
+  update:
+    operationId: getPrivateNetworksByPrivateNetworkId
+- target: $
+  description: Link the provider-hosted human documentation.
+  update:
+    externalDocs:
+      url: https://github.com/sacloud/phy-api-go
+      description: SAKURA internet documentation
+- target: $.info
+  description: Agent-surface hints from the API Evangelist profile.
+  update:
+    x-api-evangelist:
+      provider: sakura-internet
+      mcp: mcp/sakura-internet-mcp.yml
+      tool_crosswalk: mcp/sakura-internet-tool-crosswalk.yml
+      llms: llms/sakura-internet-llms.txt

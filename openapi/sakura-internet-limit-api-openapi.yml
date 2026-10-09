@@ -1,0 +1,117 @@
+openapi: 3.2.0
+info:
+  title: Sakura Internet Limit API
+  version: 1.4.0
+  contact:
+    name: SAKURA internet Inc.
+  license:
+    name: Copyright(C) SAKURA internet Inc. all rights reserved.
+  description: 'Operations tagged limit across 2 of this provider''s published API definitions: apprun-dedicated-api.yaml, sakura-internet-apprun-dedicated-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://secure.sakura.ad.jp/cloud/api/apprun-dedicated/1.0
+  description: AppRun専有型 API エンドポイント
+  variables: {}
+security:
+- BasicAuth: []
+tags:
+- name: limit
+paths:
+  /limits:
+    get:
+      operationId: readLimits
+      summary: プロジェクトのリソース制限値の取得
+      description: プロジェクトに紐づくリソース制限値を返します。
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadLimitsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - limit
+    servers:
+    - url: https://secure.sakura.ad.jp/cloud/api/apprun-dedicated/1.0
+      description: AppRun専有型 API エンドポイント
+      variables: {}
+components:
+  schemas:
+    Limit:
+      type: object
+      required:
+      - clusterCount
+      - autoScalingGroupCount
+      - workerNodeCount
+      - loadBalancerNodeCount
+      - applicationCount
+      - applicationVersionCountPerApplication
+      properties:
+        clusterCount:
+          type: integer
+          format: int64
+          description: クラスタの最大数
+        autoScalingGroupCount:
+          type: integer
+          format: int64
+          description: オートスケーリンググループの最大数
+        workerNodeCount:
+          type: integer
+          format: int64
+          description: ワーカノードの最大数
+        loadBalancerNodeCount:
+          type: integer
+          format: int64
+          description: ロードバランサノードの最大数
+        applicationCount:
+          type: integer
+          format: int64
+          description: アプリケーションの最大数
+        applicationVersionCountPerApplication:
+          type: integer
+          format: int64
+          description: アプリケーションあたりのバージョンの最大数
+    ReadLimitsResponse:
+      type: object
+      required:
+      - limit
+      properties:
+        limit:
+          allOf:
+          - $ref: '#/components/schemas/Limit'
+          description: プロジェクトのリソース制限値
+      example:
+        limit:
+          clusterCount: 10
+          autoScalingGroupCount: 6
+          workerNodeCount: 14
+          loadBalancerNodeCount: 6
+          applicationCount: 10
+          applicationVersionCountPerApplication: 50
+    Error:
+      type: object
+      required:
+      - status
+      - title
+      properties:
+        status:
+          type: integer
+          format: int32
+        title:
+          type: string
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: Basic
+externalDocs:
+  url: https://manual.sakura.ad.jp/cloud/apprun-dedicated/releasenote.html
+  description: リリースノート | さくらのクラウド マニュアル
+x-refined-from:
+- apprun-dedicated-api.yaml
+- sakura-internet-apprun-dedicated-openapi.yml

@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-oidc-schema.json",
+  "title": "Oidc",
+  "description": "Oidc認証情報",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-apigw-openapi.yml#/components/schemas/Oidc",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "#/$defs/Model"
+    },
+    {
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/Name",
+          "description": "認証名<br>認証名は半角英数字およびアンダースコアのみを許可"
+        },
+        "authenticationMethods": {
+          "$ref": "#/$defs/AuthenticationMethods"
+        },
+        "issuer": {
+          "type": "string",
+          "description": "IdPに紐づくエンドポイント"
+        },
+        "clientId": {
+          "type": "string",
+          "description": "IdPに紐づくクライアントID",
+          "x-oapi-codegen-extra-tags": {
+            "mask": "true"
+          }
+        },
+        "clientSecret": {
+          "type": "string",
+          "description": "IdPに紐づくクライアントシークレット",
+          "x-oapi-codegen-extra-tags": {
+            "mask": "true"
+          }
+        },
+        "scopes": {
+          "type": "array",
+          "description": "IdPに要求するスコープ",
+          "items": {
+            "type": "string"
+          }
+        },
+        "hideCredentials": {
+          "type": "boolean",
+          "description": "認証情報のサービス（アップストリームサーバ）への転送を有効にするかどうか",
+          "default": false
+        },
+        "tokenAudiences": {
+          "type": "array",
+          "description": "トークンaudクレーム検証値",
+          "items": {
+            "type": "string"
+          }
+        },
+        "useSession": {
+          "type": "boolean",
+          "description": "認証情報をセッションとしてAPIゲートウェイへの保存を有効にするかどうか",
+          "default": false
+        },
+        "refreshTokenParamName": {
+          "type": "string",
+          "description": "この項目は現在、指定することができない<br>リフレッシュトークンパラメータ名<br>指定がない場合は\"refresh_token\"が設定される<br>※authenticationMethodsに\"refreshToken\"が含まれる場合に使用される",
+          "deprecated": true
+        }
+      },
+      "required": [
+        "name",
+        "authenticationMethods",
+        "issuer",
+        "clientId",
+        "clientSecret"
+      ]
+    }
+  ],
+  "$defs": {
+    "AuthenticationMethods": {
+      "type": "array",
+      "description": "OIDC認証フロー",
+      "items": {
+        "type": "string",
+        "enum": [
+          "authorizationCodeFlow",
+          "accessToken"
+        ]
+      }
+    },
+    "Model": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true,
+          "description": "Entityを識別するためのID"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "作成日時"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "更新日時"
+        }
+      },
+      "description": "各Entity共通のモデル"
+    },
+    "Name": {
+      "type": "string",
+      "description": "Unicode文字、数字、ハイフン、アンダースコア、ピリオドのみ許可",
+      "minLength": 1,
+      "maxLength": 255,
+      "pattern": "^[\\p{L}\\p{N}._\\-]+$"
+    }
+  }
+}

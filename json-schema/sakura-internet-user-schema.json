@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-user-schema.json",
+  "title": "User",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-iam-openapi.yml#/components/schemas/User",
+  "type": "object",
+  "required": [
+    "id",
+    "member",
+    "name",
+    "code",
+    "status",
+    "description",
+    "otp",
+    "is_security_key_registered",
+    "email",
+    "is_passwordless",
+    "created_at",
+    "updated_at"
+  ],
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "ユーザID",
+      "readOnly": true
+    },
+    "member": {
+      "type": "object",
+      "readOnly": true,
+      "required": [
+        "id",
+        "code"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "会員のID"
+        },
+        "code": {
+          "type": "string",
+          "description": "会員ID(xxx00000)"
+        }
+      }
+    },
+    "name": {
+      "type": "string",
+      "description": "ユーザ名"
+    },
+    "code": {
+      "type": "string",
+      "description": "ユーザコード",
+      "readOnly": true
+    },
+    "status": {
+      "type": "string",
+      "description": "ユーザのステータス",
+      "enum": [
+        "available"
+      ],
+      "readOnly": true
+    },
+    "description": {
+      "type": "string",
+      "description": "ユーザの説明"
+    },
+    "otp": {
+      "type": "object",
+      "required": [
+        "status",
+        "has_recovery_code"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "description": "OTP設定状態\n* deactivated OTP無効状態\n* activated OTP有効状態\n* activating OTP有効化中\n",
+          "enum": [
+            "deactivated",
+            "activated",
+            "activating"
+          ]
+        },
+        "has_recovery_code": {
+          "type": "boolean",
+          "description": "リカバリーコード作成済みかどうか"
+        }
+      }
+    },
+    "is_security_key_registered": {
+      "type": "boolean",
+      "description": "セキュリティキーを登録済みかどうか"
+    },
+    "email": {
+      "type": "string",
+      "description": "メールアドレス",
+      "readOnly": true
+    },
+    "is_passwordless": {
+      "type": "boolean",
+      "description": "パスワードレス認証かどうか",
+      "readOnly": true
+    },
+    "created_at": {
+      "type": "string",
+      "description": "作成日時",
+      "readOnly": true
+    },
+    "updated_at": {
+      "type": "string",
+      "description": "更新日時",
+      "readOnly": true
+    }
+  }
+}

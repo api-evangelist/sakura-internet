@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-route-schema.json",
+  "title": "Route",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-apigw-openapi.yml#/components/schemas/Route",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "#/$defs/Model"
+    },
+    {
+      "properties": {
+        "serviceId": {
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "name": {
+          "$ref": "#/$defs/Name"
+        },
+        "tags": {
+          "$ref": "#/$defs/Tags",
+          "description": "Routeを検索するためのタグ"
+        },
+        "protocols": {
+          "type": "string",
+          "enum": [
+            "https"
+          ],
+          "description": "Routeにアクセスするためのプロトコル"
+        },
+        "path": {
+          "type": "string",
+          "maxLength": 255,
+          "pattern": "^(\\/|~\\/).*",
+          "description": "Routeにアクセスするためのパス<br>パスはスラッシュまたはチルダスラッシュで始まるパス文字列のみを許可"
+        },
+        "host": {
+          "readOnly": true,
+          "type": "string",
+          "description": "自動発行されたホスト<br>hostsに値が設定されていない場合に有効"
+        },
+        "hosts": {
+          "type": "array",
+          "description": "ホスト名<br>自動発行されたホストまたは設定したドメインを指定する<br>自動発行されたホストはService詳細照会APIで確認できる<br>作成したドメインはDomain一覧照会APIで確認できる",
+          "items": {
+            "type": "string",
+            "description": "ホスト名<br>自動発行されたホストまたは設定したドメインを指定する<br>自動発行されたホストはService詳細照会APIで確認できる<br>作成したドメインはDomain一覧照会APIで確認できる"
+          }
+        },
+        "methods": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/HTTPMethod"
+          },
+          "default": [
+            "GET",
+            "POST",
+            "PUT",
+            "DELETE",
+            "PATCH",
+            "OPTIONS",
+            "HEAD",
+            "CONNECT",
+            "TRACE"
+          ],
+          "description": "RouteにアクセスするためのHTTPメソッド<br>未指定の場合は全メソッドを許可<br>オブジェクトストレージ形式のサービスに紐づく場合は、GET・HEAD・OPTIONSメソッドのみを許可"
+        },
+        "httpsRedirectStatusCode": {
+          "type": "integer",
+          "enum": [
+            301,
+            302,
+            303,
+            307,
+            308,
+            426
+          ],
+          "default": 426,
+          "description": "HTTPSリダイレクト時のステータスコード"
+        },
+        "regexPriority": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 255,
+          "default": 0,
+          "description": "パスを正規表現で指定した場合の優先度<br>0が最優先"
+        },
+        "stripPath": {
+          "type": "boolean",
+          "default": true,
+          "description": "リクエストのパスからルートのパスを削除するかどうか"
+        },
+        "preserveHost": {
+          "type": "boolean",
+          "default": false,
+          "description": "リクエストのHostヘッダーを保持するかどうか"
+        },
+        "requestBuffering": {
+          "type": "boolean",
+          "default": true,
+          "description": "リクエストのバッファリングを有効にするかどうか"
+        },
+        "responseBuffering": {
+          "type": "boolean",
+          "default": true,
+          "description": "レスポンスのバッファリングを有効にするかどうか"
+        }
+      }
+    }
+  ],
+  "required": [
+    "name",
+    "protocols",
+    "methods"
+  ],
+  "$defs": {
+    "HTTPMethod": {
+      "type": "string",
+      "description": "変換するHTTPメソッド",
+      "enum": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "PATCH",
+        "OPTIONS",
+        "HEAD",
+        "CONNECT",
+        "TRACE"
+      ]
+    },
+    "Model": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true,
+          "description": "Entityを識別するためのID"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "作成日時"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true,
+          "description": "更新日時"
+        }
+      },
+      "description": "各Entity共通のモデル"
+    },
+    "Name": {
+      "type": "string",
+      "description": "Unicode文字、数字、ハイフン、アンダースコア、ピリオドのみ許可",
+      "minLength": 1,
+      "maxLength": 255,
+      "pattern": "^[\\p{L}\\p{N}._\\-]+$"
+    },
+    "Tags": {
+      "type": "array",
+      "description": "エンティティを検索するためのタグ",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 255,
+        "pattern": "^[^\\/\\s\\u3000]+$"
+      }
+    }
+  }
+}

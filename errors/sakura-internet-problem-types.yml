@@ -1,0 +1,20 @@
+generated: '2026-10-09'
+method: searched
+source: https://manual.sakura.ad.jp/cloud-api/1.1/
+format: http-status
+envelope: 'IaaS API 1.1: status code plus is_ok/Success booleans in the body ("技術的な例外が発生したときは、 is_ok = false"). PHY and security-control portal APIs declare problem-details objects (type, title, detail, status).'
+problems:
+- {status: 400, title: Bad Request, description: リクエストパラメータが不正等。, remediation: Fix invalid field values/types.}
+- {status: 401, title: Unauthorized, description: 認証に失敗した。, remediation: Check API key and secret token.}
+- {status: 403, title: Forbidden, description: リソースへのアクセス権限がない。}
+- {status: 404, title: Not Found, description: リソースが存在しない。}
+- {status: 405, title: Method Not Allowed, description: 要求されたメソッドは非対応。}
+- {status: 406, title: Not Acceptable, description: 何らかの事情でリクエストを受け入れられない。 例：残りの空きリソースがない}
+- {status: 408, title: Request Time-out, description: リクエストがタイムアウトした。}
+- {status: 409, title: Conflict, description: リソースの現在の状態と矛盾する操作を行おうとした。}
+- {status: 411, title: Length Required, description: リクエストヘッダーにLengthが含まれていない。, remediation: "curl -d '' で回避できる。"}
+- {status: 413, title: Request Entity Too Large, description: リクエストされた処理にかかる負荷が対応可能な範囲を越えた。}
+- {status: 415, title: Unsupported Media Type, description: リクエストされたフォーマットに対応していない。}
+- {status: 429, title: throttled, type: about:blank, description: リクエスト数制限に達している (PHY API problem_details_429), remediation: Wait for Retry-After seconds.}
+- {status: 500, title: Internal Server Error, description: 内部エラーが発生した。}
+- {status: 503, title: Service Unavailable, description: 何らかの事情によりサービスが利用可能でない。}

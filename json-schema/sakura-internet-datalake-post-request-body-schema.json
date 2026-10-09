@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/sakura-internet/main/json-schema/sakura-internet-datalake-post-request-body-schema.json",
+  "title": "DatalakePostRequestBody",
+  "description": "データレイク機能の作成APIで受信するリクエストボディ",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/sakura-internet-addon-openapi.yml#/components/schemas/DatalakePostRequestBody",
+  "required": [
+    "location",
+    "performance",
+    "redundancy"
+  ],
+  "type": "object",
+  "properties": {
+    "location": {
+      "minLength": 1,
+      "enum": [
+        "japaneast"
+      ],
+      "type": "string",
+      "description": "デプロイ先のリージョン"
+    },
+    "performance": {
+      "$ref": "#/$defs/DataLakePerformance"
+    },
+    "redundancy": {
+      "$ref": "#/$defs/DataLakeRedundancy"
+    },
+    "accountType": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "アカウントタイプ（パフォーマンスと冗長性の組み合わせ）",
+      "readOnly": true
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "DataLakePerformance": {
+      "enum": [
+        1,
+        2
+      ],
+      "type": "integer",
+      "description": "パフォーマンスを指定します。指定値とパフォーマンスの対応は次の通りです。\r\n- 1: Standard\r\n- 2: Premium",
+      "format": "int32"
+    },
+    "DataLakeRedundancy": {
+      "enum": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "type": "integer",
+      "description": "冗長性を指定します。指定値と冗長性の対応は次の通りです。\r\n- 1: LRS（ローカル冗長ストレージ）\r\n- 2: GRS（geo冗長ストレージ）\r\n- 3: ZRS（ゾーン冗長ストレージ）\r\n- 4: GZRS（geoゾーン冗長ストレージ）",
+      "format": "int32"
+    }
+  }
+}

@@ -1,0 +1,57 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist overlay for Sakura AI Engine RAG API
+  version: 1.0.0
+extends: ../openapi/_original/sakura-internet-ai-engine-rag-openapi.yml
+x-generated: '2026-10-09'
+x-method: generated
+x-source: openapi/sakura-internet-ai-engine-rag-openapi.yml
+x-rationale: 'Enhancements captured without mutating the original: applies the declared-but-unused BearerAuth
+  scheme at the root; trims a leading space from the server URL; derives tags for 4 untagged operations
+  from the first path segment; links the provider-hosted docs as externalDocs.'
+actions:
+- target: $
+  description: Apply the declared BearerAuth scheme as the root security requirement (declared but never
+    applied).
+  update:
+    security:
+    - BearerAuth: []
+- target: $
+  description: 'Replace the server list: the original server URL carries a leading space.'
+  update:
+    servers:
+    - url: https://api.ai.sakura.ad.jp
+- target: $.paths['/v1/documents/'].get
+  description: Derived tags (missing in original; derived from method + path).
+  update:
+    tags:
+    - documents
+- target: $.paths['/v1/documents/{id}/'].get
+  description: Derived tags (missing in original; derived from method + path).
+  update:
+    tags:
+    - documents
+- target: $.paths['/v1/documents/{id}/'].put
+  description: Derived tags (missing in original; derived from method + path).
+  update:
+    tags:
+    - documents
+- target: $.paths['/v1/documents/{id}/'].delete
+  description: Derived tags (missing in original; derived from method + path).
+  update:
+    tags:
+    - documents
+- target: $
+  description: Link the provider-hosted human documentation.
+  update:
+    externalDocs:
+      url: https://manual.sakura.ad.jp/api/cloud/portal/ai-engine-rag-api/index.html
+      description: SAKURA internet documentation
+- target: $.info
+  description: Agent-surface hints from the API Evangelist profile.
+  update:
+    x-api-evangelist:
+      provider: sakura-internet
+      mcp: mcp/sakura-internet-mcp.yml
+      tool_crosswalk: mcp/sakura-internet-tool-crosswalk.yml
+      llms: llms/sakura-internet-llms.txt
