@@ -1,12 +1,43 @@
 openapi: 3.2.0
 info:
-  title: Sakura Internet Certificate API
+  title: AppRun専有型 Certificate API
   version: 1.4.0
   contact:
     name: SAKURA internet Inc.
   license:
     name: Copyright(C) SAKURA internet Inc. all rights reserved.
-  description: 'Operations tagged certificate across 2 of this provider''s published API definitions: apprun-dedicated-api.yaml, sakura-internet-apprun-dedicated-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: '# 更新履歴
+
+
+    - 2026-07-29 (v1.4.0): クラスタのロードバランサ設定取得・更新エンドポイントを追加
+
+    - 2026-07-15 (v1.3.1): Response samplesを修正
+
+
+    ---
+
+
+    「AppRun専有型」が提供する API の利用方法とサンプルを公開しています。
+
+
+    # 基本的な使い方
+
+
+    ## APIキーの発行
+
+
+    API を利用するには、認証用の「APIキー」が必要です。事前にキーを発行してください。\
+
+    APIキーは、「ユーザーID」「パスワード」に相当する「トークン」と呼ばれる認証情報で構成されています。
+
+
+    | 項目名 | APIキー発行時の項目名 | このドキュメント内での例 |
+
+    |--------|----------------------|--------------------------|
+
+    | ユーザーID | アクセストークン (UUID) | 01234567-89ab-cdef-0123-456789abcdef |
+
+    | パスワード | アクセストークンシークレット |…'
 servers:
 - url: https://secure.sakura.ad.jp/cloud/api/apprun-dedicated/1.0
   description: AppRun専有型 API エンドポイント
@@ -90,10 +121,6 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
       - Certificate
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/apprun-dedicated/1.0
-      description: AppRun専有型 API エンドポイント
-      variables: {}
   /clusters/{clusterID}/certificates/{certificateID}:
     get:
       operationId: readCertificate
@@ -183,62 +210,29 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/UpdateCertificateRequest'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/apprun-dedicated/1.0
-      description: AppRun専有型 API エンドポイント
-      variables: {}
 components:
   schemas:
-    CreateCertificateRequest:
+    ReadCertificateResponse:
       type: object
       required:
-      - name
-      - certificatePem
-      - privatekeyPem
+      - certificate
       properties:
-        name:
-          type: string
-          minLength: 1
-          maxLength: 20
-          pattern: ^[a-zA-Z0-9_.-]+$
-          description: 証明書の名前。クラスタ内でユニーク。英数字、アンダースコア、ハイフン、ドットのみ使用可能
-        certificatePem:
-          type: string
-          maxLength: 1000000
-          description: 証明書のPEM形式の文字列
-        privatekeyPem:
-          type: string
-          maxLength: 1000000
-          description: 証明書の秘密鍵のPEM形式の文字列
-        intermediateCertificatePem:
-          type: string
-          maxLength: 1000000
-          description: 証明書のチェーン証明書のPEM形式の文字列
-    UpdateCertificateRequest:
-      type: object
-      required:
-      - name
-      - certificatePem
-      - privatekeyPem
-      properties:
-        name:
-          type: string
-          minLength: 1
-          maxLength: 20
-          pattern: ^[a-zA-Z0-9_.-]+$
-          description: 証明書の名前。クラスタ内でユニーク。英数字、アンダースコア、ハイフン、ドットのみ使用可能
-        certificatePem:
-          type: string
-          maxLength: 1000000
-          description: 証明書のPEM形式の文字列
-        privatekeyPem:
-          type: string
-          maxLength: 1000000
-          description: 証明書の秘密鍵のPEM形式の文字列
-        intermediateCertificatePem:
-          type: string
-          maxLength: 1000000
-          description: 証明書のチェーン証明書のPEM形式の文字列
+        certificate:
+          allOf:
+          - $ref: '#/components/schemas/ReadCertificate'
+          description: 証明書の情報
+      example:
+        certificate:
+          certificateID: 83B9EA83-DDB0-4385-9533-3D693A6A310F
+          name: my-certificate
+          commonName: example.com
+          subjectAlternativeNames:
+          - www.example.com
+          - api.example.com
+          notBeforeSec: 1577836800
+          notAfterSec: 1640995200
+          created: 1577836800
+          updated: 1577836800
     Error:
       type: object
       required:
@@ -250,6 +244,15 @@ components:
           format: int32
         title:
           type: string
+    CreateCertificateResponse:
+      type: object
+      required:
+      - certificate
+      properties:
+        certificate:
+          allOf:
+          - $ref: '#/components/schemas/CertificateIdentifier'
+          description: 作成された証明書の情報
     ListCertificatesResponse:
       type: object
       required:
@@ -276,46 +279,11 @@ components:
           notAfterSec: 1640995200
           created: 1577836800
           updated: 1577836800
-    CertificateIdentifier:
-      type: object
-      required:
-      - certificateID
-      properties:
-        certificateID:
-          allOf:
-          - $ref: '#/components/schemas/CertificateID'
-          description: 証明書ID
-          readOnly: true
-    CertificateID:
-      type: string
-      format: uuid
-      example: 13B9EA83-DDB0-4385-9533-3D693A6A310F
     ClusterID:
       type: string
       format: uuid
       description: クラスタID
       example: 13B9EA83-DDB0-4385-9533-3D693A6A310F
-    ReadCertificateResponse:
-      type: object
-      required:
-      - certificate
-      properties:
-        certificate:
-          allOf:
-          - $ref: '#/components/schemas/ReadCertificate'
-          description: 証明書の情報
-      example:
-        certificate:
-          certificateID: 83B9EA83-DDB0-4385-9533-3D693A6A310F
-          name: my-certificate
-          commonName: example.com
-          subjectAlternativeNames:
-          - www.example.com
-          - api.example.com
-          notBeforeSec: 1577836800
-          notAfterSec: 1640995200
-          created: 1577836800
-          updated: 1577836800
     ReadCertificate:
       type: object
       required:
@@ -363,15 +331,70 @@ components:
           type: integer
           format: unixtime
           description: 更新日時：UNIX時間（秒）
-    CreateCertificateResponse:
+    CreateCertificateRequest:
       type: object
       required:
-      - certificate
+      - name
+      - certificatePem
+      - privatekeyPem
       properties:
-        certificate:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 20
+          pattern: ^[a-zA-Z0-9_.-]+$
+          description: 証明書の名前。クラスタ内でユニーク。英数字、アンダースコア、ハイフン、ドットのみ使用可能
+        certificatePem:
+          type: string
+          maxLength: 1000000
+          description: 証明書のPEM形式の文字列
+        privatekeyPem:
+          type: string
+          maxLength: 1000000
+          description: 証明書の秘密鍵のPEM形式の文字列
+        intermediateCertificatePem:
+          type: string
+          maxLength: 1000000
+          description: 証明書のチェーン証明書のPEM形式の文字列
+    CertificateIdentifier:
+      type: object
+      required:
+      - certificateID
+      properties:
+        certificateID:
           allOf:
-          - $ref: '#/components/schemas/CertificateIdentifier'
-          description: 作成された証明書の情報
+          - $ref: '#/components/schemas/CertificateID'
+          description: 証明書ID
+          readOnly: true
+    CertificateID:
+      type: string
+      format: uuid
+      example: 13B9EA83-DDB0-4385-9533-3D693A6A310F
+    UpdateCertificateRequest:
+      type: object
+      required:
+      - name
+      - certificatePem
+      - privatekeyPem
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 20
+          pattern: ^[a-zA-Z0-9_.-]+$
+          description: 証明書の名前。クラスタ内でユニーク。英数字、アンダースコア、ハイフン、ドットのみ使用可能
+        certificatePem:
+          type: string
+          maxLength: 1000000
+          description: 証明書のPEM形式の文字列
+        privatekeyPem:
+          type: string
+          maxLength: 1000000
+          description: 証明書の秘密鍵のPEM形式の文字列
+        intermediateCertificatePem:
+          type: string
+          maxLength: 1000000
+          description: 証明書のチェーン証明書のPEM形式の文字列
   securitySchemes:
     BasicAuth:
       type: http
@@ -379,6 +402,3 @@ components:
 externalDocs:
   url: https://manual.sakura.ad.jp/cloud/apprun-dedicated/releasenote.html
   description: リリースノート | さくらのクラウド マニュアル
-x-refined-from:
-- apprun-dedicated-api.yaml
-- sakura-internet-apprun-dedicated-openapi.yml

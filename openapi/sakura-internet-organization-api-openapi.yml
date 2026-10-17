@@ -1,10 +1,10 @@
 openapi: 3.2.0
 info:
-  title: Sakura Internet Organization API
+  title: さくらのクラウドIAM Organization API
   version: 2.1.0
   contact:
     name: SAKURA internet Inc.
-  description: 'Operations tagged organization across 2 of this provider''s published API definitions: iam-api.yaml, sakura-internet-iam-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: さくらのクラウドIAMのAPIドキュメントです
 servers:
 - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
 security:
@@ -100,8 +100,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Http429TooManyRequests'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
   /organization-service-policy:
     put:
       operationId: updateOrganizationServicePolicy
@@ -465,22 +463,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Http429TooManyRequests'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
 components:
   schemas:
-    RuleStatus:
-      type: object
-      properties:
-        is_active:
-          type: boolean
-          description: ルールが有効かどうか
-          example: true
-        is_dry_run:
-          type: boolean
-          description: ルールがドライランかどうか
-          example: false
-    Http404NotFound:
+    Http403Forbidden:
       type: object
       required:
       - type
@@ -495,15 +480,88 @@ components:
         status:
           type: integer
           description: HTTPステータスコード
-          example: 404
+          example: 403
         title:
           type: string
           description: 問題を表す簡単な文字列
-          example: not_found
+          example: permission_denied
         detail:
           type: string
           description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
-          example: 見つかりませんでした。
+          example: このアクションを実行する権限がありません。
+    Http409Conflict:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 409
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: conflict
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 状態の競合によりリクエストを処理できません。
+    RuleContent:
+      type: object
+      properties:
+        values:
+          type: object
+          properties:
+            allowed_values:
+              type: array
+              items:
+                type: string
+              description: 許可する値のリスト
+            denied_values:
+              type: array
+              items:
+                type: string
+              description: 拒否する値のリスト
+        allow_all:
+          type: boolean
+          description: すべての値を許可する。リスト型ルールの場合のみ設定可能。
+        deny_all:
+          type: boolean
+          description: すべての値を許可する。リスト型ルールの場合のみ設定可能。
+        enforce:
+          type: boolean
+          description: ブール型ルールを強制するかどうか
+    Http401Unauthorized:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 401
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: authentication_failed
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 認証情報が含まれていません。
     Http429TooManyRequests:
       type: object
       required:
@@ -544,54 +602,17 @@ components:
           dry_run_spec:
             $ref: '#/components/schemas/RuleSpec'
       - $ref: '#/components/schemas/RuleStatus'
-    Http409Conflict:
+    RuleStatus:
       type: object
-      required:
-      - type
-      - status
-      - title
-      - detail
       properties:
-        type:
-          type: string
-          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
-          example: about:blank
-        status:
-          type: integer
-          description: HTTPステータスコード
-          example: 409
-        title:
-          type: string
-          description: 問題を表す簡単な文字列
-          example: conflict
-        detail:
-          type: string
-          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
-          example: 状態の競合によりリクエストを処理できません。
-    Http403Forbidden:
-      type: object
-      required:
-      - type
-      - status
-      - title
-      - detail
-      properties:
-        type:
-          type: string
-          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
-          example: about:blank
-        status:
-          type: integer
-          description: HTTPステータスコード
-          example: 403
-        title:
-          type: string
-          description: 問題を表す簡単な文字列
-          example: permission_denied
-        detail:
-          type: string
-          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
-          example: このアクションを実行する権限がありません。
+        is_active:
+          type: boolean
+          description: ルールが有効かどうか
+          example: true
+        is_dry_run:
+          type: boolean
+          description: ルールがドライランかどうか
+          example: false
     Rule:
       type: object
       required:
@@ -609,6 +630,30 @@ components:
           dry_run_spec:
             $ref: '#/components/schemas/RuleSpec'
       - $ref: '#/components/schemas/RuleStatus'
+    Http404NotFound:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 404
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: not_found
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 見つかりませんでした。
     Organization:
       type: object
       required:
@@ -623,31 +668,6 @@ components:
           type: string
           description: 組織名
           example: 組織名
-    RuleContent:
-      type: object
-      properties:
-        values:
-          type: object
-          properties:
-            allowed_values:
-              type: array
-              items:
-                type: string
-              description: 許可する値のリスト
-            denied_values:
-              type: array
-              items:
-                type: string
-              description: 拒否する値のリスト
-        allow_all:
-          type: boolean
-          description: すべての値を許可する。リスト型ルールの場合のみ設定可能。
-        deny_all:
-          type: boolean
-          description: すべての値を許可する。リスト型ルールの場合のみ設定可能。
-        enforce:
-          type: boolean
-          description: ブール型ルールを強制するかどうか
     Http400BadRequest:
       type: object
       required:
@@ -727,30 +747,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/RuleContent'
-    Http401Unauthorized:
-      type: object
-      required:
-      - type
-      - status
-      - title
-      - detail
-      properties:
-        type:
-          type: string
-          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
-          example: about:blank
-        status:
-          type: integer
-          description: HTTPステータスコード
-          example: 401
-        title:
-          type: string
-          description: 問題を表す簡単な文字列
-          example: authentication_failed
-        detail:
-          type: string
-          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
-          example: 認証情報が含まれていません。
   securitySchemes:
     ServicePrincipalAuth:
       description: 'サービスプリンシパル認証
@@ -770,6 +766,3 @@ components:
         '
       type: http
       scheme: basic
-x-refined-from:
-- iam-api.yaml
-- sakura-internet-iam-openapi.yml

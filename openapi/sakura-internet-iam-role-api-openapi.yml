@@ -1,10 +1,10 @@
 openapi: 3.2.0
 info:
-  title: Sakura Internet Iam Role API
+  title: さくらのクラウドIAM Iam Role API
   version: 2.1.0
   contact:
     name: SAKURA internet Inc.
-  description: 'Operations tagged iam-role across 2 of this provider''s published API definitions: iam-api.yaml, sakura-internet-iam-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: さくらのクラウドIAMのAPIドキュメントです
 servers:
 - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
 security:
@@ -57,8 +57,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Http429TooManyRequests'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
   /iam-roles/{iam_role_id}:
     parameters:
     - $ref: '#/components/parameters/IamRoleID'
@@ -98,100 +96,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Http429TooManyRequests'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
 components:
   schemas:
-    Http404NotFound:
-      type: object
-      required:
-      - type
-      - status
-      - title
-      - detail
-      properties:
-        type:
-          type: string
-          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
-          example: about:blank
-        status:
-          type: integer
-          description: HTTPステータスコード
-          example: 404
-        title:
-          type: string
-          description: 問題を表す簡単な文字列
-          example: not_found
-        detail:
-          type: string
-          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
-          example: 見つかりませんでした。
-    Http429TooManyRequests:
-      type: object
-      required:
-      - type
-      - status
-      - title
-      - detail
-      properties:
-        type:
-          type: string
-          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
-          example: about:blank
-        status:
-          type: integer
-          description: HTTPステータスコード
-          example: 429
-        title:
-          type: string
-          description: 問題を表す簡単な文字列
-          example: throttled
-        detail:
-          type: string
-          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
-          example: リクエストの処理は絞られました。 60秒後に利用可能になります。
-    IamRole:
-      type: object
-      required:
-      - id
-      - name
-      - description
-      - category
-      - lowest_grantable_resource
-      properties:
-        id:
-          type: string
-          description: IAMロールID
-          readOnly: true
-          example: viewer
-        name:
-          type: string
-          description: IAMロール名
-          example: 管理者
-        description:
-          type: string
-          description: IAMロールの説明
-          example: 管理者権限のIAMロール
-        category:
-          type: string
-          description: IAMロールのカテゴリ
-          example: apprun
-        lowest_grantable_resource:
-          type: string
-          enum:
-          - organization
-          - folder
-          - project
-          description: 'このIAMロールを付与可能な最低階層。
-
-            * `"organization"` - 組織
-
-            * `"folder"` - フォルダ
-
-            * `"project"` - プロジェクト
-
-            '
-          example: folder
     Http403Forbidden:
       type: object
       required:
@@ -265,6 +171,96 @@ components:
           type: string
           description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
           example: 認証情報が含まれていません。
+    Http429TooManyRequests:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 429
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: throttled
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: リクエストの処理は絞られました。 60秒後に利用可能になります。
+    IamRole:
+      type: object
+      required:
+      - id
+      - name
+      - description
+      - category
+      - lowest_grantable_resource
+      properties:
+        id:
+          type: string
+          description: IAMロールID
+          readOnly: true
+          example: viewer
+        name:
+          type: string
+          description: IAMロール名
+          example: 管理者
+        description:
+          type: string
+          description: IAMロールの説明
+          example: 管理者権限のIAMロール
+        category:
+          type: string
+          description: IAMロールのカテゴリ
+          example: apprun
+        lowest_grantable_resource:
+          type: string
+          enum:
+          - organization
+          - folder
+          - project
+          description: 'このIAMロールを付与可能な最低階層。
+
+            * `"organization"` - 組織
+
+            * `"folder"` - フォルダ
+
+            * `"project"` - プロジェクト
+
+            '
+          example: folder
+    Http404NotFound:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 404
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: not_found
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 見つかりませんでした。
   parameters:
     PaginationPage:
       in: query
@@ -302,6 +298,3 @@ components:
         '
       type: http
       scheme: basic
-x-refined-from:
-- iam-api.yaml
-- sakura-internet-iam-openapi.yml

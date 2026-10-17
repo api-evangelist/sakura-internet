@@ -1,12 +1,43 @@
 openapi: 3.2.0
 info:
-  title: Sakura Internet Application API
+  title: AppRun専有型 Application API
   version: 1.4.0
   contact:
     name: SAKURA internet Inc.
   license:
     name: Copyright(C) SAKURA internet Inc. all rights reserved.
-  description: 'Operations tagged application across 2 of this provider''s published API definitions: apprun-dedicated-api.yaml, sakura-internet-apprun-dedicated-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: '# 更新履歴
+
+
+    - 2026-07-29 (v1.4.0): クラスタのロードバランサ設定取得・更新エンドポイントを追加
+
+    - 2026-07-15 (v1.3.1): Response samplesを修正
+
+
+    ---
+
+
+    「AppRun専有型」が提供する API の利用方法とサンプルを公開しています。
+
+
+    # 基本的な使い方
+
+
+    ## APIキーの発行
+
+
+    API を利用するには、認証用の「APIキー」が必要です。事前にキーを発行してください。\
+
+    APIキーは、「ユーザーID」「パスワード」に相当する「トークン」と呼ばれる認証情報で構成されています。
+
+
+    | 項目名 | APIキー発行時の項目名 | このドキュメント内での例 |
+
+    |--------|----------------------|--------------------------|
+
+    | ユーザーID | アクセストークン (UUID) | 01234567-89ab-cdef-0123-456789abcdef |
+
+    | パスワード | アクセストークンシークレット |…'
 servers:
 - url: https://secure.sakura.ad.jp/cloud/api/apprun-dedicated/1.0
   description: AppRun専有型 API エンドポイント
@@ -87,10 +118,6 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
       - Application
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/apprun-dedicated/1.0
-      description: AppRun専有型 API エンドポイント
-      variables: {}
   /applications/{applicationID}:
     get:
       operationId: readApplication
@@ -173,10 +200,6 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
       - Application
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/apprun-dedicated/1.0
-      description: AppRun専有型 API エンドポイント
-      variables: {}
   /applications/{applicationID}/containers:
     get:
       operationId: listApplicationContainers
@@ -203,12 +226,19 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
       - Application
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/apprun-dedicated/1.0
-      description: AppRun専有型 API エンドポイント
-      variables: {}
 components:
   schemas:
+    Error:
+      type: object
+      required:
+      - status
+      - title
+      properties:
+        status:
+          type: integer
+          format: int32
+        title:
+          type: string
     ApplicationDesiredContainer:
       type: object
       required:
@@ -237,6 +267,9 @@ components:
         image:
           type: string
           description: デプロイするコンテナのイメージ名
+    ApplicationID:
+      type: string
+      format: uuid
     ReadApplication:
       type: object
       required:
@@ -291,65 +324,6 @@ components:
           - $ref: '#/components/schemas/EnoughResources'
           description: アプリケーションをデプロイするクラスタのリソースが十分かどうか
       description: アプリケーション
-    CreateApplicationRequest:
-      type: object
-      required:
-      - name
-      - clusterID
-      properties:
-        name:
-          type: string
-          minLength: 1
-          maxLength: 20
-          pattern: ^[a-zA-Z0-9_-]+$
-          description: アプリケーションの名前。クラスタの中ではユニーク。英数字とハイフン、アンダースコアのみ使用可能
-          example: bbs
-        clusterID:
-          allOf:
-          - $ref: '#/components/schemas/ClusterID'
-          description: デプロイ先クラスタ
-    ClusterID:
-      type: string
-      format: uuid
-      description: クラスタID
-      example: 13B9EA83-DDB0-4385-9533-3D693A6A310F
-    ApplicationCurrentContainers:
-      type: object
-      required:
-      - collectedAtSec
-      - containers
-      properties:
-        collectedAtSec:
-          type: integer
-          format: unixtime
-          description: 状態回収日時：UNIX時間（秒）
-        containers:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApplicationCurrentContainer'
-    WorkerNodeID:
-      type: string
-      format: uuid
-    ApplicationDesiredContainers:
-      type: object
-      required:
-      - containers
-      properties:
-        containers:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApplicationDesiredContainer'
-    Error:
-      type: object
-      required:
-      - status
-      - title
-      properties:
-        status:
-          type: integer
-          format: int32
-        title:
-          type: string
     WorkerNodeContainerPlacement:
       type: object
       required:
@@ -375,27 +349,105 @@ components:
           allOf:
           - $ref: '#/components/schemas/ApplicationDesiredContainers'
           description: desired（目標配置）情報
-    ReadApplicationResponse:
+    ApplicationVersionNumber:
+      type: integer
+      format: int32
+      minimum: 1
+      example: 3
+    WorkerNodeID:
+      type: string
+      format: uuid
+    EnoughResources:
       type: object
       required:
-      - application
+      - cpu
+      - memory
       properties:
-        application:
+        cpu:
+          type:
+          - boolean
+          - 'null'
+          description: CPU不足が原因でアプリケーションがデプロイできない場合はfalse。ASGスケールアウト中もfalse。nullの場合は不明。
+        memory:
+          type:
+          - boolean
+          - 'null'
+          description: メモリ不足が原因でアプリケーションがデプロイできない場合はfalse。ASGスケールアウト中もfalse。nullの場合は不明。
+    UpdateApplicationRequest:
+      type: object
+      required:
+      - activeVersion
+      properties:
+        activeVersion:
+          type:
+          - integer
+          - 'null'
           allOf:
-          - $ref: '#/components/schemas/ReadApplication'
-          description: アプリケーションの情報
-      example:
-        application:
-          applicationID: A0199B39-B361-45B9-8DF4-FC8BE494D690
-          name: my-app
-          clusterID: 13B9EA83-DDB0-4385-9533-3D693A6A310F
-          clusterName: mock-cluster
-          activeVersion: 3
-          desiredCount: 3
-          scalingCooldownSeconds: 300
-          enoughResources:
-            cpu: true
-            memory: true
+          - $ref: '#/components/schemas/ApplicationVersionNumber'
+          description: 利用しているバージョン
+          example: 3
+    ApplicationCurrentContainer:
+      type: object
+      required:
+      - id
+      - image
+      - state
+      - status
+      - cpuUsagePercent
+      - applicationID
+      - applicationVersion
+      properties:
+        id:
+          type: string
+          description: コンテナID
+        image:
+          type: string
+          description: イメージ名
+        state:
+          type: string
+          description: コンテナのステート（created、running、restarting、removing、paused、exited、dead のうちいずれか）
+        status:
+          type: string
+          description: コンテナのステータス
+        cpuUsagePercent:
+          type: number
+          format: float
+          description: コンテナのCPU使用率（単位：%）
+        applicationID:
+          allOf:
+          - $ref: '#/components/schemas/ApplicationID'
+          description: アプリケーションID
+        applicationVersion:
+          allOf:
+          - $ref: '#/components/schemas/ApplicationVersionNumber'
+          description: アプリケーションのバージョン
+    CreateApplicationRequest:
+      type: object
+      required:
+      - name
+      - clusterID
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 20
+          pattern: ^[a-zA-Z0-9_-]+$
+          description: アプリケーションの名前。クラスタの中ではユニーク。英数字とハイフン、アンダースコアのみ使用可能
+          example: bbs
+        clusterID:
+          allOf:
+          - $ref: '#/components/schemas/ClusterID'
+          description: デプロイ先クラスタ
+    ApplicationIdentifier:
+      type: object
+      required:
+      - applicationID
+      properties:
+        applicationID:
+          allOf:
+          - $ref: '#/components/schemas/ApplicationID'
+          description: ID
+          readOnly: true
     ListApplicationContainersResponse:
       type: object
       required:
@@ -432,78 +484,41 @@ components:
               cpuMillis: 250
               memoryMB: 128
               image: redis:alpine
-    ApplicationCurrentContainer:
+    ReadApplicationResponse:
       type: object
       required:
-      - id
-      - image
-      - state
-      - status
-      - cpuUsagePercent
-      - applicationID
-      - applicationVersion
+      - application
       properties:
-        id:
-          type: string
-          description: コンテナID
-        image:
-          type: string
-          description: イメージ名
-        state:
-          type: string
-          description: コンテナのステート（created、running、restarting、removing、paused、exited、dead のうちいずれか）
-        status:
-          type: string
-          description: コンテナのステータス
-        cpuUsagePercent:
-          type: number
-          format: float
-          description: コンテナのCPU使用率（単位：%）
-        applicationID:
+        application:
           allOf:
-          - $ref: '#/components/schemas/ApplicationID'
-          description: アプリケーションID
-        applicationVersion:
-          allOf:
-          - $ref: '#/components/schemas/ApplicationVersionNumber'
-          description: アプリケーションのバージョン
-    ApplicationVersionNumber:
-      type: integer
-      format: int32
-      minimum: 1
-      example: 3
-    ApplicationID:
-      type: string
-      format: uuid
-    UpdateApplicationRequest:
+          - $ref: '#/components/schemas/ReadApplication'
+          description: アプリケーションの情報
+      example:
+        application:
+          applicationID: A0199B39-B361-45B9-8DF4-FC8BE494D690
+          name: my-app
+          clusterID: 13B9EA83-DDB0-4385-9533-3D693A6A310F
+          clusterName: mock-cluster
+          activeVersion: 3
+          desiredCount: 3
+          scalingCooldownSeconds: 300
+          enoughResources:
+            cpu: true
+            memory: true
+    ApplicationCurrentContainers:
       type: object
       required:
-      - activeVersion
+      - collectedAtSec
+      - containers
       properties:
-        activeVersion:
-          type:
-          - integer
-          - 'null'
-          allOf:
-          - $ref: '#/components/schemas/ApplicationVersionNumber'
-          description: 利用しているバージョン
-          example: 3
-    EnoughResources:
-      type: object
-      required:
-      - cpu
-      - memory
-      properties:
-        cpu:
-          type:
-          - boolean
-          - 'null'
-          description: CPU不足が原因でアプリケーションがデプロイできない場合はfalse。ASGスケールアウト中もfalse。nullの場合は不明。
-        memory:
-          type:
-          - boolean
-          - 'null'
-          description: メモリ不足が原因でアプリケーションがデプロイできない場合はfalse。ASGスケールアウト中もfalse。nullの場合は不明。
+        collectedAtSec:
+          type: integer
+          format: unixtime
+          description: 状態回収日時：UNIX時間（秒）
+        containers:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplicationCurrentContainer'
     ListApplicationsResponse:
       type: object
       required:
@@ -530,16 +545,15 @@ components:
           enoughResources:
             cpu: true
             memory: true
-    ApplicationIdentifier:
+    ApplicationDesiredContainers:
       type: object
       required:
-      - applicationID
+      - containers
       properties:
-        applicationID:
-          allOf:
-          - $ref: '#/components/schemas/ApplicationID'
-          description: ID
-          readOnly: true
+        containers:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplicationDesiredContainer'
     CreateApplicationResponse:
       type: object
       required:
@@ -549,6 +563,11 @@ components:
           allOf:
           - $ref: '#/components/schemas/ApplicationIdentifier'
           description: 作成されたアプリケーションの情報
+    ClusterID:
+      type: string
+      format: uuid
+      description: クラスタID
+      example: 13B9EA83-DDB0-4385-9533-3D693A6A310F
   securitySchemes:
     BasicAuth:
       type: http
@@ -556,6 +575,3 @@ components:
 externalDocs:
   url: https://manual.sakura.ad.jp/cloud/apprun-dedicated/releasenote.html
   description: リリースノート | さくらのクラウド マニュアル
-x-refined-from:
-- apprun-dedicated-api.yaml
-- sakura-internet-apprun-dedicated-openapi.yml

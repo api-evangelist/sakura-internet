@@ -1,12 +1,44 @@
 openapi: 3.2.0
 info:
-  title: Sakura Internet CDN API
   version: 1.1.1
+  title: Add-on APIドキュメント CDN API
+  description: '---
+
+
+    「Add-on」が提供するAPIの利用方法とサンプルを公開しております。
+
+
+    # 基本的な使い方
+
+
+    ## APIキーの発行
+
+
+    APIを利用するためには、認証のための「APIキー」が必要です。事前にキーを発行しておきます。
+
+    APIキーは「ユーザーID」「パスワード」に相当する「トークン」と呼ばれる認証情報で構成されています。
+
+
+    | 項目名 | APIキー発行時の項目名 | このドキュメント内での例 |
+
+    |------------|------------------------------|--------------------------------------|
+
+    | ユーザーID | アクセストークン(UUID) | 01234567-89ab-cdef-0123-456789abcdef |
+
+    | パスワード | アクセストークンシークレット | SAMPLETOKENSAMPLETOKENSAMPLETOKENSAM |
+
+
+    操作マニュアル
+
+
+    APIキー | さくらのクラウド ドキュメント
+
+
+    ##…'
   contact:
     name: SAKURA internet Inc.
   license:
     name: Copyright(C) SAKURA internet Inc. all rights reserved.
-  description: 'Operations tagged CDN across 2 of this provider''s published API definitions: addon-api.yaml, sakura-internet-addon-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://secure.sakura.ad.jp/cloud/api/addon/1.0/
 tags:
@@ -59,8 +91,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/addon/1.0/
   /cdn/{resourceGroupName}:
     get:
       tags:
@@ -114,8 +144,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: CDNサービスリソースが見つかりませんでした。
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/addon/1.0/
   /cdn/status/{resourceGroupName}/{deploymentName}:
     get:
       tags:
@@ -149,62 +177,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/addon/1.0/
 components:
   schemas:
-    ResourceGroupResource:
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/ResourceIdentifier'
-        hasData:
-          type: boolean
-          readOnly: true
-        data:
-          $ref: '#/components/schemas/ResourceGroupData'
-      additionalProperties: false
-    SystemData:
-      type: object
-      properties:
-        createdBy:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-        createdByType:
-          $ref: '#/components/schemas/CreatedByType'
-        createdOn:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          readOnly: true
-        lastModifiedBy:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-        lastModifiedByType:
-          $ref: '#/components/schemas/CreatedByType'
-        lastModifiedOn:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          readOnly: true
-      additionalProperties: false
-    PricingLevel:
-      enum:
-      - 1
-      - 2
-      type: integer
-      description: 'Front Doorリソースの価格レベルを指定します。指定値と価格レベルの対応は次の通りです。
-
-        - 1: Standard
-
-        - 2: Premium'
-      format: int32
     ErrorResponse:
       type: object
       properties:
@@ -217,123 +191,6 @@ components:
           description: エラーリスト
       additionalProperties: false
       description: エラーレスポンス
-    DeploymentStatus:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: デプロイメントの一意の識別子。
-        name:
-          type:
-          - string
-          - 'null'
-          description: デプロイメントの名前。
-        type:
-          type:
-          - string
-          - 'null'
-          description: デプロイメントのタイプ。
-        properties:
-          $ref: '#/components/schemas/DeploymentStatusProperties'
-      additionalProperties: false
-      description: デプロイメントステータスのレスポンスを表します。
-    FrontDoorOriginGroup:
-      required:
-      - origin
-      type: object
-      properties:
-        origin:
-          $ref: '#/components/schemas/FrontDoorOrigin'
-      additionalProperties: false
-      description: 配信元グループ
-    ListResourcesResponse:
-      type: object
-      properties:
-        resources:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ResourceGroupResource'
-          description: リソースグループ一覧
-      additionalProperties: false
-    PostDeploymentResponse:
-      type: object
-      properties:
-        resourceGroupName:
-          type:
-          - string
-          - 'null'
-          description: リソースグループ名を取得します。
-        deploymentName:
-          type:
-          - string
-          - 'null'
-          description: デプロイメント名を取得します。
-      additionalProperties: false
-      description: デプロイメントが投稿された後に受け取るレスポンスを表します。
-    FrontDoorEndpoint:
-      required:
-      - route
-      type: object
-      properties:
-        route:
-          $ref: '#/components/schemas/FrontDoorRoute'
-      additionalProperties: false
-      description: Front Doorのエンドポイント
-    CreatedByType:
-      type: object
-      additionalProperties: false
-    ResourceType:
-      type: object
-      properties:
-        namespace:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-        type:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-      additionalProperties: false
-    AzureLocation:
-      type: object
-      properties:
-        name:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-        displayName:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-      additionalProperties: false
-    NetworkRequestBody:
-      required:
-      - endpoint
-      - location
-      - profile
-      type: object
-      properties:
-        location:
-          minLength: 1
-          enum:
-          - japaneast
-          type: string
-          description: デプロイ先のリージョン
-          example: japaneast
-        profile:
-          $ref: '#/components/schemas/FrontDoorProfile'
-        endpoint:
-          $ref: '#/components/schemas/FrontDoorEndpoint'
-      additionalProperties: false
-      description: ネットワークとCDNの作成APIで受信するリクエストボディを表します。
     FrontDoorProfile:
       required:
       - level
@@ -349,6 +206,31 @@ components:
           readOnly: true
       additionalProperties: false
       description: Front Doorのプロファイル
+    ResourceType:
+      type: object
+      properties:
+        namespace:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        type:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+      additionalProperties: false
+    PricingLevel:
+      enum:
+      - 1
+      - 2
+      type: integer
+      description: 'Front Doorリソースの価格レベルを指定します。指定値と価格レベルの対応は次の通りです。
+
+        - 1: Standard
+
+        - 2: Premium'
+      format: int32
     ResourceIdentifier:
       type: object
       properties:
@@ -379,52 +261,6 @@ components:
           - 'null'
           readOnly: true
       additionalProperties: false
-    FrontDoorRoute:
-      required:
-      - originGroup
-      - patterns
-      type: object
-      properties:
-        patterns:
-          type: array
-          items:
-            type: string
-          description: 'Front Doorルートのパスパターンを指定します。
-
-            パターンの先頭はスラッシュ (/) にする必要があります。アスタリスクは末尾のみで使用でき、アスタリスクの前はスラッシュ (/*) にする必要があります 。'
-        originGroup:
-          $ref: '#/components/schemas/FrontDoorOriginGroup'
-      additionalProperties: false
-      description: Front Doorルート
-    DeploymentStatusProperties:
-      type: object
-      properties:
-        provisioningState:
-          type:
-          - string
-          - 'null'
-          description: リソースのプロビジョニング状態。
-        timestamp:
-          type: string
-          description: デプロイメントステータスのタイムスタンプ。
-          format: date-time
-      additionalProperties: false
-      description: デプロイメントステータスのプロパティを表します。
-    ErrorInfo:
-      type: object
-      properties:
-        code:
-          type:
-          - string
-          - 'null'
-          description: エラーコード
-        message:
-          type:
-          - string
-          - 'null'
-          description: エラーメッセージ
-      additionalProperties: false
-      description: エラー情報
     ResourceGroupData:
       type: object
       properties:
@@ -460,6 +296,63 @@ components:
           - string
           - 'null'
       additionalProperties: false
+    PostDeploymentResponse:
+      type: object
+      properties:
+        resourceGroupName:
+          type:
+          - string
+          - 'null'
+          description: リソースグループ名を取得します。
+        deploymentName:
+          type:
+          - string
+          - 'null'
+          description: デプロイメント名を取得します。
+      additionalProperties: false
+      description: デプロイメントが投稿された後に受け取るレスポンスを表します。
+    ListResourcesResponse:
+      type: object
+      properties:
+        resources:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ResourceGroupResource'
+          description: リソースグループ一覧
+      additionalProperties: false
+    DeploymentStatus:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: デプロイメントの一意の識別子。
+        name:
+          type:
+          - string
+          - 'null'
+          description: デプロイメントの名前。
+        type:
+          type:
+          - string
+          - 'null'
+          description: デプロイメントのタイプ。
+        properties:
+          $ref: '#/components/schemas/DeploymentStatusProperties'
+      additionalProperties: false
+      description: デプロイメントステータスのレスポンスを表します。
+    FrontDoorEndpoint:
+      required:
+      - route
+      type: object
+      properties:
+        route:
+          $ref: '#/components/schemas/FrontDoorRoute'
+      additionalProperties: false
+      description: Front Doorのエンドポイント
     GetResourceResponse:
       type: object
       properties:
@@ -472,6 +365,41 @@ components:
           description: 管理ポータルのURL
       additionalProperties: false
       description: リソース個別取得APIのレスポンス
+    ErrorInfo:
+      type: object
+      properties:
+        code:
+          type:
+          - string
+          - 'null'
+          description: エラーコード
+        message:
+          type:
+          - string
+          - 'null'
+          description: エラーメッセージ
+      additionalProperties: false
+      description: エラー情報
+    NetworkRequestBody:
+      required:
+      - endpoint
+      - location
+      - profile
+      type: object
+      properties:
+        location:
+          minLength: 1
+          enum:
+          - japaneast
+          type: string
+          description: デプロイ先のリージョン
+          example: japaneast
+        profile:
+          $ref: '#/components/schemas/FrontDoorProfile'
+        endpoint:
+          $ref: '#/components/schemas/FrontDoorEndpoint'
+      additionalProperties: false
+      description: ネットワークとCDNの作成APIで受信するリクエストボディを表します。
     FrontDoorOrigin:
       required:
       - hostHeader
@@ -494,6 +422,101 @@ components:
             ホストヘッダーは、有効なドメイン名、IPv4、または IPv6 である必要があります。'
       additionalProperties: false
       description: 配信元
-x-refined-from:
-- addon-api.yaml
-- sakura-internet-addon-openapi.yml
+    FrontDoorRoute:
+      required:
+      - originGroup
+      - patterns
+      type: object
+      properties:
+        patterns:
+          type: array
+          items:
+            type: string
+          description: 'Front Doorルートのパスパターンを指定します。
+
+            パターンの先頭はスラッシュ (/) にする必要があります。アスタリスクは末尾のみで使用でき、アスタリスクの前はスラッシュ (/*) にする必要があります 。'
+        originGroup:
+          $ref: '#/components/schemas/FrontDoorOriginGroup'
+      additionalProperties: false
+      description: Front Doorルート
+    FrontDoorOriginGroup:
+      required:
+      - origin
+      type: object
+      properties:
+        origin:
+          $ref: '#/components/schemas/FrontDoorOrigin'
+      additionalProperties: false
+      description: 配信元グループ
+    ResourceGroupResource:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/ResourceIdentifier'
+        hasData:
+          type: boolean
+          readOnly: true
+        data:
+          $ref: '#/components/schemas/ResourceGroupData'
+      additionalProperties: false
+    DeploymentStatusProperties:
+      type: object
+      properties:
+        provisioningState:
+          type:
+          - string
+          - 'null'
+          description: リソースのプロビジョニング状態。
+        timestamp:
+          type: string
+          description: デプロイメントステータスのタイムスタンプ。
+          format: date-time
+      additionalProperties: false
+      description: デプロイメントステータスのプロパティを表します。
+    SystemData:
+      type: object
+      properties:
+        createdBy:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        createdByType:
+          $ref: '#/components/schemas/CreatedByType'
+        createdOn:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        lastModifiedBy:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        lastModifiedByType:
+          $ref: '#/components/schemas/CreatedByType'
+        lastModifiedOn:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+      additionalProperties: false
+    CreatedByType:
+      type: object
+      additionalProperties: false
+    AzureLocation:
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        displayName:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+      additionalProperties: false

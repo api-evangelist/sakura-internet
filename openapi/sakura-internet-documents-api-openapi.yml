@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Sakura Internet Documents API
+  title: Sakura AI Engine RAG Documents API
   version: '2026-06-29'
-  description: 'Operations tagged Documents across 2 of this provider''s published API definitions: ai-engine-rag-api.yaml, sakura-internet-ai-engine-rag-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: さくらのAI Engine RAG API
 servers:
 - url: ' https://api.ai.sakura.ad.jp'
 tags:
@@ -49,8 +49,6 @@ paths:
       - Documents
       summary: Documents list
       x-summary-source: derived
-    servers:
-    - url: ' https://api.ai.sakura.ad.jp'
   /v1/documents/{id}/:
     get:
       operationId: documents_retrieve
@@ -123,27 +121,8 @@ paths:
       - Documents
       summary: Documents destroy
       x-summary-source: derived
-    servers:
-    - url: ' https://api.ai.sakura.ad.jp'
 components:
   schemas:
-    StatusEnum:
-      enum:
-      - pending
-      - processing
-      - available
-      - deleted
-      - error
-      type: string
-      description: '* `pending` - Pending
-
-        * `processing` - Processing
-
-        * `available` - Available
-
-        * `deleted` - Deleted
-
-        * `error` - Error'
     Document:
       type: object
       properties:
@@ -192,6 +171,23 @@ components:
       - model
       - name
       - status
+    StatusEnum:
+      enum:
+      - pending
+      - processing
+      - available
+      - deleted
+      - error
+      type: string
+      description: '* `pending` - Pending
+
+        * `processing` - Processing
+
+        * `available` - Available
+
+        * `deleted` - Deleted
+
+        * `error` - Error'
     PaginatedDocumentListList:
       type: object
       properties:
@@ -278,6 +274,3 @@ components:
     BearerAuth:
       type: http
       scheme: bearer
-x-refined-from:
-- ai-engine-rag-api.yaml
-- sakura-internet-ai-engine-rag-openapi.yml

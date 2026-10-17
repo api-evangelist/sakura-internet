@@ -1,10 +1,10 @@
 openapi: 3.2.0
 info:
-  title: Sakura Internet Iam Policy API
+  title: さくらのクラウドIAM Iam Policy API
   version: 2.1.0
   contact:
     name: SAKURA internet Inc.
-  description: 'Operations tagged iam-policy across 2 of this provider''s published API definitions: iam-api.yaml, sakura-internet-iam-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: さくらのクラウドIAMのAPIドキュメントです
 servers:
 - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
 security:
@@ -165,8 +165,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Http503ServiceUnavailable'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
   /folders/{folder_id}/iam-policy:
     parameters:
     - $ref: '#/components/parameters/FolderID'
@@ -318,8 +316,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Http503ServiceUnavailable'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
   /organization-iam-policy:
     get:
       operationId: readOrganizationIamPolicy
@@ -445,58 +441,23 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Http503ServiceUnavailable'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
 components:
+  parameters:
+    FolderID:
+      in: path
+      name: folder_id
+      description: フォルダID
+      required: true
+      schema:
+        type: integer
+    ProjectID:
+      in: path
+      name: project_id
+      description: プロジェクトID
+      required: true
+      schema:
+        type: integer
   schemas:
-    Http404NotFound:
-      type: object
-      required:
-      - type
-      - status
-      - title
-      - detail
-      properties:
-        type:
-          type: string
-          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
-          example: about:blank
-        status:
-          type: integer
-          description: HTTPステータスコード
-          example: 404
-        title:
-          type: string
-          description: 問題を表す簡単な文字列
-          example: not_found
-        detail:
-          type: string
-          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
-          example: 見つかりませんでした。
-    Http429TooManyRequests:
-      type: object
-      required:
-      - type
-      - status
-      - title
-      - detail
-      properties:
-        type:
-          type: string
-          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
-          example: about:blank
-        status:
-          type: integer
-          description: HTTPステータスコード
-          example: 429
-        title:
-          type: string
-          description: 問題を表す簡単な文字列
-          example: throttled
-        detail:
-          type: string
-          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
-          example: リクエストの処理は絞られました。 60秒後に利用可能になります。
     Http503ServiceUnavailable:
       type: object
       required:
@@ -521,24 +482,6 @@ components:
           type: string
           description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
           example: 一時的にエラーが発生しました。
-    IamPolicy:
-      type: object
-      properties:
-        role:
-          type: object
-          properties:
-            type:
-              type: string
-              enum:
-              - preset
-            id:
-              type: string
-              description: IAMロールID
-              example: admin
-        principals:
-          type: array
-          items:
-            $ref: '#/components/schemas/Principal'
     Http403Forbidden:
       type: object
       required:
@@ -563,6 +506,54 @@ components:
           type: string
           description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
           example: このアクションを実行する権限がありません。
+    Http401Unauthorized:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 401
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: authentication_failed
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 認証情報が含まれていません。
+    Http429TooManyRequests:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 429
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: throttled
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: リクエストの処理は絞られました。 60秒後に利用可能になります。
     Principal:
       type: object
       properties:
@@ -574,6 +565,30 @@ components:
           type: integer
           description: プリンシパルのID
           example: 111111111111
+    Http404NotFound:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 404
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: not_found
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 見つかりませんでした。
     Http400BadRequest:
       type: object
       required:
@@ -645,45 +660,24 @@ components:
             key4:
             - message: この項目が*文字より長くならないようにしてください。
               code: max_length
-    Http401Unauthorized:
+    IamPolicy:
       type: object
-      required:
-      - type
-      - status
-      - title
-      - detail
       properties:
-        type:
-          type: string
-          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
-          example: about:blank
-        status:
-          type: integer
-          description: HTTPステータスコード
-          example: 401
-        title:
-          type: string
-          description: 問題を表す簡単な文字列
-          example: authentication_failed
-        detail:
-          type: string
-          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
-          example: 認証情報が含まれていません。
-  parameters:
-    FolderID:
-      in: path
-      name: folder_id
-      description: フォルダID
-      required: true
-      schema:
-        type: integer
-    ProjectID:
-      in: path
-      name: project_id
-      description: プロジェクトID
-      required: true
-      schema:
-        type: integer
+        role:
+          type: object
+          properties:
+            type:
+              type: string
+              enum:
+              - preset
+            id:
+              type: string
+              description: IAMロールID
+              example: admin
+        principals:
+          type: array
+          items:
+            $ref: '#/components/schemas/Principal'
   securitySchemes:
     ServicePrincipalAuth:
       description: 'サービスプリンシパル認証
@@ -703,6 +697,3 @@ components:
         '
       type: http
       scheme: basic
-x-refined-from:
-- iam-api.yaml
-- sakura-internet-iam-openapi.yml

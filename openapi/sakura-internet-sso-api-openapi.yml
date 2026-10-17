@@ -1,10 +1,10 @@
 openapi: 3.2.0
 info:
-  title: Sakura Internet SSO API
+  title: さくらのクラウドIAM SSO API
   version: 2.1.0
   contact:
     name: SAKURA internet Inc.
-  description: 'Operations tagged sso across 2 of this provider''s published API definitions: iam-api.yaml, sakura-internet-iam-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: さくらのクラウドIAMのAPIドキュメントです
 servers:
 - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
 security:
@@ -157,8 +157,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Http429TooManyRequests'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
   /sso-profiles/{sso_profile_id}:
     parameters:
     - $ref: '#/components/parameters/SSOProfileID'
@@ -320,8 +318,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Http429TooManyRequests'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
   /sso-profiles/{sso_profile_id}/assign:
     parameters:
     - $ref: '#/components/parameters/SSOProfileID'
@@ -374,8 +370,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Http429TooManyRequests'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
   /sso-profiles/{sso_profile_id}/unassign:
     parameters:
     - $ref: '#/components/parameters/SSOProfileID'
@@ -415,11 +409,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Http429TooManyRequests'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
 components:
   schemas:
-    Http404NotFound:
+    Http403Forbidden:
       type: object
       required:
       - type
@@ -434,15 +426,88 @@ components:
         status:
           type: integer
           description: HTTPステータスコード
-          example: 404
+          example: 403
         title:
           type: string
           description: 問題を表す簡単な文字列
-          example: not_found
+          example: permission_denied
         detail:
           type: string
           description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
-          example: 見つかりませんでした。
+          example: このアクションを実行する権限がありません。
+    Pagination:
+      type: object
+      required:
+      - count
+      - next
+      - previous
+      properties:
+        count:
+          type: integer
+          description: データ総数
+          example: 100
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          description: 次のページへのURL
+          example: https://api.example.com/?page=3&per_page=10
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          description: 前のページへのURL
+          example: https://api.example.com/?per_page=10
+    Http409Conflict:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 409
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: conflict
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 状態の競合によりリクエストを処理できません。
+    Http401Unauthorized:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 401
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: authentication_failed
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 認証情報が含まれていません。
     Http429TooManyRequests:
       type: object
       required:
@@ -467,6 +532,101 @@ components:
           type: string
           description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
           example: リクエストの処理は絞られました。 60秒後に利用可能になります。
+    Http404NotFound:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 404
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: not_found
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 見つかりませんでした。
+    Http400BadRequest:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      - errors
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 400
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: invalid
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 不正な入力です。
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: object
+              required:
+              - message
+              - code
+              properties:
+                message:
+                  type: string
+                  description: エラー内容を説明した文字列
+                code:
+                  type: string
+                  description: エラーの内容を表す文字列
+            description: リクエストボディの特定キーに関するエラー
+          properties:
+            non_field_errors:
+              type: array
+              items:
+                type: object
+                required:
+                - message
+                - code
+                properties:
+                  message:
+                    type: string
+                    description: エラー内容を説明した文字列
+                  code:
+                    type: string
+                    description: エラーの内容を表す文字列
+              description: リクエストボディの特定キーに関係しないエラー
+          example:
+            key1:
+            - message: この項目は必須です。
+              code: required
+            key2:
+            - message: 有効な値ではありません。
+              code: invalid
+            key3:
+            - message: この項目は少なくとも*文字以上にしてください。
+              code: min_length
+            key4:
+            - message: この項目が*文字より長くならないようにしてください。
+              code: max_length
     SSOProfile:
       type: object
       required:
@@ -540,185 +700,17 @@ components:
           description: 更新日時
           readOnly: true
           example: 2024-05-02 14:30:00+00:00
-    Http409Conflict:
-      type: object
-      required:
-      - type
-      - status
-      - title
-      - detail
-      properties:
-        type:
-          type: string
-          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
-          example: about:blank
-        status:
-          type: integer
-          description: HTTPステータスコード
-          example: 409
-        title:
-          type: string
-          description: 問題を表す簡単な文字列
-          example: conflict
-        detail:
-          type: string
-          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
-          example: 状態の競合によりリクエストを処理できません。
-    Http403Forbidden:
-      type: object
-      required:
-      - type
-      - status
-      - title
-      - detail
-      properties:
-        type:
-          type: string
-          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
-          example: about:blank
-        status:
-          type: integer
-          description: HTTPステータスコード
-          example: 403
-        title:
-          type: string
-          description: 問題を表す簡単な文字列
-          example: permission_denied
-        detail:
-          type: string
-          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
-          example: このアクションを実行する権限がありません。
-    Http400BadRequest:
-      type: object
-      required:
-      - type
-      - status
-      - title
-      - detail
-      - errors
-      properties:
-        type:
-          type: string
-          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
-          example: about:blank
-        status:
-          type: integer
-          description: HTTPステータスコード
-          example: 400
-        title:
-          type: string
-          description: 問題を表す簡単な文字列
-          example: invalid
-        detail:
-          type: string
-          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
-          example: 不正な入力です。
-        errors:
-          type: object
-          additionalProperties:
-            type: array
-            items:
-              type: object
-              required:
-              - message
-              - code
-              properties:
-                message:
-                  type: string
-                  description: エラー内容を説明した文字列
-                code:
-                  type: string
-                  description: エラーの内容を表す文字列
-            description: リクエストボディの特定キーに関するエラー
-          properties:
-            non_field_errors:
-              type: array
-              items:
-                type: object
-                required:
-                - message
-                - code
-                properties:
-                  message:
-                    type: string
-                    description: エラー内容を説明した文字列
-                  code:
-                    type: string
-                    description: エラーの内容を表す文字列
-              description: リクエストボディの特定キーに関係しないエラー
-          example:
-            key1:
-            - message: この項目は必須です。
-              code: required
-            key2:
-            - message: 有効な値ではありません。
-              code: invalid
-            key3:
-            - message: この項目は少なくとも*文字以上にしてください。
-              code: min_length
-            key4:
-            - message: この項目が*文字より長くならないようにしてください。
-              code: max_length
-    Pagination:
-      type: object
-      required:
-      - count
-      - next
-      - previous
-      properties:
-        count:
-          type: integer
-          description: データ総数
-          example: 100
-        next:
-          type:
-          - string
-          - 'null'
-          format: uri
-          description: 次のページへのURL
-          example: https://api.example.com/?page=3&per_page=10
-        previous:
-          type:
-          - string
-          - 'null'
-          format: uri
-          description: 前のページへのURL
-          example: https://api.example.com/?per_page=10
-    Http401Unauthorized:
-      type: object
-      required:
-      - type
-      - status
-      - title
-      - detail
-      properties:
-        type:
-          type: string
-          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
-          example: about:blank
-        status:
-          type: integer
-          description: HTTPステータスコード
-          example: 401
-        title:
-          type: string
-          description: 問題を表す簡単な文字列
-          example: authentication_failed
-        detail:
-          type: string
-          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
-          example: 認証情報が含まれていません。
   parameters:
-    PaginationPage:
-      in: query
-      name: page
-      schema:
-        type: integer
     SSOProfileID:
       in: path
       name: sso_profile_id
       description: SSOプロファイルID
       required: true
+      schema:
+        type: integer
+    PaginationPage:
+      in: query
+      name: page
       schema:
         type: integer
     PaginationPerPage:
@@ -745,6 +737,3 @@ components:
         '
       type: http
       scheme: basic
-x-refined-from:
-- iam-api.yaml
-- sakura-internet-iam-openapi.yml

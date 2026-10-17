@@ -1,10 +1,10 @@
 openapi: 3.2.0
 info:
-  title: Sakura Internet SCIM API
+  title: さくらのクラウドIAM SCIM API
   version: 2.1.0
   contact:
     name: SAKURA internet Inc.
-  description: 'Operations tagged scim across 2 of this provider''s published API definitions: iam-api.yaml, sakura-internet-iam-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: さくらのクラウドIAMのAPIドキュメントです
 servers:
 - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
 security:
@@ -112,8 +112,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Http429TooManyRequests'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
   /scim-configurations/{id}:
     parameters:
     - name: id
@@ -256,8 +254,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Http429TooManyRequests'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
   /scim-configurations/{id}/regenerate-token:
     parameters:
     - name: id
@@ -310,82 +306,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Http429TooManyRequests'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
 components:
   schemas:
-    Http404NotFound:
-      type: object
-      required:
-      - type
-      - status
-      - title
-      - detail
-      properties:
-        type:
-          type: string
-          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
-          example: about:blank
-        status:
-          type: integer
-          description: HTTPステータスコード
-          example: 404
-        title:
-          type: string
-          description: 問題を表す簡単な文字列
-          example: not_found
-        detail:
-          type: string
-          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
-          example: 見つかりませんでした。
-    Http429TooManyRequests:
-      type: object
-      required:
-      - type
-      - status
-      - title
-      - detail
-      properties:
-        type:
-          type: string
-          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
-          example: about:blank
-        status:
-          type: integer
-          description: HTTPステータスコード
-          example: 429
-        title:
-          type: string
-          description: 問題を表す簡単な文字列
-          example: throttled
-        detail:
-          type: string
-          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
-          example: リクエストの処理は絞られました。 60秒後に利用可能になります。
-    Http409Conflict:
-      type: object
-      required:
-      - type
-      - status
-      - title
-      - detail
-      properties:
-        type:
-          type: string
-          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
-          example: about:blank
-        status:
-          type: integer
-          description: HTTPステータスコード
-          example: 409
-        title:
-          type: string
-          description: 問題を表す簡単な文字列
-          example: conflict
-        detail:
-          type: string
-          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
-          example: 状態の競合によりリクエストを処理できません。
     Http403Forbidden:
       type: object
       required:
@@ -410,9 +332,164 @@ components:
           type: string
           description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
           example: このアクションを実行する権限がありません。
+    Pagination:
+      type: object
+      required:
+      - count
+      - next
+      - previous
+      properties:
+        count:
+          type: integer
+          description: データ総数
+          example: 100
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          description: 次のページへのURL
+          example: https://api.example.com/?page=3&per_page=10
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          description: 前のページへのURL
+          example: https://api.example.com/?per_page=10
+    Http409Conflict:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 409
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: conflict
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 状態の競合によりリクエストを処理できません。
+    ScimConfigurationBase:
+      type: object
+      required:
+      - id
+      - name
+      - base_url
+      - created_at
+      - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ユーザープロビジョニングID
+          readOnly: true
+        name:
+          type: string
+          description: ユーザープロビジョニング名
+          example: MicrosoftEntraID
+        base_url:
+          type: string
+          format: uri
+          description: ユーザープロビジョニングエンドポイントのベースURL（ユーザープロビジョニングIDを含む）
+          readOnly: true
+          example: https://secure.sakura.ad.jp/cloud/api/iam/1.0/scim/550e8400-e29b-41d4-a716-446655440000/v2/
+        created_at:
+          type: string
+          description: 作成日時
+          readOnly: true
+          example: 2024-05-01 14:30:00+00:00
+        updated_at:
+          type: string
+          description: 更新日時
+          readOnly: true
+          example: 2024-05-02 14:30:00+00:00
+    Http401Unauthorized:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 401
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: authentication_failed
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 認証情報が含まれていません。
+    Http429TooManyRequests:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 429
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: throttled
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: リクエストの処理は絞られました。 60秒後に利用可能になります。
     ScimConfigurationPublic:
       allOf:
       - $ref: '#/components/schemas/ScimConfigurationBase'
+    Http404NotFound:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 404
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: not_found
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 見つかりませんでした。
     Http400BadRequest:
       type: object
       required:
@@ -484,31 +561,6 @@ components:
             key4:
             - message: この項目が*文字より長くならないようにしてください。
               code: max_length
-    Pagination:
-      type: object
-      required:
-      - count
-      - next
-      - previous
-      properties:
-        count:
-          type: integer
-          description: データ総数
-          example: 100
-        next:
-          type:
-          - string
-          - 'null'
-          format: uri
-          description: 次のページへのURL
-          example: https://api.example.com/?page=3&per_page=10
-        previous:
-          type:
-          - string
-          - 'null'
-          format: uri
-          description: 前のページへのURL
-          example: https://api.example.com/?per_page=10
     ScimConfiguration:
       allOf:
       - $ref: '#/components/schemas/ScimConfigurationBase'
@@ -521,64 +573,6 @@ components:
             description: ユーザープロビジョニングの認証に使用するシークレットトークン
             readOnly: true
             example: your_secret_token
-    ScimConfigurationBase:
-      type: object
-      required:
-      - id
-      - name
-      - base_url
-      - created_at
-      - updated_at
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: ユーザープロビジョニングID
-          readOnly: true
-        name:
-          type: string
-          description: ユーザープロビジョニング名
-          example: MicrosoftEntraID
-        base_url:
-          type: string
-          format: uri
-          description: ユーザープロビジョニングエンドポイントのベースURL（ユーザープロビジョニングIDを含む）
-          readOnly: true
-          example: https://secure.sakura.ad.jp/cloud/api/iam/1.0/scim/550e8400-e29b-41d4-a716-446655440000/v2/
-        created_at:
-          type: string
-          description: 作成日時
-          readOnly: true
-          example: 2024-05-01 14:30:00+00:00
-        updated_at:
-          type: string
-          description: 更新日時
-          readOnly: true
-          example: 2024-05-02 14:30:00+00:00
-    Http401Unauthorized:
-      type: object
-      required:
-      - type
-      - status
-      - title
-      - detail
-      properties:
-        type:
-          type: string
-          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
-          example: about:blank
-        status:
-          type: integer
-          description: HTTPステータスコード
-          example: 401
-        title:
-          type: string
-          description: 問題を表す簡単な文字列
-          example: authentication_failed
-        detail:
-          type: string
-          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
-          example: 認証情報が含まれていません。
   parameters:
     PaginationPage:
       in: query
@@ -609,6 +603,3 @@ components:
         '
       type: http
       scheme: basic
-x-refined-from:
-- iam-api.yaml
-- sakura-internet-iam-openapi.yml

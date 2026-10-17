@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Sakura Internet Chunks API
+  title: Sakura AI Engine RAG Chunks API
   version: '2026-06-29'
-  description: 'Operations tagged chunks across 2 of this provider''s published API definitions: ai-engine-rag-api.yaml, sakura-internet-ai-engine-rag-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: さくらのAI Engine RAG API
 servers:
 - url: ' https://api.ai.sakura.ad.jp'
 tags:
@@ -48,8 +48,6 @@ paths:
           description: ''
       summary: Document chunks list
       x-summary-source: derived
-    servers:
-    - url: ' https://api.ai.sakura.ad.jp'
   /v1/documents/{document_pk}/chunks/{index}/:
     get:
       operationId: document_chunks_retrieve
@@ -84,27 +82,8 @@ paths:
           description: ''
       summary: Document chunks retrieve
       x-summary-source: derived
-    servers:
-    - url: ' https://api.ai.sakura.ad.jp'
 components:
   schemas:
-    StatusEnum:
-      enum:
-      - pending
-      - processing
-      - available
-      - deleted
-      - error
-      type: string
-      description: '* `pending` - Pending
-
-        * `processing` - Processing
-
-        * `available` - Available
-
-        * `deleted` - Deleted
-
-        * `error` - Error'
     PaginatedDocumentChunkList:
       type: object
       properties:
@@ -143,6 +122,30 @@ components:
       required:
       - meta
       - results
+    DocumentChunk:
+      type: object
+      properties:
+        document:
+          allOf:
+          - $ref: '#/components/schemas/DocumentList'
+          readOnly: true
+        chunk_index:
+          type: integer
+          readOnly: true
+        content:
+          type: string
+          readOnly: true
+        metadata:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+          readOnly: true
+      required:
+      - chunk_index
+      - content
+      - document
+      - metadata
     DocumentList:
       type: object
       properties:
@@ -187,34 +190,24 @@ components:
       - model
       - name
       - status
-    DocumentChunk:
-      type: object
-      properties:
-        document:
-          allOf:
-          - $ref: '#/components/schemas/DocumentList'
-          readOnly: true
-        chunk_index:
-          type: integer
-          readOnly: true
-        content:
-          type: string
-          readOnly: true
-        metadata:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-          readOnly: true
-      required:
-      - chunk_index
-      - content
-      - document
-      - metadata
+    StatusEnum:
+      enum:
+      - pending
+      - processing
+      - available
+      - deleted
+      - error
+      type: string
+      description: '* `pending` - Pending
+
+        * `processing` - Processing
+
+        * `available` - Available
+
+        * `deleted` - Deleted
+
+        * `error` - Error'
   securitySchemes:
     BearerAuth:
       type: http
       scheme: bearer
-x-refined-from:
-- ai-engine-rag-api.yaml
-- sakura-internet-ai-engine-rag-openapi.yml

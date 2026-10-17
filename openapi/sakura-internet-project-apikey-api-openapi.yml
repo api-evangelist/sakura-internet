@@ -1,10 +1,10 @@
 openapi: 3.2.0
 info:
-  title: Sakura Internet Project Apikey API
+  title: さくらのクラウドIAM Project Apikey API
   version: 2.1.0
   contact:
     name: SAKURA internet Inc.
-  description: 'Operations tagged project-apikey across 2 of this provider''s published API definitions: iam-api.yaml, sakura-internet-iam-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: さくらのクラウドIAMのAPIドキュメントです
 servers:
 - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
 security:
@@ -190,8 +190,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Http503ServiceUnavailable'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
   /compat/api-keys/{apikey_id}:
     parameters:
     - $ref: '#/components/parameters/ProjectApiKeyID'
@@ -376,11 +374,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Http503ServiceUnavailable'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
 components:
   schemas:
-    Http404NotFound:
+    Http503ServiceUnavailable:
       type: object
       required:
       - type
@@ -395,16 +391,16 @@ components:
         status:
           type: integer
           description: HTTPステータスコード
-          example: 404
+          example: 503
         title:
           type: string
           description: 問題を表す簡単な文字列
-          example: not_found
+          example: temporary_unavailable
         detail:
           type: string
           description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
-          example: 見つかりませんでした。
-    Http429TooManyRequests:
+          example: 一時的にエラーが発生しました。
+    Http403Forbidden:
       type: object
       required:
       - type
@@ -419,15 +415,40 @@ components:
         status:
           type: integer
           description: HTTPステータスコード
-          example: 429
+          example: 403
         title:
           type: string
           description: 問題を表す簡単な文字列
-          example: throttled
+          example: permission_denied
         detail:
           type: string
           description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
-          example: リクエストの処理は絞られました。 60秒後に利用可能になります。
+          example: このアクションを実行する権限がありません。
+    Pagination:
+      type: object
+      required:
+      - count
+      - next
+      - previous
+      properties:
+        count:
+          type: integer
+          description: データ総数
+          example: 100
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          description: 次のページへのURL
+          example: https://api.example.com/?page=3&per_page=10
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          description: 前のページへのURL
+          example: https://api.example.com/?per_page=10
     ProjectApiKey:
       type: object
       required:
@@ -488,7 +509,7 @@ components:
           type: string
           description: 更新日時
           example: 2024-05-02 14:30:00+00:00
-    Http503ServiceUnavailable:
+    Http401Unauthorized:
       type: object
       required:
       - type
@@ -503,16 +524,16 @@ components:
         status:
           type: integer
           description: HTTPステータスコード
-          example: 503
+          example: 401
         title:
           type: string
           description: 問題を表す簡単な文字列
-          example: temporary_unavailable
+          example: authentication_failed
         detail:
           type: string
           description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
-          example: 一時的にエラーが発生しました。
-    Http403Forbidden:
+          example: 認証情報が含まれていません。
+    Http429TooManyRequests:
       type: object
       required:
       - type
@@ -527,15 +548,15 @@ components:
         status:
           type: integer
           description: HTTPステータスコード
-          example: 403
+          example: 429
         title:
           type: string
           description: 問題を表す簡単な文字列
-          example: permission_denied
+          example: throttled
         detail:
           type: string
           description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
-          example: このアクションを実行する権限がありません。
+          example: リクエストの処理は絞られました。 60秒後に利用可能になります。
     ProjectApiKeyWithSecret:
       allOf:
       - $ref: '#/components/schemas/ProjectApiKey'
@@ -547,31 +568,30 @@ components:
             type: string
             description: アクセストークンシークレット
             example: '********'
-    Pagination:
+    Http404NotFound:
       type: object
       required:
-      - count
-      - next
-      - previous
+      - type
+      - status
+      - title
+      - detail
       properties:
-        count:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
           type: integer
-          description: データ総数
-          example: 100
-        next:
-          type:
-          - string
-          - 'null'
-          format: uri
-          description: 次のページへのURL
-          example: https://api.example.com/?page=3&per_page=10
-        previous:
-          type:
-          - string
-          - 'null'
-          format: uri
-          description: 前のページへのURL
-          example: https://api.example.com/?per_page=10
+          description: HTTPステータスコード
+          example: 404
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: not_found
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 見つかりませんでした。
     Http400BadRequest:
       type: object
       required:
@@ -643,31 +663,24 @@ components:
             key4:
             - message: この項目が*文字より長くならないようにしてください。
               code: max_length
-    Http401Unauthorized:
-      type: object
-      required:
-      - type
-      - status
-      - title
-      - detail
-      properties:
-        type:
-          type: string
-          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
-          example: about:blank
-        status:
-          type: integer
-          description: HTTPステータスコード
-          example: 401
-        title:
-          type: string
-          description: 問題を表す簡単な文字列
-          example: authentication_failed
-        detail:
-          type: string
-          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
-          example: 認証情報が含まれていません。
   examples:
+    ProjectApiKeySingleServerWithSecret:
+      summary: シングルサーバAPIキー（シークレットあり）
+      value:
+        id: 222333444555
+        project_id: 123456789123
+        name: シングルサーバAPIキー
+        description: シングルサーバコントロールパネル用
+        access_token: '********'
+        access_token_secret: '********'
+        server_resource_id: '321987654321'
+        iam_roles:
+        - viewer
+        - editor
+        - admin
+        zone_id: is1a
+        created_at: 2024-05-01 14:30:00+00:00
+        updated_at: 2024-05-02 14:30:00+00:00
     ProjectApiKeySingleServer:
       summary: シングルサーバAPIキー
       value:
@@ -717,27 +730,15 @@ components:
         zone_id: null
         created_at: 2024-05-01 14:30:00+00:00
         updated_at: 2024-05-02 14:30:00+00:00
-    ProjectApiKeySingleServerWithSecret:
-      summary: シングルサーバAPIキー（シークレットあり）
-      value:
-        id: 222333444555
-        project_id: 123456789123
-        name: シングルサーバAPIキー
-        description: シングルサーバコントロールパネル用
-        access_token: '********'
-        access_token_secret: '********'
-        server_resource_id: '321987654321'
-        iam_roles:
-        - viewer
-        - editor
-        - admin
-        zone_id: is1a
-        created_at: 2024-05-01 14:30:00+00:00
-        updated_at: 2024-05-02 14:30:00+00:00
   parameters:
     PaginationPage:
       in: query
       name: page
+      schema:
+        type: integer
+    PaginationPerPage:
+      in: query
+      name: per_page
       schema:
         type: integer
     ProjectApiKeyID:
@@ -745,11 +746,6 @@ components:
       name: apikey_id
       description: APIキーID
       required: true
-      schema:
-        type: integer
-    PaginationPerPage:
-      in: query
-      name: per_page
       schema:
         type: integer
   securitySchemes:
@@ -771,6 +767,3 @@ components:
         '
       type: http
       scheme: basic
-x-refined-from:
-- iam-api.yaml
-- sakura-internet-iam-openapi.yml

@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: Sakura Internet Chat API
   version: '1.0'
-  description: 'Operations tagged Chat across 4 of this provider''s published API definitions: ai-engine-inference-api.yaml, ai-engine-rag-api.yaml, sakura-internet-ai-engine-inference-openapi.yml, sakura-internet-ai-engine-rag-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: 'Operations tagged Chat across 2 of this provider''s published API definitions: ai-engine-inference-api.yaml, ai-engine-rag-api.yaml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.ai.sakura.ad.jp
 - url: ' https://api.ai.sakura.ad.jp'
@@ -124,9 +124,143 @@ paths:
     - url: ' https://api.ai.sakura.ad.jp'
 components:
   schemas:
+    ChatCompletionNamedToolChoice:
+      type: object
+      description: 特定のツールをモデルに利用させる。
+      required:
+      - type
+      - function
+      properties:
+        type:
+          type: string
+          enum:
+          - function
+        function:
+          type: object
+          required:
+          - name
+          properties:
+            name:
+              type: string
+              description: ツールの名前。
+    ChatCompletionTool:
+      type: object
+      required:
+      - type
+      - function
+      properties:
+        type:
+          type: string
+          enum:
+          - function
+        function:
+          $ref: '#/components/schemas/FunctionObject'
+    ChatCompletionRequestUserMessage:
+      type: object
+      title: User message
+      description: ユーザーからのメッセージ。
+      required:
+      - content
+      - role
+      properties:
+        content:
+          anyOf:
+          - type: string
+            description: メッセージの内容。
+          - type: array
+            items:
+              $ref: '#/components/schemas/ChatCompletionRequestUserMessageContentPart'
+            minItems: 1
+        role:
+          type: string
+          description: メッセージの発言者の役割。
+          enum:
+          - user
+    ChatCompletionRequestDeveloperMessage:
+      type: object
+      title: Developer message
+      description: モデルに対する開発者からの指示メッセージ。
+      required:
+      - content
+      - role
+      properties:
+        content:
+          anyOf:
+          - type: string
+            description: メッセージの内容。
+          - type: array
+            items:
+              $ref: '#/components/schemas/ChatCompletionRequestMessageContentPartText'
+            minItems: 1
+        role:
+          type: string
+          description: メッセージの発言者の役割。
+          enum:
+          - developer
+    ChatCompletionRequestAssistantMessage:
+      type: object
+      title: Assistant message
+      description: モデルからの応答メッセージ。
+      required:
+      - role
+      properties:
+        content:
+          anyOf:
+          - type: string
+            description: メッセージの内容。
+          - type: array
+            items:
+              $ref: '#/components/schemas/ChatCompletionRequestAssistantMessageContentPart'
+            minItems: 1
+        role:
+          type: string
+          description: メッセージの発言者の役割。
+          enum:
+          - assistant
+    ChatCompletionRequestSystemMessageContentPart:
+      anyOf:
+      - $ref: '#/components/schemas/ChatCompletionRequestMessageContentPartText'
+    ChatCompletionRequestUserMessageContentPart:
+      anyOf:
+      - $ref: '#/components/schemas/ChatCompletionRequestMessageContentPartText'
+      - $ref: '#/components/schemas/ChatCompletionRequestMessageContentPartImage'
+    ChatCompletionRequestMessageContentPartImage:
+      type: object
+      description: 画像コンテンツ。
+      properties:
+        type:
+          type: string
+          enum:
+          - image_url
+        image_url:
+          type: object
+          properties:
+            url:
+              type: string
+              description: MIMEタイプ情報を付与したbase64エンコードされた画像データ。（例："data:image/png;base64,xxx..."）
+              format: uri
+          required:
+          - url
+      required:
+      - type
+      - image_url
     ChatCompletionRequestAssistantMessageContentPart:
       anyOf:
       - $ref: '#/components/schemas/ChatCompletionRequestMessageContentPartText'
+    FunctionObject:
+      type: object
+      properties:
+        description:
+          type: string
+          description: ツールの説明。
+        name:
+          type: string
+          description: ツールの名前。英数字、アンダースコア、ハイフンのみ使用可能で、最大64文字まで指定できます。
+        parameters:
+          type: object
+          description: ツールのパラメータ仕様。
+      required:
+      - name
     ChatCompletionRequestToolMessage:
       type: object
       title: Tool message
@@ -153,157 +287,9 @@ components:
       - role
       - content
       - tool_call_id
-    ChatCompletionRequestSystemMessageContentPart:
-      anyOf:
-      - $ref: '#/components/schemas/ChatCompletionRequestMessageContentPartText'
-    ChatCompletionRequestMessageContentPartText:
-      type: object
-      description: テキストコンテンツ。
-      properties:
-        type:
-          type: string
-          enum:
-          - text
-        text:
-          type: string
-          description: メッセージの内容。
-      required:
-      - type
-      - text
-    FunctionObject:
-      type: object
-      properties:
-        description:
-          type: string
-          description: ツールの説明。
-        name:
-          type: string
-          description: ツールの名前。英数字、アンダースコア、ハイフンのみ使用可能で、最大64文字まで指定できます。
-        parameters:
-          type: object
-          description: ツールのパラメータ仕様。
-      required:
-      - name
-    ChatCompletionTool:
-      type: object
-      required:
-      - type
-      - function
-      properties:
-        type:
-          type: string
-          enum:
-          - function
-        function:
-          $ref: '#/components/schemas/FunctionObject'
-    ChatCompletionRequestDeveloperMessage:
-      type: object
-      title: Developer message
-      description: モデルに対する開発者からの指示メッセージ。
-      required:
-      - content
-      - role
-      properties:
-        content:
-          anyOf:
-          - type: string
-            description: メッセージの内容。
-          - type: array
-            items:
-              $ref: '#/components/schemas/ChatCompletionRequestMessageContentPartText'
-            minItems: 1
-        role:
-          type: string
-          description: メッセージの発言者の役割。
-          enum:
-          - developer
     ChatCompletionRequestToolMessageContentPart:
       anyOf:
       - $ref: '#/components/schemas/ChatCompletionRequestMessageContentPartText'
-    ChatCompletionRequestUserMessage:
-      type: object
-      title: User message
-      description: ユーザーからのメッセージ。
-      required:
-      - content
-      - role
-      properties:
-        content:
-          anyOf:
-          - type: string
-            description: メッセージの内容。
-          - type: array
-            items:
-              $ref: '#/components/schemas/ChatCompletionRequestUserMessageContentPart'
-            minItems: 1
-        role:
-          type: string
-          description: メッセージの発言者の役割。
-          enum:
-          - user
-    ChatCompletionRequestMessageContentPartImage:
-      type: object
-      description: 画像コンテンツ。
-      properties:
-        type:
-          type: string
-          enum:
-          - image_url
-        image_url:
-          type: object
-          properties:
-            url:
-              type: string
-              description: MIMEタイプ情報を付与したbase64エンコードされた画像データ。（例："data:image/png;base64,xxx..."）
-              format: uri
-          required:
-          - url
-      required:
-      - type
-      - image_url
-    ChatCompletionNamedToolChoice:
-      type: object
-      description: 特定のツールをモデルに利用させる。
-      required:
-      - type
-      - function
-      properties:
-        type:
-          type: string
-          enum:
-          - function
-        function:
-          type: object
-          required:
-          - name
-          properties:
-            name:
-              type: string
-              description: ツールの名前。
-    ChatCompletionRequestUserMessageContentPart:
-      anyOf:
-      - $ref: '#/components/schemas/ChatCompletionRequestMessageContentPartText'
-      - $ref: '#/components/schemas/ChatCompletionRequestMessageContentPartImage'
-    ChatCompletionRequestAssistantMessage:
-      type: object
-      title: Assistant message
-      description: モデルからの応答メッセージ。
-      required:
-      - role
-      properties:
-        content:
-          anyOf:
-          - type: string
-            description: メッセージの内容。
-          - type: array
-            items:
-              $ref: '#/components/schemas/ChatCompletionRequestAssistantMessageContentPart'
-            minItems: 1
-        role:
-          type: string
-          description: メッセージの発言者の役割。
-          enum:
-          - assistant
     ChatCompletionToolChoiceOption:
       anyOf:
       - type: string
@@ -334,6 +320,75 @@ components:
           description: メッセージの発言者の役割。
           enum:
           - system
+    ChatCompletionRequestMessageContentPartText:
+      type: object
+      description: テキストコンテンツ。
+      properties:
+        type:
+          type: string
+          enum:
+          - text
+        text:
+          type: string
+          description: メッセージの内容。
+      required:
+      - type
+      - text
+    DistanceTypeEnum:
+      enum:
+      - cosine
+      - l2
+      type: string
+      description: '* `cosine` - cosine
+
+        * `l2` - l2'
+    ChatResult:
+      type: object
+      properties:
+        answer:
+          type: string
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatResultSource'
+          readOnly: true
+      required:
+      - answer
+      - sources
+    QueryResultDocument:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        tags:
+          type: array
+          items:
+            type: string
+        model:
+          type: string
+          readOnly: true
+        chunk_size:
+          type: integer
+          readOnly: true
+        distance:
+          type: number
+          format: double
+          readOnly: true
+        content:
+          type: string
+          readOnly: true
+      required:
+      - chunk_size
+      - content
+      - distance
+      - id
+      - model
+      - name
     DocumentList:
       type: object
       properties:
@@ -378,31 +433,23 @@ components:
       - model
       - name
       - status
-    DistanceTypeEnum:
+    StatusEnum:
       enum:
-      - cosine
-      - l2
+      - pending
+      - processing
+      - available
+      - deleted
+      - error
       type: string
-      description: '* `cosine` - cosine
+      description: '* `pending` - Pending
 
-        * `l2` - l2'
-    ChatResultSource:
-      oneOf:
-      - $ref: '#/components/schemas/QueryResultChunk'
-      - $ref: '#/components/schemas/QueryResultDocument'
-    ChatResult:
-      type: object
-      properties:
-        answer:
-          type: string
-        sources:
-          type: array
-          items:
-            $ref: '#/components/schemas/ChatResultSource'
-          readOnly: true
-      required:
-      - answer
-      - sources
+        * `processing` - Processing
+
+        * `available` - Available
+
+        * `deleted` - Deleted
+
+        * `error` - Error'
     ChatQueryRequest:
       type: object
       properties:
@@ -483,23 +530,10 @@ components:
       required:
       - chat_model
       - query
-    StatusEnum:
-      enum:
-      - pending
-      - processing
-      - available
-      - deleted
-      - error
-      type: string
-      description: '* `pending` - Pending
-
-        * `processing` - Processing
-
-        * `available` - Available
-
-        * `deleted` - Deleted
-
-        * `error` - Error'
+    ChatResultSource:
+      oneOf:
+      - $ref: '#/components/schemas/QueryResultChunk'
+      - $ref: '#/components/schemas/QueryResultDocument'
     QueryResultChunk:
       type: object
       properties:
@@ -527,40 +561,6 @@ components:
       - distance
       - document
       - metadata
-    QueryResultDocument:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        name:
-          type: string
-          readOnly: true
-        tags:
-          type: array
-          items:
-            type: string
-        model:
-          type: string
-          readOnly: true
-        chunk_size:
-          type: integer
-          readOnly: true
-        distance:
-          type: number
-          format: double
-          readOnly: true
-        content:
-          type: string
-          readOnly: true
-      required:
-      - chunk_size
-      - content
-      - distance
-      - id
-      - model
-      - name
   securitySchemes:
     BearerAuth:
       type: http
@@ -568,5 +568,3 @@ components:
 x-refined-from:
 - ai-engine-inference-api.yaml
 - ai-engine-rag-api.yaml
-- sakura-internet-ai-engine-inference-openapi.yml
-- sakura-internet-ai-engine-rag-openapi.yml

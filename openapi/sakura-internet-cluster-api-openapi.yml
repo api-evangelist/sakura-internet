@@ -1,12 +1,43 @@
 openapi: 3.2.0
 info:
-  title: Sakura Internet Cluster API
+  title: AppRun専有型 Cluster API
   version: 1.4.0
   contact:
     name: SAKURA internet Inc.
   license:
     name: Copyright(C) SAKURA internet Inc. all rights reserved.
-  description: 'Operations tagged cluster across 2 of this provider''s published API definitions: apprun-dedicated-api.yaml, sakura-internet-apprun-dedicated-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: '# 更新履歴
+
+
+    - 2026-07-29 (v1.4.0): クラスタのロードバランサ設定取得・更新エンドポイントを追加
+
+    - 2026-07-15 (v1.3.1): Response samplesを修正
+
+
+    ---
+
+
+    「AppRun専有型」が提供する API の利用方法とサンプルを公開しています。
+
+
+    # 基本的な使い方
+
+
+    ## APIキーの発行
+
+
+    API を利用するには、認証用の「APIキー」が必要です。事前にキーを発行してください。\
+
+    APIキーは、「ユーザーID」「パスワード」に相当する「トークン」と呼ばれる認証情報で構成されています。
+
+
+    | 項目名 | APIキー発行時の項目名 | このドキュメント内での例 |
+
+    |--------|----------------------|--------------------------|
+
+    | ユーザーID | アクセストークン (UUID) | 01234567-89ab-cdef-0123-456789abcdef |
+
+    | パスワード | アクセストークンシークレット |…'
 servers:
 - url: https://secure.sakura.ad.jp/cloud/api/apprun-dedicated/1.0
   description: AppRun専有型 API エンドポイント
@@ -86,10 +117,6 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
       - Cluster
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/apprun-dedicated/1.0
-      description: AppRun専有型 API エンドポイント
-      variables: {}
   /clusters/{clusterID}:
     get:
       operationId: readCluster
@@ -164,10 +191,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/UpdateClusterRequest'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/apprun-dedicated/1.0
-      description: AppRun専有型 API エンドポイント
-      variables: {}
   /clusters/{clusterID}/asg:
     post:
       operationId: createAutoScalingGroup
@@ -248,10 +271,6 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
       - Cluster
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/apprun-dedicated/1.0
-      description: AppRun専有型 API エンドポイント
-      variables: {}
   /clusters/{clusterID}/asg/{autoScalingGroupID}:
     get:
       operationId: readAutoScalingGroup
@@ -309,10 +328,6 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
       - Cluster
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/apprun-dedicated/1.0
-      description: AppRun専有型 API エンドポイント
-      variables: {}
   /clusters/{clusterID}/asg/{autoScalingGroupID}/load_balancers:
     post:
       operationId: createLoadBalancer
@@ -396,10 +411,6 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
       - Cluster
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/apprun-dedicated/1.0
-      description: AppRun専有型 API エンドポイント
-      variables: {}
   /clusters/{clusterID}/asg/{autoScalingGroupID}/load_balancers/{loadBalancerID}:
     get:
       operationId: readLoadBalancer
@@ -467,10 +478,6 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
       - Cluster
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/apprun-dedicated/1.0
-      description: AppRun専有型 API エンドポイント
-      variables: {}
   /clusters/{clusterID}/asg/{autoScalingGroupID}/load_balancers/{loadBalancerID}/load_balancer_nodes:
     get:
       operationId: listLoadBalancerNodes
@@ -523,10 +530,6 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
       - Cluster
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/apprun-dedicated/1.0
-      description: AppRun専有型 API エンドポイント
-      variables: {}
   /clusters/{clusterID}/asg/{autoScalingGroupID}/load_balancers/{loadBalancerID}/load_balancer_nodes/{loadBalancerNodeID}:
     get:
       operationId: readLoadBalancerNode
@@ -568,10 +571,6 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
       - Cluster
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/apprun-dedicated/1.0
-      description: AppRun専有型 API エンドポイント
-      variables: {}
   /clusters/{clusterID}/asg/{autoScalingGroupID}/worker_nodes:
     get:
       operationId: listWorkerNodes
@@ -619,10 +618,6 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
       - Cluster
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/apprun-dedicated/1.0
-      description: AppRun専有型 API エンドポイント
-      variables: {}
   /clusters/{clusterID}/asg/{autoScalingGroupID}/worker_nodes/{workerNodeID}:
     get:
       operationId: readWorkerNode
@@ -659,10 +654,6 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
       - Cluster
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/apprun-dedicated/1.0
-      description: AppRun専有型 API エンドポイント
-      variables: {}
   /clusters/{clusterID}/asg/{autoScalingGroupID}/worker_nodes/{workerNodeID}/draining:
     put:
       operationId: updateWorkerNodeDraining
@@ -701,10 +692,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/UpdateWorkerNodeDrainingRequest'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/apprun-dedicated/1.0
-      description: AppRun専有型 API エンドポイント
-      variables: {}
   /clusters/{clusterID}/load_balancer:
     get:
       operationId: readClusterLoadBalancer
@@ -758,213 +745,8 @@ paths:
           application/merge-patch+json:
             schema:
               $ref: '#/components/schemas/PatchClusterLoadBalancerRequest'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/apprun-dedicated/1.0
-      description: AppRun専有型 API エンドポイント
-      variables: {}
 components:
   schemas:
-    ListLoadBalancerNodesResponse:
-      type: object
-      required:
-      - loadBalancerNodes
-      properties:
-        loadBalancerNodes:
-          type: array
-          items:
-            $ref: '#/components/schemas/LoadBalancerNode'
-          description: ロードバランサノードの一覧
-        nextCursor:
-          allOf:
-          - $ref: '#/components/schemas/LoadBalancerNodeID'
-          description: 次ページのカーソル。次のリクエストでcursorとして指定する。データが残っていなければnull。
-      description: ロードバランサノードの一覧レスポンス
-      example:
-        loadBalancerNodes:
-        - loadBalancerNodeID: 550e8400-e29b-41d4-a716-446655440001
-          resourceID: '12345678901'
-          status: healthy
-          interfaces:
-          - interfaceIndex: 1
-            addresses:
-            - address: 10.0.0.8/24
-              vip: false
-            - address: 10.0.1.2/24
-              vip: true
-          - interfaceIndex: 2
-            addresses:
-            - address: 10.0.2.8/24
-              vip: false
-            - address: 10.0.3.4/24
-              vip: true
-          archiveVersion: 2025.1014.1
-          created: 1577836800
-        - loadBalancerNodeID: 660e8400-e29b-41d4-a716-446655440001
-          resourceID: '12345678901'
-          status: healthy
-          interfaces:
-          - interfaceIndex: 1
-            addresses:
-            - address: 10.0.0.9/24
-              vip: false
-          createErrorMessage: クラスタのサービスプリンシパルにさくらのクラウドの作成・削除権限が付与されているか確認してください
-          created: 1577836800
-    UpdateClusterRequest:
-      type: object
-      required:
-      - servicePrincipalID
-      properties:
-        letsEncryptEmail:
-          type: string
-          pattern: ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
-          description: 'Let''s Encrypt による証明書発行を有効にするにはここにメールアドレスを設定します。
-
-            Let''s Encrypt による証明書発行は HTTP-01 チャレンジになるため、80 番ポートを HTTPプロトコルで外向きに解放する必要があります。'
-          title: Let's Encrypt のメールアドレス
-        servicePrincipalID:
-          $ref: '#/components/schemas/ServicePrincipalID'
-        ports:
-          type: array
-          items:
-            $ref: '#/components/schemas/ClusterLoadBalancerPort'
-          maxItems: 5
-          description: ロードバランサのポート群
-    ListLoadBalancersResponse:
-      type: object
-      required:
-      - loadBalancers
-      properties:
-        loadBalancers:
-          type: array
-          items:
-            $ref: '#/components/schemas/ReadLoadBalancerSummary'
-          description: ロードバランサの一覧
-        nextCursor:
-          allOf:
-          - $ref: '#/components/schemas/LoadBalancerID'
-          description: 次ページのカーソル。次のリクエストでcursorとして指定する。データが残っていなければnull。
-      description: ロードバランサの一覧レスポンス
-      example:
-        loadBalancers:
-        - loadBalancerID: 550e8400-e29b-41d4-a716-446655440000
-          name: example-lb
-          serviceClassPath: cloud/apprun/dedicated/lb/1vcpu_2gb_1
-          created: 1577836800
-          deleting: false
-        - loadBalancerID: 550e8400-e29b-41d4-a716-446655440001
-          name: another-lb
-          serviceClassPath: cloud/apprun/dedicated/lb/1vcpu_2gb_1
-          created: 1577836800
-          deleting: true
-    CreateAutoScalingGroupRequest:
-      type: object
-      required:
-      - name
-      - zone
-      - workerServiceClassPath
-      - minNodes
-      - maxNodes
-      - interfaces
-      properties:
-        name:
-          type: string
-          minLength: 1
-          maxLength: 20
-          pattern: ^[a-zA-Z0-9_-]+$
-          description: オートスケーリンググループの名前。クラスタ内でユニーク。英数字、アンダースコア、ハイフンのみ使用可能
-        zone:
-          type: string
-          description: オートスケーリンググループのゾーン
-        nameServers:
-          type: array
-          items:
-            $ref: '#/components/schemas/Ipv4'
-          minItems: 1
-          maxItems: 3
-          description: ネームサーバ設定
-        workerServiceClassPath:
-          type: string
-          minLength: 1
-          maxLength: 255
-          description: ワーカノードのサービスクラスパス
-        minNodes:
-          type: integer
-          format: int32
-          minimum: 1
-          maximum: 10
-          description: オートスケーリンググループの最小ノード数
-        maxNodes:
-          type: integer
-          format: int32
-          minimum: 1
-          maximum: 10
-          description: オートスケーリンググループの最大ノード数
-        interfaces:
-          type: array
-          items:
-            $ref: '#/components/schemas/AutoScalingGroupNodeInterface'
-          minItems: 1
-          maxItems: 5
-          title: ネットワークインターフェース定義
-    ReadClusterResponse:
-      type: object
-      required:
-      - cluster
-      properties:
-        cluster:
-          allOf:
-          - $ref: '#/components/schemas/ReadCluster'
-          description: クラスタの情報
-      example:
-        cluster:
-          clusterID: 13B9EA83-DDB0-4385-9533-3D693A6A310F
-          name: mock-cluster
-          hasLetsEncryptEmail: true
-          ports:
-          - port: 80
-            protocol: http
-          - port: 443
-            protocol: https
-          servicePrincipalID: '123456789012'
-          created: 1577836800
-    ReadCluster:
-      type: object
-      required:
-      - clusterID
-      - name
-      - created
-      - hasLetsEncryptEmail
-      - ports
-      - servicePrincipalID
-      properties:
-        clusterID:
-          $ref: '#/components/schemas/ClusterID'
-        name:
-          type: string
-          minLength: 1
-          maxLength: 20
-          pattern: ^[a-zA-Z0-9_-]+$
-          description: クラスタの名前。プロジェクト内でユニーク。英数字、アンダースコア、ハイフンのみ使用可能
-        created:
-          type: integer
-          format: unixtime
-          description: クラスタの作成日時：UNIX時間（秒）
-        hasLetsEncryptEmail:
-          type: boolean
-          description: Let's Encrypt 用のメールアドレスが設定済みかどうか
-        ports:
-          type: array
-          items:
-            $ref: '#/components/schemas/ClusterLoadBalancerPort'
-          maxItems: 5
-          description: ロードバランサのポート群
-        servicePrincipalID:
-          $ref: '#/components/schemas/ServicePrincipalID'
-    ClusterID:
-      type: string
-      format: uuid
-      description: クラスタID
-      example: 13B9EA83-DDB0-4385-9533-3D693A6A310F
     ClusterLoadBalancerPort:
       type: object
       required:
@@ -985,173 +767,6 @@ components:
           - https
           - tcp
           description: ポートで扱うプロトコル
-    WorkerNodeInterfaceAddress:
-      type: object
-      required:
-      - address
-      properties:
-        address:
-          type: string
-          description: アドレス
-    ReadClusterSummary:
-      type: object
-      required:
-      - clusterID
-      - name
-      - created
-      properties:
-        clusterID:
-          $ref: '#/components/schemas/ClusterID'
-        name:
-          type: string
-          minLength: 1
-          maxLength: 20
-          pattern: ^[a-zA-Z0-9_-]+$
-          description: クラスタの名前。プロジェクト内でユニーク。英数字、アンダースコア、ハイフンのみ使用可能
-        created:
-          type: integer
-          format: unixtime
-          description: クラスタの作成日時：UNIX時間（秒）
-    LoadBalancerInterface:
-      type: object
-      required:
-      - interfaceIndex
-      - upstream
-      properties:
-        interfaceIndex:
-          type: integer
-          format: int16
-          description: 例：eth0→0、eth1→1、eth2→2。0は必須。重複不可。
-          title: インターフェース番号
-        upstream:
-          type: string
-          description: 接続先スイッチ
-        ipPool:
-          type: array
-          items:
-            $ref: '#/components/schemas/IpRange'
-          maxItems: 20
-          description: アップストリームが 'shared' の場合、指定できません。それ以外のときは必須です。
-          title: IPアドレスの割り当て範囲
-        netmaskLen:
-          type: integer
-          format: int16
-          minimum: 8
-          maximum: 29
-          description: アップストリームが 'shared' の場合、指定できません。それ以外のときは必須です。
-          title: ネットマスク長
-        defaultGateway:
-          type: string
-          description: アップストリームが 'shared' の場合、指定できません。
-          title: デフォルトゲートウェイ
-        vip:
-          type: string
-          pattern: ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$
-          description: アップストリームが 'shared' の場合、指定できません。
-          title: ロードバランサの VIP
-        virtualRouterID:
-          type: integer
-          format: int16
-          description: アップストリームが 'shared' の場合、指定できません。1-255 の値を指定します。ロードバランサの VIP を指定した場合は、virtualRouterID の入力は必須です。
-          title: バーチャルルーターID
-        packetFilterID:
-          type: string
-          description: パケットフィルターID
-    ReadClusterLoadBalancerResponse:
-      type: object
-      required:
-      - loadBalancer
-      properties:
-        loadBalancer:
-          allOf:
-          - $ref: '#/components/schemas/ReadClusterLoadBalancer'
-          description: ロードバランサ設定の情報
-      example:
-        loadBalancer:
-          hasLetsEncryptEmail: true
-          ports:
-          - port: 80
-            protocol: http
-          - port: 443
-            protocol: https
-    CreateClusterRequest:
-      type: object
-      required:
-      - name
-      - ports
-      - servicePrincipalID
-      properties:
-        name:
-          type: string
-          minLength: 1
-          maxLength: 20
-          pattern: ^[a-zA-Z0-9_-]+$
-          description: クラスタの名前。プロジェクト内でユニーク。英数字、アンダースコア、ハイフンのみ使用可能
-        letsEncryptEmail:
-          type: string
-          pattern: ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
-          description: 'Let''s Encrypt による証明書発行を有効にするにはここにメールアドレスを設定します。
-
-            Let''s Encrypt による証明書発行は HTTP-01 チャレンジになるため、80 番ポートを HTTPプロトコルで外向きに解放する必要があります。'
-          title: Let's Encrypt のメールアドレス
-        ports:
-          type: array
-          items:
-            $ref: '#/components/schemas/ClusterLoadBalancerPort'
-          maxItems: 5
-          description: ロードバランサのポート群
-        servicePrincipalID:
-          $ref: '#/components/schemas/ServicePrincipalID'
-    WorkerNodeID:
-      type: string
-      format: uuid
-    LoadBalancerNodeInterface:
-      type: object
-      required:
-      - interfaceIndex
-      - addresses
-      properties:
-        interfaceIndex:
-          type: integer
-          format: int16
-          minimum: 0
-          description: インターフェース番号。eth0 なら 0。eth1 なら 1。
-        addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/LoadBalancerNodeInterfaceAddress'
-          description: ロードバランサノードのアドレス
-    CreateClusterResponse:
-      type: object
-      required:
-      - cluster
-      properties:
-        cluster:
-          allOf:
-          - $ref: '#/components/schemas/ClusterIdentifier'
-          description: 作成されたクラスタの情報
-    LoadBalancerNodeID:
-      type: string
-      format: uuid
-    ListClustersResponse:
-      type: object
-      required:
-      - clusters
-      properties:
-        clusters:
-          type: array
-          items:
-            $ref: '#/components/schemas/ReadClusterSummary'
-          description: クラスタの一覧
-        nextCursor:
-          allOf:
-          - $ref: '#/components/schemas/ClusterID'
-          description: 次ページのカーソル。次のリクエストでcursorとして指定する。データが残っていなければnull。
-      example:
-        clusters:
-        - clusterID: 13B9EA83-DDB0-4385-9533-3D693A6A310F
-          name: mock-cluster
-          created: 1577836800
     Error:
       type: object
       required:
@@ -1163,552 +778,6 @@ components:
           format: int32
         title:
           type: string
-    ReadAutoScalingGroupResponse:
-      type: object
-      required:
-      - autoScalingGroup
-      properties:
-        autoScalingGroup:
-          allOf:
-          - $ref: '#/components/schemas/ReadAutoScalingGroup'
-          description: オートスケーリンググループの情報
-      example:
-        autoScalingGroup:
-          autoScalingGroupID: 123e4567-e89b-12d3-a456-426614174001
-          name: tokyo-asg
-          zone: tk1b
-          minNodes: 2
-          maxNodes: 10
-          workerNodeCount: 3
-          workerServiceClassPath: cloud/apprun/dedicated/worker/1vcpu_2gb
-          deleting: false
-          nameServers:
-          - 192.0.2.1
-          interfaces:
-          - interfaceIndex: 0
-            netmaskLen: 24
-            upstream: '111111111111'
-            packetFilterID: pf-123456
-            defaultGateway: 192.0.1.1
-            connectsToLB: true
-          - interfaceIndex: 1
-            netmaskLen: 24
-            upstream: '111111111112'
-            connectsToLB: false
-    Ipv4:
-      type: string
-      pattern: ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$
-    LoadBalancerIdentifier:
-      type: object
-      required:
-      - loadBalancerID
-      properties:
-        loadBalancerID:
-          allOf:
-          - $ref: '#/components/schemas/LoadBalancerID'
-          description: ロードバランサID
-          readOnly: true
-    ClusterLoadBalancerPortMergePatchCreateOrUpdateReplaceOnly:
-      type: object
-      required:
-      - port
-      - protocol
-      properties:
-        port:
-          type: integer
-          format: uint16
-          minimum: 1
-          maximum: 65535
-          description: 外部公開するポート番号。5950-5959は予約されているため指定不可
-          example: 8080
-        protocol:
-          type: string
-          enum:
-          - http
-          - https
-          - tcp
-          description: ポートで扱うプロトコル
-    UpdateWorkerNodeDrainingRequest:
-      type: object
-      required:
-      - draining
-      properties:
-        draining:
-          type: boolean
-          description: ドレイン状態にするかどうか
-      description: ワーカノードのドレイン状態を変更するリクエスト
-    ListWorkerNodesResponse:
-      type: object
-      required:
-      - workerNodes
-      properties:
-        workerNodes:
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkerNodeSummary'
-          description: ワーカノードの一覧
-        nextCursor:
-          allOf:
-          - $ref: '#/components/schemas/WorkerNodeID'
-          description: 次ページのカーソル。次のリクエストでcursorとして指定する。データが残っていなければnull。
-      example:
-        workerNodes:
-        - workerNodeID: 123e4567-e89b-12d3-a456-426614174002
-          resourceID: worker-node-01
-          draining: false
-          status: healthy
-          networkInterfaces:
-          - interfaceIndex: 0
-            addresses:
-            - address: 192.168.0.1
-          - interfaceIndex: 1
-            addresses:
-            - address: 10.0.0.8
-          archiveVersion: 2025.1014.1
-          created: 1577836800
-        - workerNodeID: 987f6543-e21a-45c3-b123-554433221101
-          resourceID: worker-node-02
-          draining: true
-          status: healthy
-          networkInterfaces:
-          - interfaceIndex: 0
-            addresses:
-            - address: 192.168.0.1
-          - interfaceIndex: 1
-            addresses:
-            - address: 10.0.0.8
-          archiveVersion: 2025.1014.2
-          created: 1577836800
-        - workerNodeID: 487f6543-e21a-45c3-b123-554433221101
-          resourceID: worker-node-03
-          draining: true
-          status: creating
-          networkInterfaces:
-          - interfaceIndex: 0
-            addresses:
-            - address: 192.168.0.1
-          - interfaceIndex: 1
-            addresses:
-            - address: 10.0.0.8
-          archiveVersion: 2025.1014.3
-          created: 1577836800
-          createErrorMessage: クラスタのサービスプリンシパルにさくらのクラウドの作成・削除権限が付与されているか確認してください
-    LoadBalancerID:
-      type: string
-      format: uuid
-    IpRange:
-      type: object
-      required:
-      - start
-      - end
-      properties:
-        start:
-          $ref: '#/components/schemas/Ipv4'
-        end:
-          $ref: '#/components/schemas/Ipv4'
-    ApplicationVersionNumber:
-      type: integer
-      format: int32
-      minimum: 1
-      example: 3
-    ApplicationID:
-      type: string
-      format: uuid
-    AutoScalingGroupID:
-      type: string
-      format: uuid
-    WorkerNodeNetworkInterface:
-      type: object
-      required:
-      - interfaceIndex
-      - addresses
-      properties:
-        interfaceIndex:
-          type: integer
-          format: int16
-          minimum: 0
-          description: インターフェース番号。eth0 なら 0。eth1 なら 1。
-        addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkerNodeInterfaceAddress'
-          description: インターフェースに割り当てられたIPアドレスのリスト
-    LoadBalancerNode:
-      type: object
-      required:
-      - loadBalancerNodeID
-      - resourceID
-      - status
-      - interfaces
-      - created
-      properties:
-        loadBalancerNodeID:
-          allOf:
-          - $ref: '#/components/schemas/LoadBalancerNodeID'
-          description: ID
-        resourceID:
-          type:
-          - string
-          - 'null'
-          description: リソースID
-        status:
-          allOf:
-          - $ref: '#/components/schemas/LoadBalancerNodeStatus'
-          description: ノードの状態
-        interfaces:
-          type: array
-          items:
-            $ref: '#/components/schemas/LoadBalancerNodeInterface'
-          description: インターフェース情報
-        archiveVersion:
-          type: string
-          description: ノードにインストールされているアーカイブのバージョン
-        createErrorMessage:
-          type: string
-          description: ノードの作成に関するエラーメッセージ
-        created:
-          type: integer
-          format: unixtime
-          description: 作成日時：UNIX時間（秒）
-    AutoScalingGroupNodeInterface:
-      type: object
-      required:
-      - interfaceIndex
-      - upstream
-      - connectsToLB
-      properties:
-        interfaceIndex:
-          type: integer
-          format: int16
-          description: インターフェース番号。例：eth0→0、eth1→1、eth2→2。0は必須。重複不可。
-        upstream:
-          type: string
-          description: '''shared'' にすると共有セグメントに繋がります。ルータ+スイッチ、および共有セグメントにつなげられるのは eth0 のみです。'
-          title: 接続先スイッチ
-        ipPool:
-          type: array
-          items:
-            $ref: '#/components/schemas/IpRange'
-          maxItems: 20
-          description: IPプールは最大20個まで指定可能。アップストリームが 'shared' の場合は指定できません。それ以外の場合は指定必須です。
-          title: IPアドレスの割り当て範囲
-        netmaskLen:
-          type: integer
-          format: int16
-          minimum: 8
-          maximum: 29
-          description: アップストリームが 'shared' の場合、指定できません。それ以外の場合は指定必須です。
-          title: ネットマスク長
-        defaultGateway:
-          type: string
-          description: アップストリームが 'shared' の場合、指定できません。
-          title: デフォルトゲートウェイ
-        packetFilterID:
-          type: string
-          description: パケットフィルターID
-        connectsToLB:
-          type: boolean
-          description: 一つのオートスケーリンググループにつき、一つのインターフェースのみがロードバランサ接続対象となる。接続対象になった場合、そのインターフェースに割り当てられた IP アドレスがロードバランサのバックエンドとして登録される。クラスタにロードバランサポートが設定されている場合、一つのインターフェースが true である必要がある。
-          title: ロードバランサ接続対象インターフェースかどうか
-    LoadBalancerNodeStatus:
-      type: string
-      enum:
-      - healthy
-      - unhealthy
-      - creating
-      - starting
-      description: ロードバランサノードの状態を表す列挙型
-    WorkerNodeStatus:
-      type: string
-      enum:
-      - healthy
-      - unhealthy
-      - creating
-      - starting
-      description: ワーカノードの状態を表す列挙型
-    PatchClusterLoadBalancerRequest:
-      type: object
-      properties:
-        letsEncryptEmail:
-          type:
-          - string
-          - 'null'
-          pattern: ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
-          description: 'Let''s Encrypt による証明書発行を有効にするにはここにメールアドレスを設定します。
-
-            Let''s Encrypt による証明書発行は HTTP-01 チャレンジになるため、80 番ポートを HTTPプロトコルで外向きに解放する必要があります。'
-          title: Let's Encrypt のメールアドレス
-        ports:
-          type: array
-          items:
-            $ref: '#/components/schemas/ClusterLoadBalancerPortMergePatchCreateOrUpdateReplaceOnly'
-          maxItems: 5
-          description: ロードバランサのポート群
-    LoadBalancerNodeInterfaceAddress:
-      type: object
-      required:
-      - address
-      - vip
-      properties:
-        address:
-          type: string
-          description: アドレス
-        vip:
-          type: boolean
-          description: VIPかどうか
-    ReadLoadBalancer:
-      type: object
-      required:
-      - loadBalancerID
-      - name
-      - serviceClassPath
-      - created
-      - deleting
-      - interfaces
-      properties:
-        loadBalancerID:
-          allOf:
-          - $ref: '#/components/schemas/LoadBalancerID'
-          description: ロードバランサID
-        name:
-          type: string
-          minLength: 1
-          maxLength: 20
-          pattern: ^[a-zA-Z0-9_-]+$
-          description: ロードバランサ名。オートスケーリンググループ内でユニーク。英数字とハイフン、アンダースコアのみ使用可能
-        serviceClassPath:
-          type: string
-          minLength: 1
-          maxLength: 255
-          description: ロードバランサのサービスクラスパス
-        nameServers:
-          type: array
-          items:
-            $ref: '#/components/schemas/Ipv4'
-          minItems: 1
-          maxItems: 3
-          description: ネームサーバ設定
-        created:
-          type: integer
-          format: unixtime
-          description: ロードバランサの作成日時：UNIX時間（秒）
-        deleting:
-          type: boolean
-          description: 削除中
-        interfaces:
-          type: array
-          items:
-            $ref: '#/components/schemas/LoadBalancerInterface'
-          minItems: 1
-          maxItems: 5
-          description: ロードバランサのインターフェース
-    AutoScalingGroupIdentifier:
-      type: object
-      required:
-      - autoScalingGroupID
-      properties:
-        autoScalingGroupID:
-          allOf:
-          - $ref: '#/components/schemas/AutoScalingGroupID'
-          readOnly: true
-    WorkerNode:
-      type: object
-      required:
-      - workerNodeID
-      - resourceID
-      - draining
-      - status
-      - networkInterfaces
-      - created
-      - healthy
-      - creating
-      - runningContainers
-      properties:
-        workerNodeID:
-          allOf:
-          - $ref: '#/components/schemas/WorkerNodeID'
-          description: ワーカノードID
-        resourceID:
-          type:
-          - string
-          - 'null'
-          description: アプライアンスリソースID
-        draining:
-          type: boolean
-          description: ドレイン状態かどうか
-        status:
-          allOf:
-          - $ref: '#/components/schemas/WorkerNodeStatus'
-          description: ノード状態
-        networkInterfaces:
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkerNodeNetworkInterface'
-          description: ネットワークインターフェース情報
-        archiveVersion:
-          type: string
-          description: ノードにインストールされているアーカイブのバージョン
-        created:
-          type: integer
-          format: unixtime
-          description: リソース作成日時：UNIX時間（秒）
-        createErrorMessage:
-          type: string
-          description: ノード作成に関するエラーメッセージ
-        healthy:
-          type: boolean
-          description: ヘルシーかどうか
-        creating:
-          type: boolean
-          description: ワーカノードが作成中かどうか
-        runningContainers:
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkerNodeRunningContainer'
-          description: 実行中コンテナ
-    ServicePrincipalID:
-      type: string
-      minLength: 12
-      maxLength: 12
-      description: サービスプリンシパルのID
-      example: '123456789012'
-    ReadWorkerNodeResponse:
-      type: object
-      required:
-      - workerNode
-      properties:
-        workerNode:
-          allOf:
-          - $ref: '#/components/schemas/WorkerNode'
-          description: ワーカノードの詳細
-      example:
-        workerNode:
-          workerNodeID: 123e4567-e89b-12d3-a456-426614174002
-          resourceID: worker-node-01
-          draining: false
-          healthy: true
-          creating: false
-          status: healthy
-          created: 1577836800
-          runningContainers:
-          - containerID: container-01
-            name: nginx
-            state: running
-            status: running
-            image: nginx:latest
-            startedAt: 1577836800
-            applicationID: A0199B39-B361-45B9-8DF4-FC8BE494D690
-            applicationVersion: 1
-          - containerID: container-02
-            name: redis
-            state: running
-            status: running
-            image: redis:latest
-            startedAt: 1577836800
-            applicationID: A0199B39-B361-45B9-8DF4-FC8BE494D690
-            applicationVersion: 1
-          networkInterfaces:
-          - interfaceIndex: 0
-            addresses:
-            - address: 10.0.0.1
-          - interfaceIndex: 1
-            addresses:
-            - address: 192.168.0.1
-          archiveVersion: 2025.1014.1
-          createErrorMessage: クラスタのサービスプリンシパルにさくらのクラウドの作成・削除権限が付与されているか確認してください
-    WorkerNodeRunningContainer:
-      type: object
-      required:
-      - containerID
-      - name
-      - state
-      - status
-      - image
-      - startedAt
-      - applicationID
-      - applicationVersion
-      properties:
-        containerID:
-          type: string
-          description: コンテナID
-        name:
-          type: string
-          description: コンテナ名
-        state:
-          type: string
-          description: コンテナのステート（created、running、restarting、removing、paused、exited、dead のうちいずれか）
-        status:
-          type: string
-          description: コンテナのステータス
-        image:
-          type: string
-          description: コンテナのイメージ
-        startedAt:
-          type: integer
-          format: unixtime
-          description: コンテナの開始日時：UNIX時間（秒）
-        applicationID:
-          allOf:
-          - $ref: '#/components/schemas/ApplicationID'
-          description: アプリケーションID
-        applicationVersion:
-          allOf:
-          - $ref: '#/components/schemas/ApplicationVersionNumber'
-          description: アプリケーションバージョン
-    CreateLoadBalancerResponse:
-      type: object
-      required:
-      - loadBalancer
-      properties:
-        loadBalancer:
-          allOf:
-          - $ref: '#/components/schemas/LoadBalancerIdentifier'
-          description: 作成されたロードバランサの情報
-      description: ロードバランサの作成レスポンス
-      example:
-        loadBalancer:
-          loadBalancerID: 123e4567-e89b-12d3-a456-426614174000
-    ListAutoScalingGroupsResponse:
-      type: object
-      required:
-      - autoScalingGroups
-      properties:
-        autoScalingGroups:
-          type: array
-          items:
-            $ref: '#/components/schemas/ReadAutoScalingGroup'
-          description: オートスケーリンググループの一覧
-        nextCursor:
-          allOf:
-          - $ref: '#/components/schemas/AutoScalingGroupID'
-          description: 次ページのカーソル。次のリクエストでcursorとして指定する。データが残っていなければnull。
-      example:
-        autoScalingGroups:
-        - autoScalingGroupID: 123e4567-e89b-12d3-a456-426614174001
-          name: tokyo-asg
-          zone: tk1b
-          minNodes: 2
-          maxNodes: 10
-          workerNodeCount: 3
-          workerServiceClassPath: cloud/apprun/dedicated/worker/1vcpu_2gb
-          deleting: false
-          interfaces:
-          - interfaceIndex: 0
-            ipPool:
-            - start: 192.0.1.0
-              end: 192.0.1.255
-            netmaskLen: 24
-            upstream: '111111111111'
-            packetFilterID: pf-123456
-            defaultGateway: 192.0.1.1
-            connectsToLB: true
-          - interfaceIndex: 1
-            ipPool:
-            - start: 192.0.2.0
-              end: 192.0.2.255
-            netmaskLen: 24
-            upstream: '111111111112'
-            connectsToLB: false
     ReadAutoScalingGroup:
       type: object
       required:
@@ -1771,6 +840,864 @@ components:
         deleting:
           type: boolean
           description: 削除中
+    IpRange:
+      type: object
+      required:
+      - start
+      - end
+      properties:
+        start:
+          $ref: '#/components/schemas/Ipv4'
+        end:
+          $ref: '#/components/schemas/Ipv4'
+    WorkerNodeInterfaceAddress:
+      type: object
+      required:
+      - address
+      properties:
+        address:
+          type: string
+          description: アドレス
+    ServicePrincipalID:
+      type: string
+      minLength: 12
+      maxLength: 12
+      description: サービスプリンシパルのID
+      example: '123456789012'
+    ReadLoadBalancerResponse:
+      type: object
+      required:
+      - loadBalancer
+      properties:
+        loadBalancer:
+          allOf:
+          - $ref: '#/components/schemas/ReadLoadBalancer'
+          description: ロードバランサの情報
+      description: ロードバランサの詳細取得レスポンス
+      example:
+        loadBalancer:
+          loadBalancerID: 550e8400-e29b-41d4-a716-446655440000
+          name: example-lb
+          serviceClassPath: cloud/apprun/dedicated/lb/1vcpu_2gb_1
+          deleting: false
+          interfaces:
+          - interfaceIndex: 1
+            vip: 192.168.1.100
+            netmaskLen: 24
+            virtualRouterID: 51
+            upstream: switch1
+            packetFilterID: pf-123456
+            defaultGateway: 192.168.1.0/32
+          - interfaceIndex: 2
+            netmaskLen: 24
+            upstream: switch2
+          created: 1577836800
+    WorkerNode:
+      type: object
+      required:
+      - workerNodeID
+      - resourceID
+      - draining
+      - status
+      - networkInterfaces
+      - created
+      - healthy
+      - creating
+      - runningContainers
+      properties:
+        workerNodeID:
+          allOf:
+          - $ref: '#/components/schemas/WorkerNodeID'
+          description: ワーカノードID
+        resourceID:
+          type:
+          - string
+          - 'null'
+          description: アプライアンスリソースID
+        draining:
+          type: boolean
+          description: ドレイン状態かどうか
+        status:
+          allOf:
+          - $ref: '#/components/schemas/WorkerNodeStatus'
+          description: ノード状態
+        networkInterfaces:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkerNodeNetworkInterface'
+          description: ネットワークインターフェース情報
+        archiveVersion:
+          type: string
+          description: ノードにインストールされているアーカイブのバージョン
+        created:
+          type: integer
+          format: unixtime
+          description: リソース作成日時：UNIX時間（秒）
+        createErrorMessage:
+          type: string
+          description: ノード作成に関するエラーメッセージ
+        healthy:
+          type: boolean
+          description: ヘルシーかどうか
+        creating:
+          type: boolean
+          description: ワーカノードが作成中かどうか
+        runningContainers:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkerNodeRunningContainer'
+          description: 実行中コンテナ
+    WorkerNodeStatus:
+      type: string
+      enum:
+      - healthy
+      - unhealthy
+      - creating
+      - starting
+      description: ワーカノードの状態を表す列挙型
+    AutoScalingGroupIdentifier:
+      type: object
+      required:
+      - autoScalingGroupID
+      properties:
+        autoScalingGroupID:
+          allOf:
+          - $ref: '#/components/schemas/AutoScalingGroupID'
+          readOnly: true
+    LoadBalancerNodeStatus:
+      type: string
+      enum:
+      - healthy
+      - unhealthy
+      - creating
+      - starting
+      description: ロードバランサノードの状態を表す列挙型
+    ApplicationID:
+      type: string
+      format: uuid
+    ReadCluster:
+      type: object
+      required:
+      - clusterID
+      - name
+      - created
+      - hasLetsEncryptEmail
+      - ports
+      - servicePrincipalID
+      properties:
+        clusterID:
+          $ref: '#/components/schemas/ClusterID'
+        name:
+          type: string
+          minLength: 1
+          maxLength: 20
+          pattern: ^[a-zA-Z0-9_-]+$
+          description: クラスタの名前。プロジェクト内でユニーク。英数字、アンダースコア、ハイフンのみ使用可能
+        created:
+          type: integer
+          format: unixtime
+          description: クラスタの作成日時：UNIX時間（秒）
+        hasLetsEncryptEmail:
+          type: boolean
+          description: Let's Encrypt 用のメールアドレスが設定済みかどうか
+        ports:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClusterLoadBalancerPort'
+          maxItems: 5
+          description: ロードバランサのポート群
+        servicePrincipalID:
+          $ref: '#/components/schemas/ServicePrincipalID'
+    ClusterIdentifier:
+      type: object
+      required:
+      - clusterID
+      properties:
+        clusterID:
+          allOf:
+          - $ref: '#/components/schemas/ClusterID'
+          readOnly: true
+    WorkerNodeID:
+      type: string
+      format: uuid
+    ApplicationVersionNumber:
+      type: integer
+      format: int32
+      minimum: 1
+      example: 3
+    CreateLoadBalancerRequest:
+      type: object
+      required:
+      - name
+      - serviceClassPath
+      - interfaces
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 20
+          pattern: ^[a-zA-Z0-9_-]+$
+          description: ロードバランサ名。オートスケーリンググループ内でユニーク。英数字とハイフン、アンダースコアのみ使用可能
+        serviceClassPath:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: ロードバランサのサービスクラスパス
+        nameServers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ipv4'
+          minItems: 1
+          maxItems: 3
+          description: ネームサーバ設定
+        interfaces:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoadBalancerInterface'
+          minItems: 1
+          maxItems: 5
+          description: ロードバランサのインターフェース
+    ListWorkerNodesResponse:
+      type: object
+      required:
+      - workerNodes
+      properties:
+        workerNodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkerNodeSummary'
+          description: ワーカノードの一覧
+        nextCursor:
+          allOf:
+          - $ref: '#/components/schemas/WorkerNodeID'
+          description: 次ページのカーソル。次のリクエストでcursorとして指定する。データが残っていなければnull。
+      example:
+        workerNodes:
+        - workerNodeID: 123e4567-e89b-12d3-a456-426614174002
+          resourceID: worker-node-01
+          draining: false
+          status: healthy
+          networkInterfaces:
+          - interfaceIndex: 0
+            addresses:
+            - address: 192.168.0.1
+          - interfaceIndex: 1
+            addresses:
+            - address: 10.0.0.8
+          archiveVersion: 2025.1014.1
+          created: 1577836800
+        - workerNodeID: 987f6543-e21a-45c3-b123-554433221101
+          resourceID: worker-node-02
+          draining: true
+          status: healthy
+          networkInterfaces:
+          - interfaceIndex: 0
+            addresses:
+            - address: 192.168.0.1
+          - interfaceIndex: 1
+            addresses:
+            - address: 10.0.0.8
+          archiveVersion: 2025.1014.2
+          created: 1577836800
+        - workerNodeID: 487f6543-e21a-45c3-b123-554433221101
+          resourceID: worker-node-03
+          draining: true
+          status: creating
+          networkInterfaces:
+          - interfaceIndex: 0
+            addresses:
+            - address: 192.168.0.1
+          - interfaceIndex: 1
+            addresses:
+            - address: 10.0.0.8
+          archiveVersion: 2025.1014.3
+          created: 1577836800
+          createErrorMessage: クラスタのサービスプリンシパルにさくらのクラウドの作成・削除権限が付与されているか確認してください
+    WorkerNodeNetworkInterface:
+      type: object
+      required:
+      - interfaceIndex
+      - addresses
+      properties:
+        interfaceIndex:
+          type: integer
+          format: int16
+          minimum: 0
+          description: インターフェース番号。eth0 なら 0。eth1 なら 1。
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkerNodeInterfaceAddress'
+          description: インターフェースに割り当てられたIPアドレスのリスト
+    Ipv4:
+      type: string
+      pattern: ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$
+    ReadLoadBalancer:
+      type: object
+      required:
+      - loadBalancerID
+      - name
+      - serviceClassPath
+      - created
+      - deleting
+      - interfaces
+      properties:
+        loadBalancerID:
+          allOf:
+          - $ref: '#/components/schemas/LoadBalancerID'
+          description: ロードバランサID
+        name:
+          type: string
+          minLength: 1
+          maxLength: 20
+          pattern: ^[a-zA-Z0-9_-]+$
+          description: ロードバランサ名。オートスケーリンググループ内でユニーク。英数字とハイフン、アンダースコアのみ使用可能
+        serviceClassPath:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: ロードバランサのサービスクラスパス
+        nameServers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ipv4'
+          minItems: 1
+          maxItems: 3
+          description: ネームサーバ設定
+        created:
+          type: integer
+          format: unixtime
+          description: ロードバランサの作成日時：UNIX時間（秒）
+        deleting:
+          type: boolean
+          description: 削除中
+        interfaces:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoadBalancerInterface'
+          minItems: 1
+          maxItems: 5
+          description: ロードバランサのインターフェース
+    ListLoadBalancerNodesResponse:
+      type: object
+      required:
+      - loadBalancerNodes
+      properties:
+        loadBalancerNodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoadBalancerNode'
+          description: ロードバランサノードの一覧
+        nextCursor:
+          allOf:
+          - $ref: '#/components/schemas/LoadBalancerNodeID'
+          description: 次ページのカーソル。次のリクエストでcursorとして指定する。データが残っていなければnull。
+      description: ロードバランサノードの一覧レスポンス
+      example:
+        loadBalancerNodes:
+        - loadBalancerNodeID: 550e8400-e29b-41d4-a716-446655440001
+          resourceID: '12345678901'
+          status: healthy
+          interfaces:
+          - interfaceIndex: 1
+            addresses:
+            - address: 10.0.0.8/24
+              vip: false
+            - address: 10.0.1.2/24
+              vip: true
+          - interfaceIndex: 2
+            addresses:
+            - address: 10.0.2.8/24
+              vip: false
+            - address: 10.0.3.4/24
+              vip: true
+          archiveVersion: 2025.1014.1
+          created: 1577836800
+        - loadBalancerNodeID: 660e8400-e29b-41d4-a716-446655440001
+          resourceID: '12345678901'
+          status: healthy
+          interfaces:
+          - interfaceIndex: 1
+            addresses:
+            - address: 10.0.0.9/24
+              vip: false
+          createErrorMessage: クラスタのサービスプリンシパルにさくらのクラウドの作成・削除権限が付与されているか確認してください
+          created: 1577836800
+    AutoScalingGroupID:
+      type: string
+      format: uuid
+    ListClustersResponse:
+      type: object
+      required:
+      - clusters
+      properties:
+        clusters:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReadClusterSummary'
+          description: クラスタの一覧
+        nextCursor:
+          allOf:
+          - $ref: '#/components/schemas/ClusterID'
+          description: 次ページのカーソル。次のリクエストでcursorとして指定する。データが残っていなければnull。
+      example:
+        clusters:
+        - clusterID: 13B9EA83-DDB0-4385-9533-3D693A6A310F
+          name: mock-cluster
+          created: 1577836800
+    LoadBalancerNodeID:
+      type: string
+      format: uuid
+    CreateLoadBalancerResponse:
+      type: object
+      required:
+      - loadBalancer
+      properties:
+        loadBalancer:
+          allOf:
+          - $ref: '#/components/schemas/LoadBalancerIdentifier'
+          description: 作成されたロードバランサの情報
+      description: ロードバランサの作成レスポンス
+      example:
+        loadBalancer:
+          loadBalancerID: 123e4567-e89b-12d3-a456-426614174000
+    UpdateClusterRequest:
+      type: object
+      required:
+      - servicePrincipalID
+      properties:
+        letsEncryptEmail:
+          type: string
+          pattern: ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
+          description: 'Let''s Encrypt による証明書発行を有効にするにはここにメールアドレスを設定します。
+
+            Let''s Encrypt による証明書発行は HTTP-01 チャレンジになるため、80 番ポートを HTTPプロトコルで外向きに解放する必要があります。'
+          title: Let's Encrypt のメールアドレス
+        servicePrincipalID:
+          $ref: '#/components/schemas/ServicePrincipalID'
+        ports:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClusterLoadBalancerPort'
+          maxItems: 5
+          description: ロードバランサのポート群
+    ReadAutoScalingGroupResponse:
+      type: object
+      required:
+      - autoScalingGroup
+      properties:
+        autoScalingGroup:
+          allOf:
+          - $ref: '#/components/schemas/ReadAutoScalingGroup'
+          description: オートスケーリンググループの情報
+      example:
+        autoScalingGroup:
+          autoScalingGroupID: 123e4567-e89b-12d3-a456-426614174001
+          name: tokyo-asg
+          zone: tk1b
+          minNodes: 2
+          maxNodes: 10
+          workerNodeCount: 3
+          workerServiceClassPath: cloud/apprun/dedicated/worker/1vcpu_2gb
+          deleting: false
+          nameServers:
+          - 192.0.2.1
+          interfaces:
+          - interfaceIndex: 0
+            netmaskLen: 24
+            upstream: '111111111111'
+            packetFilterID: pf-123456
+            defaultGateway: 192.0.1.1
+            connectsToLB: true
+          - interfaceIndex: 1
+            netmaskLen: 24
+            upstream: '111111111112'
+            connectsToLB: false
+    ReadClusterLoadBalancer:
+      type: object
+      required:
+      - hasLetsEncryptEmail
+      - ports
+      properties:
+        hasLetsEncryptEmail:
+          type: boolean
+          description: Let's Encrypt 用のメールアドレスが設定済みかどうか
+        ports:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClusterLoadBalancerPort'
+          maxItems: 5
+          description: ロードバランサのポート群
+    LoadBalancerNodeInterface:
+      type: object
+      required:
+      - interfaceIndex
+      - addresses
+      properties:
+        interfaceIndex:
+          type: integer
+          format: int16
+          minimum: 0
+          description: インターフェース番号。eth0 なら 0。eth1 なら 1。
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoadBalancerNodeInterfaceAddress'
+          description: ロードバランサノードのアドレス
+    ReadClusterResponse:
+      type: object
+      required:
+      - cluster
+      properties:
+        cluster:
+          allOf:
+          - $ref: '#/components/schemas/ReadCluster'
+          description: クラスタの情報
+      example:
+        cluster:
+          clusterID: 13B9EA83-DDB0-4385-9533-3D693A6A310F
+          name: mock-cluster
+          hasLetsEncryptEmail: true
+          ports:
+          - port: 80
+            protocol: http
+          - port: 443
+            protocol: https
+          servicePrincipalID: '123456789012'
+          created: 1577836800
+    ReadWorkerNodeResponse:
+      type: object
+      required:
+      - workerNode
+      properties:
+        workerNode:
+          allOf:
+          - $ref: '#/components/schemas/WorkerNode'
+          description: ワーカノードの詳細
+      example:
+        workerNode:
+          workerNodeID: 123e4567-e89b-12d3-a456-426614174002
+          resourceID: worker-node-01
+          draining: false
+          healthy: true
+          creating: false
+          status: healthy
+          created: 1577836800
+          runningContainers:
+          - containerID: container-01
+            name: nginx
+            state: running
+            status: running
+            image: nginx:latest
+            startedAt: 1577836800
+            applicationID: A0199B39-B361-45B9-8DF4-FC8BE494D690
+            applicationVersion: 1
+          - containerID: container-02
+            name: redis
+            state: running
+            status: running
+            image: redis:latest
+            startedAt: 1577836800
+            applicationID: A0199B39-B361-45B9-8DF4-FC8BE494D690
+            applicationVersion: 1
+          networkInterfaces:
+          - interfaceIndex: 0
+            addresses:
+            - address: 10.0.0.1
+          - interfaceIndex: 1
+            addresses:
+            - address: 192.168.0.1
+          archiveVersion: 2025.1014.1
+          createErrorMessage: クラスタのサービスプリンシパルにさくらのクラウドの作成・削除権限が付与されているか確認してください
+    LoadBalancerNodeInterfaceAddress:
+      type: object
+      required:
+      - address
+      - vip
+      properties:
+        address:
+          type: string
+          description: アドレス
+        vip:
+          type: boolean
+          description: VIPかどうか
+    ReadClusterSummary:
+      type: object
+      required:
+      - clusterID
+      - name
+      - created
+      properties:
+        clusterID:
+          $ref: '#/components/schemas/ClusterID'
+        name:
+          type: string
+          minLength: 1
+          maxLength: 20
+          pattern: ^[a-zA-Z0-9_-]+$
+          description: クラスタの名前。プロジェクト内でユニーク。英数字、アンダースコア、ハイフンのみ使用可能
+        created:
+          type: integer
+          format: unixtime
+          description: クラスタの作成日時：UNIX時間（秒）
+    UpdateWorkerNodeDrainingRequest:
+      type: object
+      required:
+      - draining
+      properties:
+        draining:
+          type: boolean
+          description: ドレイン状態にするかどうか
+      description: ワーカノードのドレイン状態を変更するリクエスト
+    LoadBalancerNode:
+      type: object
+      required:
+      - loadBalancerNodeID
+      - resourceID
+      - status
+      - interfaces
+      - created
+      properties:
+        loadBalancerNodeID:
+          allOf:
+          - $ref: '#/components/schemas/LoadBalancerNodeID'
+          description: ID
+        resourceID:
+          type:
+          - string
+          - 'null'
+          description: リソースID
+        status:
+          allOf:
+          - $ref: '#/components/schemas/LoadBalancerNodeStatus'
+          description: ノードの状態
+        interfaces:
+          type: array
+          items:
+            $ref: '#/components/schemas/LoadBalancerNodeInterface'
+          description: インターフェース情報
+        archiveVersion:
+          type: string
+          description: ノードにインストールされているアーカイブのバージョン
+        createErrorMessage:
+          type: string
+          description: ノードの作成に関するエラーメッセージ
+        created:
+          type: integer
+          format: unixtime
+          description: 作成日時：UNIX時間（秒）
+    CreateAutoScalingGroupResponse:
+      type: object
+      required:
+      - autoScalingGroup
+      properties:
+        autoScalingGroup:
+          allOf:
+          - $ref: '#/components/schemas/AutoScalingGroupIdentifier'
+          description: 作成されたオートスケーリンググループの情報
+    CreateAutoScalingGroupRequest:
+      type: object
+      required:
+      - name
+      - zone
+      - workerServiceClassPath
+      - minNodes
+      - maxNodes
+      - interfaces
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 20
+          pattern: ^[a-zA-Z0-9_-]+$
+          description: オートスケーリンググループの名前。クラスタ内でユニーク。英数字、アンダースコア、ハイフンのみ使用可能
+        zone:
+          type: string
+          description: オートスケーリンググループのゾーン
+        nameServers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ipv4'
+          minItems: 1
+          maxItems: 3
+          description: ネームサーバ設定
+        workerServiceClassPath:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: ワーカノードのサービスクラスパス
+        minNodes:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 10
+          description: オートスケーリンググループの最小ノード数
+        maxNodes:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 10
+          description: オートスケーリンググループの最大ノード数
+        interfaces:
+          type: array
+          items:
+            $ref: '#/components/schemas/AutoScalingGroupNodeInterface'
+          minItems: 1
+          maxItems: 5
+          title: ネットワークインターフェース定義
+    WorkerNodeRunningContainer:
+      type: object
+      required:
+      - containerID
+      - name
+      - state
+      - status
+      - image
+      - startedAt
+      - applicationID
+      - applicationVersion
+      properties:
+        containerID:
+          type: string
+          description: コンテナID
+        name:
+          type: string
+          description: コンテナ名
+        state:
+          type: string
+          description: コンテナのステート（created、running、restarting、removing、paused、exited、dead のうちいずれか）
+        status:
+          type: string
+          description: コンテナのステータス
+        image:
+          type: string
+          description: コンテナのイメージ
+        startedAt:
+          type: integer
+          format: unixtime
+          description: コンテナの開始日時：UNIX時間（秒）
+        applicationID:
+          allOf:
+          - $ref: '#/components/schemas/ApplicationID'
+          description: アプリケーションID
+        applicationVersion:
+          allOf:
+          - $ref: '#/components/schemas/ApplicationVersionNumber'
+          description: アプリケーションバージョン
+    LoadBalancerInterface:
+      type: object
+      required:
+      - interfaceIndex
+      - upstream
+      properties:
+        interfaceIndex:
+          type: integer
+          format: int16
+          description: 例：eth0→0、eth1→1、eth2→2。0は必須。重複不可。
+          title: インターフェース番号
+        upstream:
+          type: string
+          description: 接続先スイッチ
+        ipPool:
+          type: array
+          items:
+            $ref: '#/components/schemas/IpRange'
+          maxItems: 20
+          description: アップストリームが 'shared' の場合、指定できません。それ以外のときは必須です。
+          title: IPアドレスの割り当て範囲
+        netmaskLen:
+          type: integer
+          format: int16
+          minimum: 8
+          maximum: 29
+          description: アップストリームが 'shared' の場合、指定できません。それ以外のときは必須です。
+          title: ネットマスク長
+        defaultGateway:
+          type: string
+          description: アップストリームが 'shared' の場合、指定できません。
+          title: デフォルトゲートウェイ
+        vip:
+          type: string
+          pattern: ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$
+          description: アップストリームが 'shared' の場合、指定できません。
+          title: ロードバランサの VIP
+        virtualRouterID:
+          type: integer
+          format: int16
+          description: アップストリームが 'shared' の場合、指定できません。1-255 の値を指定します。ロードバランサの VIP を指定した場合は、virtualRouterID の入力は必須です。
+          title: バーチャルルーターID
+        packetFilterID:
+          type: string
+          description: パケットフィルターID
+    ReadLoadBalancerNodeResponse:
+      type: object
+      required:
+      - loadBalancerNode
+      properties:
+        loadBalancerNode:
+          allOf:
+          - $ref: '#/components/schemas/LoadBalancerNode'
+          description: ロードバランサノードの情報
+      description: ロードバランサノードの詳細取得レスポンス
+      example:
+        loadBalancerNode:
+          loadBalancerNodeID: 550e8400-e29b-41d4-a716-446655440001
+          resourceID: '12345678901'
+          status: healthy
+          interfaces:
+          - interfaceIndex: 1
+            addresses:
+            - address: 10.0.0.2/24
+              vip: false
+            - address: 10.0.1.2/24
+              vip: true
+          - interfaceIndex: 2
+            addresses:
+            - address: 10.0.2.8/24
+              vip: false
+            - address: 10.0.3.4/24
+              vip: true
+          archiveVersion: 2025.1014.1
+          createErrorMessage: クラスタのサービスプリンシパルにさくらのクラウドの作成・削除権限が付与されているか確認してください
+          created: 1577836800
+    PatchClusterLoadBalancerRequest:
+      type: object
+      properties:
+        letsEncryptEmail:
+          type:
+          - string
+          - 'null'
+          pattern: ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
+          description: 'Let''s Encrypt による証明書発行を有効にするにはここにメールアドレスを設定します。
+
+            Let''s Encrypt による証明書発行は HTTP-01 チャレンジになるため、80 番ポートを HTTPプロトコルで外向きに解放する必要があります。'
+          title: Let's Encrypt のメールアドレス
+        ports:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClusterLoadBalancerPortMergePatchCreateOrUpdateReplaceOnly'
+          maxItems: 5
+          description: ロードバランサのポート群
+    ClusterLoadBalancerPortMergePatchCreateOrUpdateReplaceOnly:
+      type: object
+      required:
+      - port
+      - protocol
+      properties:
+        port:
+          type: integer
+          format: uint16
+          minimum: 1
+          maximum: 65535
+          description: 外部公開するポート番号。5950-5959は予約されているため指定不可
+          example: 8080
+        protocol:
+          type: string
+          enum:
+          - http
+          - https
+          - tcp
+          description: ポートで扱うプロトコル
     ReadLoadBalancerSummary:
       type: object
       required:
@@ -1809,75 +1736,139 @@ components:
         deleting:
           type: boolean
           description: 削除中
-    CreateLoadBalancerRequest:
+    ClusterID:
+      type: string
+      format: uuid
+      description: クラスタID
+      example: 13B9EA83-DDB0-4385-9533-3D693A6A310F
+    ListAutoScalingGroupsResponse:
       type: object
       required:
-      - name
-      - serviceClassPath
-      - interfaces
+      - autoScalingGroups
       properties:
-        name:
-          type: string
-          minLength: 1
-          maxLength: 20
-          pattern: ^[a-zA-Z0-9_-]+$
-          description: ロードバランサ名。オートスケーリンググループ内でユニーク。英数字とハイフン、アンダースコアのみ使用可能
-        serviceClassPath:
-          type: string
-          minLength: 1
-          maxLength: 255
-          description: ロードバランサのサービスクラスパス
-        nameServers:
+        autoScalingGroups:
           type: array
           items:
-            $ref: '#/components/schemas/Ipv4'
-          minItems: 1
-          maxItems: 3
-          description: ネームサーバ設定
-        interfaces:
+            $ref: '#/components/schemas/ReadAutoScalingGroup'
+          description: オートスケーリンググループの一覧
+        nextCursor:
+          allOf:
+          - $ref: '#/components/schemas/AutoScalingGroupID'
+          description: 次ページのカーソル。次のリクエストでcursorとして指定する。データが残っていなければnull。
+      example:
+        autoScalingGroups:
+        - autoScalingGroupID: 123e4567-e89b-12d3-a456-426614174001
+          name: tokyo-asg
+          zone: tk1b
+          minNodes: 2
+          maxNodes: 10
+          workerNodeCount: 3
+          workerServiceClassPath: cloud/apprun/dedicated/worker/1vcpu_2gb
+          deleting: false
+          interfaces:
+          - interfaceIndex: 0
+            ipPool:
+            - start: 192.0.1.0
+              end: 192.0.1.255
+            netmaskLen: 24
+            upstream: '111111111111'
+            packetFilterID: pf-123456
+            defaultGateway: 192.0.1.1
+            connectsToLB: true
+          - interfaceIndex: 1
+            ipPool:
+            - start: 192.0.2.0
+              end: 192.0.2.255
+            netmaskLen: 24
+            upstream: '111111111112'
+            connectsToLB: false
+    LoadBalancerID:
+      type: string
+      format: uuid
+    ListLoadBalancersResponse:
+      type: object
+      required:
+      - loadBalancers
+      properties:
+        loadBalancers:
           type: array
           items:
-            $ref: '#/components/schemas/LoadBalancerInterface'
-          minItems: 1
-          maxItems: 5
-          description: ロードバランサのインターフェース
-    ReadLoadBalancerResponse:
+            $ref: '#/components/schemas/ReadLoadBalancerSummary'
+          description: ロードバランサの一覧
+        nextCursor:
+          allOf:
+          - $ref: '#/components/schemas/LoadBalancerID'
+          description: 次ページのカーソル。次のリクエストでcursorとして指定する。データが残っていなければnull。
+      description: ロードバランサの一覧レスポンス
+      example:
+        loadBalancers:
+        - loadBalancerID: 550e8400-e29b-41d4-a716-446655440000
+          name: example-lb
+          serviceClassPath: cloud/apprun/dedicated/lb/1vcpu_2gb_1
+          created: 1577836800
+          deleting: false
+        - loadBalancerID: 550e8400-e29b-41d4-a716-446655440001
+          name: another-lb
+          serviceClassPath: cloud/apprun/dedicated/lb/1vcpu_2gb_1
+          created: 1577836800
+          deleting: true
+    ReadClusterLoadBalancerResponse:
       type: object
       required:
       - loadBalancer
       properties:
         loadBalancer:
           allOf:
-          - $ref: '#/components/schemas/ReadLoadBalancer'
-          description: ロードバランサの情報
-      description: ロードバランサの詳細取得レスポンス
+          - $ref: '#/components/schemas/ReadClusterLoadBalancer'
+          description: ロードバランサ設定の情報
       example:
         loadBalancer:
-          loadBalancerID: 550e8400-e29b-41d4-a716-446655440000
-          name: example-lb
-          serviceClassPath: cloud/apprun/dedicated/lb/1vcpu_2gb_1
-          deleting: false
-          interfaces:
-          - interfaceIndex: 1
-            vip: 192.168.1.100
-            netmaskLen: 24
-            virtualRouterID: 51
-            upstream: switch1
-            packetFilterID: pf-123456
-            defaultGateway: 192.168.1.0/32
-          - interfaceIndex: 2
-            netmaskLen: 24
-            upstream: switch2
-          created: 1577836800
-    ClusterIdentifier:
+          hasLetsEncryptEmail: true
+          ports:
+          - port: 80
+            protocol: http
+          - port: 443
+            protocol: https
+    AutoScalingGroupNodeInterface:
       type: object
       required:
-      - clusterID
+      - interfaceIndex
+      - upstream
+      - connectsToLB
       properties:
-        clusterID:
-          allOf:
-          - $ref: '#/components/schemas/ClusterID'
-          readOnly: true
+        interfaceIndex:
+          type: integer
+          format: int16
+          description: インターフェース番号。例：eth0→0、eth1→1、eth2→2。0は必須。重複不可。
+        upstream:
+          type: string
+          description: '''shared'' にすると共有セグメントに繋がります。ルータ+スイッチ、および共有セグメントにつなげられるのは eth0 のみです。'
+          title: 接続先スイッチ
+        ipPool:
+          type: array
+          items:
+            $ref: '#/components/schemas/IpRange'
+          maxItems: 20
+          description: IPプールは最大20個まで指定可能。アップストリームが 'shared' の場合は指定できません。それ以外の場合は指定必須です。
+          title: IPアドレスの割り当て範囲
+        netmaskLen:
+          type: integer
+          format: int16
+          minimum: 8
+          maximum: 29
+          description: アップストリームが 'shared' の場合、指定できません。それ以外の場合は指定必須です。
+          title: ネットマスク長
+        defaultGateway:
+          type: string
+          description: アップストリームが 'shared' の場合、指定できません。
+          title: デフォルトゲートウェイ
+        packetFilterID:
+          type: string
+          description: パケットフィルターID
+        connectsToLB:
+          type: boolean
+          description: 一つのオートスケーリンググループにつき、一つのインターフェースのみがロードバランサ接続対象となる。接続対象になった場合、そのインターフェースに割り当てられた IP アドレスがロードバランサのバックエンドとして登録される。クラスタにロードバランサポートが設定されている場合、一つのインターフェースが true である必要がある。
+          title: ロードバランサ接続対象インターフェースかどうか
     WorkerNodeSummary:
       type: object
       required:
@@ -1919,61 +1910,53 @@ components:
         createErrorMessage:
           type: string
           description: ノード作成に関するエラーメッセージ
-    ReadLoadBalancerNodeResponse:
+    CreateClusterRequest:
       type: object
       required:
-      - loadBalancerNode
-      properties:
-        loadBalancerNode:
-          allOf:
-          - $ref: '#/components/schemas/LoadBalancerNode'
-          description: ロードバランサノードの情報
-      description: ロードバランサノードの詳細取得レスポンス
-      example:
-        loadBalancerNode:
-          loadBalancerNodeID: 550e8400-e29b-41d4-a716-446655440001
-          resourceID: '12345678901'
-          status: healthy
-          interfaces:
-          - interfaceIndex: 1
-            addresses:
-            - address: 10.0.0.2/24
-              vip: false
-            - address: 10.0.1.2/24
-              vip: true
-          - interfaceIndex: 2
-            addresses:
-            - address: 10.0.2.8/24
-              vip: false
-            - address: 10.0.3.4/24
-              vip: true
-          archiveVersion: 2025.1014.1
-          createErrorMessage: クラスタのサービスプリンシパルにさくらのクラウドの作成・削除権限が付与されているか確認してください
-          created: 1577836800
-    ReadClusterLoadBalancer:
-      type: object
-      required:
-      - hasLetsEncryptEmail
+      - name
       - ports
+      - servicePrincipalID
       properties:
-        hasLetsEncryptEmail:
-          type: boolean
-          description: Let's Encrypt 用のメールアドレスが設定済みかどうか
+        name:
+          type: string
+          minLength: 1
+          maxLength: 20
+          pattern: ^[a-zA-Z0-9_-]+$
+          description: クラスタの名前。プロジェクト内でユニーク。英数字、アンダースコア、ハイフンのみ使用可能
+        letsEncryptEmail:
+          type: string
+          pattern: ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
+          description: 'Let''s Encrypt による証明書発行を有効にするにはここにメールアドレスを設定します。
+
+            Let''s Encrypt による証明書発行は HTTP-01 チャレンジになるため、80 番ポートを HTTPプロトコルで外向きに解放する必要があります。'
+          title: Let's Encrypt のメールアドレス
         ports:
           type: array
           items:
             $ref: '#/components/schemas/ClusterLoadBalancerPort'
           maxItems: 5
           description: ロードバランサのポート群
-    CreateAutoScalingGroupResponse:
+        servicePrincipalID:
+          $ref: '#/components/schemas/ServicePrincipalID'
+    LoadBalancerIdentifier:
       type: object
       required:
-      - autoScalingGroup
+      - loadBalancerID
       properties:
-        autoScalingGroup:
+        loadBalancerID:
           allOf:
-          - $ref: '#/components/schemas/AutoScalingGroupIdentifier'
-          description: 作成されたオートスケーリンググループの情報
+          - $ref: '#/components/schemas/LoadBalancerID'
+          description: ロードバランサID
+          readOnly: true
+    CreateClusterResponse:
+      type: object
+      required:
+      - cluster
+      properties:
+        cluster:
+          allOf:
+          - $ref: '#/components/schemas/ClusterIdentifier'
+          description: 作成されたクラスタの情報
   securitySchemes:
     BasicAuth:
       type: http
@@ -1981,6 +1964,3 @@ components:
 externalDocs:
   url: https://manual.sakura.ad.jp/cloud/apprun-dedicated/releasenote.html
   description: リリースノート | さくらのクラウド マニュアル
-x-refined-from:
-- apprun-dedicated-api.yaml
-- sakura-internet-apprun-dedicated-openapi.yml

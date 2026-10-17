@@ -1,10 +1,10 @@
 openapi: 3.2.0
 info:
-  title: Sakura Internet User API
+  title: さくらのクラウドIAM User API
   version: 2.1.0
   contact:
     name: SAKURA internet Inc.
-  description: 'Operations tagged user across 2 of this provider''s published API definitions: iam-api.yaml, sakura-internet-iam-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: さくらのクラウドIAMのAPIドキュメントです
 servers:
 - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
 security:
@@ -156,8 +156,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Http503ServiceUnavailable'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
   /compat/users/{user_id}:
     parameters:
     - $ref: '#/components/parameters/UserID'
@@ -302,8 +300,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Http503ServiceUnavailable'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
   /compat/users/{user_id}/register-email:
     parameters:
     - $ref: '#/components/parameters/UserID'
@@ -358,8 +354,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Http429TooManyRequests'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
   /compat/users/{user_id}/unregister-email:
     parameters:
     - $ref: '#/components/parameters/UserID'
@@ -395,8 +389,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Http429TooManyRequests'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
 components:
   parameters:
     UserID:
@@ -417,54 +409,6 @@ components:
       schema:
         type: integer
   schemas:
-    Http404NotFound:
-      type: object
-      required:
-      - type
-      - status
-      - title
-      - detail
-      properties:
-        type:
-          type: string
-          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
-          example: about:blank
-        status:
-          type: integer
-          description: HTTPステータスコード
-          example: 404
-        title:
-          type: string
-          description: 問題を表す簡単な文字列
-          example: not_found
-        detail:
-          type: string
-          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
-          example: 見つかりませんでした。
-    Http429TooManyRequests:
-      type: object
-      required:
-      - type
-      - status
-      - title
-      - detail
-      properties:
-        type:
-          type: string
-          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
-          example: about:blank
-        status:
-          type: integer
-          description: HTTPステータスコード
-          example: 429
-        title:
-          type: string
-          description: 問題を表す簡単な文字列
-          example: throttled
-        detail:
-          type: string
-          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
-          example: リクエストの処理は絞られました。 60秒後に利用可能になります。
     Http503ServiceUnavailable:
       type: object
       required:
@@ -489,30 +433,6 @@ components:
           type: string
           description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
           example: 一時的にエラーが発生しました。
-    Http409Conflict:
-      type: object
-      required:
-      - type
-      - status
-      - title
-      - detail
-      properties:
-        type:
-          type: string
-          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
-          example: about:blank
-        status:
-          type: integer
-          description: HTTPステータスコード
-          example: 409
-        title:
-          type: string
-          description: 問題を表す簡単な文字列
-          example: conflict
-        detail:
-          type: string
-          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
-          example: 状態の競合によりリクエストを処理できません。
     Http403Forbidden:
       type: object
       required:
@@ -537,6 +457,127 @@ components:
           type: string
           description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
           example: このアクションを実行する権限がありません。
+    Http409Conflict:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 409
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: conflict
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 状態の競合によりリクエストを処理できません。
+    Pagination:
+      type: object
+      required:
+      - count
+      - next
+      - previous
+      properties:
+        count:
+          type: integer
+          description: データ総数
+          example: 100
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          description: 次のページへのURL
+          example: https://api.example.com/?page=3&per_page=10
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          description: 前のページへのURL
+          example: https://api.example.com/?per_page=10
+    Http401Unauthorized:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 401
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: authentication_failed
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 認証情報が含まれていません。
+    Http429TooManyRequests:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 429
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: throttled
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: リクエストの処理は絞られました。 60秒後に利用可能になります。
+    Http404NotFound:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 404
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: not_found
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 見つかりませんでした。
     User:
       type: object
       required:
@@ -642,31 +683,6 @@ components:
           description: 更新日時
           readOnly: true
           example: 2024-05-02 16:32:23+00:00
-    Pagination:
-      type: object
-      required:
-      - count
-      - next
-      - previous
-      properties:
-        count:
-          type: integer
-          description: データ総数
-          example: 100
-        next:
-          type:
-          - string
-          - 'null'
-          format: uri
-          description: 次のページへのURL
-          example: https://api.example.com/?page=3&per_page=10
-        previous:
-          type:
-          - string
-          - 'null'
-          format: uri
-          description: 前のページへのURL
-          example: https://api.example.com/?per_page=10
     Http400BadRequest:
       type: object
       required:
@@ -738,30 +754,6 @@ components:
             key4:
             - message: この項目が*文字より長くならないようにしてください。
               code: max_length
-    Http401Unauthorized:
-      type: object
-      required:
-      - type
-      - status
-      - title
-      - detail
-      properties:
-        type:
-          type: string
-          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
-          example: about:blank
-        status:
-          type: integer
-          description: HTTPステータスコード
-          example: 401
-        title:
-          type: string
-          description: 問題を表す簡単な文字列
-          example: authentication_failed
-        detail:
-          type: string
-          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
-          example: 認証情報が含まれていません。
   securitySchemes:
     ServicePrincipalAuth:
       description: 'サービスプリンシパル認証
@@ -781,6 +773,3 @@ components:
         '
       type: http
       scheme: basic
-x-refined-from:
-- iam-api.yaml
-- sakura-internet-iam-openapi.yml

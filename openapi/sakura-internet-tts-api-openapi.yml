@@ -1,8 +1,27 @@
 openapi: 3.2.0
 info:
-  title: Sakura Internet Tts API
+  title: さくらの AI Engine Inference Tts API
   version: 1.0.1
-  description: 'Operations tagged Tts across 2 of this provider''s published API definitions: ai-engine-inference-api.yaml, sakura-internet-ai-engine-inference-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: '---
+
+    Copyright SAKURA internet Inc.
+
+
+    # さくらの AI Engine チャット生成 / 音声文字起こし / 音声合成 エンドポイント
+
+
+    ### 基本的な使い方
+
+
+    さくらのAI Engine 利用手順 | さくらのクラウド マニュアル
+
+
+    ### APIエンドポイント
+
+    https://api.ai.sakura.ad.jp
+
+
+    ---'
 servers:
 - url: https://api.ai.sakura.ad.jp
 security:
@@ -89,8 +108,6 @@ paths:
           description: Server error
       tags:
       - TTS
-    servers:
-    - url: https://api.ai.sakura.ad.jp
   /tts/v1/synthesis:
     post:
       summary: Synthesize speech from audio query (TTS)
@@ -177,35 +194,8 @@ paths:
           description: Server error
       tags:
       - TTS
-    servers:
-    - url: https://api.ai.sakura.ad.jp
 components:
   schemas:
-    TtsAccentPhrase:
-      type: object
-      required:
-      - moras
-      - accent
-      - is_interrogative
-      properties:
-        moras:
-          type: array
-          description: モーラ列
-          items:
-            type: object
-            additionalProperties: true
-        accent:
-          type: integer
-          description: アクセント位置
-        pause_mora:
-          type:
-          - object
-          - 'null'
-          description: 無音モーラ
-          additionalProperties: true
-        is_interrogative:
-          type: boolean
-          description: 疑問形かどうか
     TtsSynthesisRequest:
       type: object
       required:
@@ -270,6 +260,31 @@ components:
             [読み取り専用] AquesTalk風記法によるテキスト。音声合成用のクエリとしては無視される
 
             '
+    TtsAccentPhrase:
+      type: object
+      required:
+      - moras
+      - accent
+      - is_interrogative
+      properties:
+        moras:
+          type: array
+          description: モーラ列
+          items:
+            type: object
+            additionalProperties: true
+        accent:
+          type: integer
+          description: アクセント位置
+        pause_mora:
+          type:
+          - object
+          - 'null'
+          description: 無音モーラ
+          additionalProperties: true
+        is_interrogative:
+          type: boolean
+          description: 疑問形かどうか
     TtsAudioQuery:
       type: object
       required:
@@ -338,6 +353,3 @@ components:
     BearerAuth:
       type: http
       scheme: bearer
-x-refined-from:
-- ai-engine-inference-api.yaml
-- sakura-internet-ai-engine-inference-openapi.yml

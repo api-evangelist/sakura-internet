@@ -1,12 +1,44 @@
 openapi: 3.2.0
 info:
-  title: Sakura Internet OIDC認証 API
   version: 2.1.0
+  title: Gateway 正式版 APIドキュメント OIDC認証 API
   contact:
     name: SAKURA internet Inc.
   license:
     name: Copyright(C) SAKURA internet Inc. all rights reserved.
-  description: 'Operations tagged OIDC認証 across 2 of this provider''s published API definitions: apigw-api.yaml, sakura-internet-apigw-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: '---
+
+    「API Gateway」が提供するAPIの利用方法とサンプルを公開しております。
+
+    # 基本的な使い方
+
+    ## APIキーの発行
+
+    APIを利用するためには、認証のための「APIキー」が必要です。事前にキーを発行しておきます。
+
+    APIキーは「ユーザーID」「パスワード」に相当する「トークン」と呼ばれる認証情報で構成されています。
+
+    | 項目名 | APIキー発行時の項目名 | このドキュメント内での例 |
+
+    |------------|------------------------------|--------------------------------------|
+
+    | ユーザーID | アクセストークン(UUID) | 01234567-89ab-cdef-0123-456789abcdef |
+
+    | パスワード | アクセストークンシークレット | SAMPLETOKENSAMPLETOKENSAMPLETOKENSAM |
+
+
+    操作マニュアル
+
+
+    APIキー | さくらのクラウド ドキュメント
+
+
+    ---
+
+    # 利用例
+
+
+    API…'
 servers:
 - url: https://secure.sakura.ad.jp/cloud/api/apigw/1.0/
 tags:
@@ -81,8 +113,6 @@ paths:
           $ref: '#/components/responses/NotFoundResponse'
         '500':
           $ref: '#/components/responses/ServerErrorResponse'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/apigw/1.0/
   /oidc/{oidcId}:
     get:
       tags:
@@ -161,54 +191,15 @@ paths:
           $ref: '#/components/responses/ConflictResponse'
         '500':
           $ref: '#/components/responses/ServerErrorResponse'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/apigw/1.0/
 components:
-  responses:
-    ServerErrorResponse:
-      description: サーバーエラー
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorSchema'
-    ConflictResponse:
-      description: リソースが競合している
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorSchema'
-    UnprocessableEntityResponse:
-      description: Request自体は正しいが、処理できない
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorSchema'
-    BadRequestResponse:
-      description: Requestエラー
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorSchema'
-    NotFoundResponse:
-      description: リソースが存在しない
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorSchema'
-    UnauthorizedResponse:
-      description: 認証エラー
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorSchema'
   schemas:
-    Name:
-      type: string
-      description: Unicode文字、数字、ハイフン、アンダースコア、ピリオドのみ許可
-      minLength: 1
-      maxLength: 255
-      example: name
-      pattern: ^[\p{L}\p{N}._\-]+$
+    ErrorSchema:
+      type: object
+      properties:
+        message:
+          type: string
+          description: 各エラーに対応したメッセージが返却される
+          example: Bad Request
     AuthenticationMethods:
       type: array
       description: OIDC認証フロー
@@ -218,6 +209,44 @@ components:
         - authorizationCodeFlow
         - accessToken
         example: accessToken
+    OidcDetail:
+      description: OIDC詳細情報
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Oidc'
+      - properties:
+          services:
+            type: array
+            description: OIDC認証を使用するServiceの要約情報
+            items:
+              $ref: '#/components/schemas/ServiceSummary'
+    Name:
+      type: string
+      description: Unicode文字、数字、ハイフン、アンダースコア、ピリオドのみ許可
+      minLength: 1
+      maxLength: 255
+      example: name
+      pattern: ^[\p{L}\p{N}._\-]+$
+    Model:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: b69f7bfe-1d8f-48bb-8b85-b47359366e48
+          description: Entityを識別するためのID
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+          description: 作成日時
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+          description: 更新日時
+      description: 各Entity共通のモデル
     Oidc:
       description: Oidc認証情報
       type: object
@@ -277,37 +306,6 @@ components:
         - issuer
         - clientId
         - clientSecret
-    OidcDetail:
-      description: OIDC詳細情報
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/Oidc'
-      - properties:
-          services:
-            type: array
-            description: OIDC認証を使用するServiceの要約情報
-            items:
-              $ref: '#/components/schemas/ServiceSummary'
-    Model:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-          example: b69f7bfe-1d8f-48bb-8b85-b47359366e48
-          description: Entityを識別するためのID
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-          description: 作成日時
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-          description: 更新日時
-      description: 各Entity共通のモデル
     ServiceSummary:
       description: Service要約情報
       type: object
@@ -323,13 +321,6 @@ components:
             $ref: '#/components/schemas/Name'
             description: Service名<br>Service名は半角英数字およびアンダースコアのみを許可
             example: serviceName
-    ErrorSchema:
-      type: object
-      properties:
-        message:
-          type: string
-          description: 各エラーに対応したメッセージが返却される
-          example: Bad Request
   parameters:
     OidcID:
       in: path
@@ -341,6 +332,40 @@ components:
         example: 7c8d78bc-e4a3-4600-b70a-f5fe802dc1ba
       required: true
       example: 7c8d78bc-e4a3-4600-b70a-f5fe802dc1ba
-x-refined-from:
-- apigw-api.yaml
-- sakura-internet-apigw-openapi.yml
+  responses:
+    UnprocessableEntityResponse:
+      description: Request自体は正しいが、処理できない
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorSchema'
+    BadRequestResponse:
+      description: Requestエラー
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorSchema'
+    ConflictResponse:
+      description: リソースが競合している
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorSchema'
+    UnauthorizedResponse:
+      description: 認証エラー
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorSchema'
+    NotFoundResponse:
+      description: リソースが存在しない
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorSchema'
+    ServerErrorResponse:
+      description: サーバーエラー
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorSchema'

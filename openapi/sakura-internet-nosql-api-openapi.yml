@@ -1,12 +1,39 @@
 openapi: 3.2.0
 info:
-  title: Sakura Internet No SQL API
   version: 2.1.1
+  title: APIドキュメント No SQL API
   contact:
     name: SAKURA internet Inc.
   license:
     name: Copyright(C) SAKURA internet Inc. all rights reserved.
-  description: 'Operations tagged NoSQL across 2 of this provider''s published API definitions: nosql-api.yaml, sakura-internet-nosql-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: '---
+
+    「NoSQL」が提供するAPIの利用方法とサンプルを公開しております。
+
+    # 基本的な使い方
+
+    ## APIキーの発行
+
+    APIを利用するためには、認証のための「APIキー」が必要です。事前にキーを発行しておきます。
+
+    APIキーは「ユーザID」「パスワード」に相当する「トークン」と呼ばれる認証情報で構成されています。
+
+    | 項目名 | APIキー発行時の項目名 | このドキュメント内での例 |
+
+    |------------|------------------------------|--------------------------------------|
+
+    | ユーザID | アクセストークン(UUID) | 01234567-89ab-cdef-0123-456789abcdef |
+
+    | パスワード | アクセストークンシークレット | SAMPLETOKENSAMPLETOKENSAMPLETOKENSAM |
+
+
+    操作マニュアル
+
+
+    APIキー | さくらのクラウド ドキュメント
+
+
+    ##…'
 servers:
 - url: https://secure.sakura.ad.jp/cloud/zone/tk1b/api/cloud/1.1
 tags:
@@ -82,8 +109,6 @@ paths:
           $ref: '#/components/responses/ConflictResponse'
         '500':
           $ref: '#/components/responses/ServerErrorResponse'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/zone/tk1b/api/cloud/1.1
   /appliance/{applianceID}:
     get:
       tags:
@@ -173,8 +198,6 @@ paths:
           $ref: '#/components/responses/ConflictResponse'
         '500':
           $ref: '#/components/responses/ServerErrorResponse'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/zone/tk1b/api/cloud/1.1
   /appliance/{applianceID}/config:
     put:
       tags:
@@ -197,8 +220,6 @@ paths:
                 $ref: '#/components/schemas/NosqlIsOkResponse'
         '400':
           $ref: '#/components/responses/BadRequestResponse'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/zone/tk1b/api/cloud/1.1
   /appliance/{applianceID}/status:
     get:
       tags:
@@ -223,10 +244,226 @@ paths:
           $ref: '#/components/responses/UnauthorizedResponse'
         '500':
           $ref: '#/components/responses/ServerErrorResponse'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/zone/tk1b/api/cloud/1.1
 components:
   schemas:
+    NosqlReadResponse:
+      type: object
+      properties:
+        Appliance:
+          $ref: '#/components/schemas/NosqlApplianceResponse'
+        is_ok:
+          $ref: '#/components/schemas/is_ok'
+      required:
+      - Appliance
+    NosqlRemarkResponse:
+      type: object
+      properties:
+        Nosql:
+          type: object
+          properties:
+            PrimaryNodes:
+              type: object
+              description: プライマリノード情報
+              properties:
+                Appliance:
+                  type: object
+                  description: 既存のNoSQLのアプライアンス情報
+                  properties:
+                    ID:
+                      type: string
+                      description: 既存のNoSQLのアプライアンスID
+                      example: '113700352689'
+                    Zone:
+                      type: object
+                      description: 既存のNoSQLのゾーン
+                      properties:
+                        Name:
+                          type: string
+                          description: 既存のNoSQLのゾーン情報
+                          example: tk1b
+            DatabaseEngine:
+              type: string
+              description: データベースに使用するエンジン
+              enum:
+              - Cassandra
+              example: Cassandra
+            DatabaseVersion:
+              type: string
+              description: データベースバージョン
+              pattern: ^\d+\.\d+\.\d+$
+              example: 4.1.9
+            DefaultUser:
+              type: string
+              description: デフォルトユーザ名
+              example: defaultuser01
+              minLength: 4
+              maxLength: 20
+              pattern: ^[a-z][a-z0-9_]{3,19}$
+            DiskSize:
+              type: integer
+              description: ディスクサイズ(MB)
+              example: 102400
+              enum:
+              - 40960
+              - 102400
+              - 256000
+            Memory:
+              type: integer
+              description: メモリ(MB)
+              example: 8192
+              enum:
+              - 4096
+              - 8192
+              - 16384
+            Nodes:
+              type: integer
+              description: ノード数
+              example: 3
+              minimum: 1
+              maximum: 3
+            Port:
+              type: integer
+              description: ポート
+              example: 9042
+              minimum: 1024
+              maximum: 65535
+            Storage:
+              type: string
+              description: ストレージ
+              example: SSD
+              enum:
+              - SSD
+            Virtualcore:
+              type: integer
+              description: 仮想コア
+              example: 3
+              enum:
+              - 2
+              - 3
+              - 6
+            Zone:
+              type: string
+              description: ゾーン
+              example: tk1b
+        Servers:
+          type: array
+          items:
+            type: object
+            properties:
+              UserIPAddress:
+                type: string
+                format: ipv4
+                description: "ユーザ側スイッチに接続するIPアドレス  \n"
+                example: 192.168.100.11
+        Network:
+          type: object
+          description: ネットワーク情報
+          properties:
+            DefaultRoute:
+              type: string
+              description: ゲートウェイのアドレス
+              example: 192.168.100.254
+            NetworkMaskLen:
+              type: integer
+              description: ネットマスク
+              example: 24
+    NosqlStatusResponse:
+      type: object
+      properties:
+        Appliance:
+          type: object
+          properties:
+            ID:
+              type: string
+              example: '113600097295'
+            SettingsResponse:
+              type: object
+              description: NoSQLのステータスレスポンス
+              properties:
+                Nosql:
+                  type: object
+                  properties:
+                    DatabaseVersion:
+                      type: string
+                      description: NoSQLの現在のバージョン
+                      example: 4.1.7
+                    UpgradeVersion:
+                      type: string
+                      description: NoSQLの更新可能な最新のバージョン
+                      example: 4.1.9
+                    Jobs:
+                      type: array
+                      description: ジョブ情報
+                      items:
+                        type: object
+                        properties:
+                          JobType:
+                            type: string
+                            description: ジョブタイプ
+                            example: Create
+                          JobStatus:
+                            type: string
+                            description: ジョブステータス
+                            example: Done
+                    PrimaryNodes:
+                      type: object
+                      description: プライマリノード情報
+                      properties:
+                        Appliance:
+                          $ref: '#/components/schemas/NosqlNodeAppliance'
+                    AddNodes:
+                      type: array
+                      description: 追加されたノードの情報
+                      items:
+                        type: object
+                        required:
+                        - Appliance
+                        properties:
+                          Appliance:
+                            $ref: '#/components/schemas/NosqlNodeAppliance'
+        is_ok:
+          $ref: '#/components/schemas/is_ok'
+    Tags:
+      type:
+      - array
+      - 'null'
+      description: タグ
+      maxItems: 10
+      items:
+        type: string
+        example: tag
+        maxLength: 32
+        pattern: ^[^\s\u3000]+$
+      example:
+      - tag1
+    is_ok:
+      type: boolean
+      description: 成功のレスポンス(true:成功)
+      example: true
+    Availability:
+      type: string
+      description: 'NoSQLの利用可能状態
+
+        | 値        | 説明       |
+
+        |-----------|------------|
+
+        | migrating | 準備中     |
+
+        | available | 利用可能   |
+
+        | failed    | 利用不可   |
+
+        '
+      enum:
+      - migrating
+      - available
+      - failed
+      example: available
+    ServiceClass:
+      type: string
+      description: "サービスクラス  \n**新規作成時・ノード追加時必須**\n\n| プラン名      | サービスクラスパス          | \n|--------------|----------------------------|\n| 40GBプラン       |  cloud/nosql/plan/1        |\n| 100GBプラン       |  cloud/nosql/plan/2        |\n| 100GBプラン/ノード |  cloud/nosql/plan/2/node  |\n| 250GBプラン       |  cloud/nosql/plan/3        |\n| 250GBプラン/ノード |  cloud/nosql/plan/3/node  |\n"
+      example: cloud/nosql/plan/1
     NosqlApplianceResponse:
       type: object
       allOf:
@@ -377,6 +614,172 @@ components:
                           type: integer
                           description: ネットマスク
                           example: 24
+    Instance:
+      type: object
+      properties:
+        Status:
+          type: string
+          example: up
+        StatusChangedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2021-01-01T00:00:00Z'
+        Host:
+          type:
+          - object
+          - 'null'
+          properties:
+            Name:
+              type: string
+              example: host_name
+            InfoURL:
+              type: string
+              example: ''
+        Hosts:
+          type: array
+          items:
+            type: object
+            properties:
+              Name:
+                type: string
+              InfoURL:
+                type: string
+    NosqlSettings:
+      type: object
+      properties:
+        Password:
+          $ref: '#/components/schemas/Password'
+        ReserveIPAddress:
+          description: "予備IPアドレス  \n**新規作成時・ノード追加時必須**  \n※デッドノード発生時、ノード切替を行う際に使用する予備のIPアドレス  \nただし、40GBプランの場合は必須ではありません。\n"
+          type: string
+          format: ipv4
+          example: 192.168.100.203
+        Backup:
+          type:
+          - object
+          - 'null'
+          description: バックアップ情報
+          properties:
+            Connect:
+              type: string
+              description: バックアップ先（NFS URL形式）
+              example: nfs://192.168.100.250/export
+              pattern: ^(nfs://[0-9\.]+/[A-Za-z0-9_\-\/]+)$
+            DayOfWeek:
+              type:
+              - array
+              - 'null'
+              description: バックアップスケジュール
+              items:
+                type: string
+                enum:
+                - sun
+                - mon
+                - tue
+                - wed
+                - thu
+                - fri
+                - sat
+              example:
+              - sun
+              - mon
+            Time:
+              type:
+              - string
+              - 'null'
+              description: バックアップする時間
+              example: 00:00
+              pattern: ^(([0-1][0-9]|2[0-3]):(00|15|30|45))?$
+            Rotate:
+              type: integer
+              description: バックアップ数（1から8まで）
+              minimum: 1
+              maximum: 8
+              example: 3
+          required:
+          - Connect
+          - Rotate
+        SourceNetwork:
+          type: array
+          description: 送信元ネットワークアドレス
+          uniqueItems: true
+          items:
+            type: string
+            pattern: ^(?:[0-9]{1,3}\.){3}[0-9]{1,3}(?:/(?:[0-9]|[1-2][0-9]|3[0-2]))?$
+          example:
+          - 192.168.100.200
+          - 192.168.100.201
+          - 192.168.100.202
+        Repair:
+          type:
+          - object
+          - 'null'
+          description: "定期リペア設定  \n※40GBプランはノード数が1のため、リペア設定を行うことはできません。 \n"
+          properties:
+            Incremental:
+              type: object
+              description: 増分リペア設定
+              properties:
+                DaysOfWeek:
+                  type: array
+                  description: 実行曜日
+                  items:
+                    type: string
+                    enum:
+                    - sun
+                    - mon
+                    - tue
+                    - wed
+                    - thu
+                    - fri
+                    - sat
+                  example:
+                  - sun
+                  - mon
+                Time:
+                  type: string
+                  description: 実行時間
+                  pattern: ^(([0-1][0-9]|2[0-3]):(00|15|30|45))?$
+                  example: 00:00
+              required:
+              - DaysOfWeek
+              - Time
+            Full:
+              type: object
+              description: 完全リペア設定
+              properties:
+                Interval:
+                  type: integer
+                  description: 7日ごとの実行間隔（日数）
+                  enum:
+                  - 7
+                  - 14
+                  - 21
+                  - 28
+                  example: 7
+                DayOfWeek:
+                  type: string
+                  description: 実行曜日
+                  enum:
+                  - sun
+                  - mon
+                  - tue
+                  - wed
+                  - thu
+                  - fri
+                  - sat
+                  example: sun
+                Time:
+                  type: string
+                  description: 実行時間
+                  pattern: ^(([0-1][0-9]|2[0-3]):(00|15|30|45))?$
+                  example: 00:00
+              required:
+              - Interval
+              - DayOfWeek
+              - Time
     NosqlApplianceInputResponse:
       type: object
       properties:
@@ -398,258 +801,6 @@ components:
           maxLength: 512
         Tags:
           $ref: '#/components/schemas/Tags'
-    NosqlIsOkResponse:
-      type: object
-      properties:
-        Nosql:
-          type: object
-          properties:
-            is_ok:
-              $ref: '#/components/schemas/is_ok'
-        is_ok:
-          $ref: '#/components/schemas/is_ok'
-    ServiceClass:
-      type: string
-      description: "サービスクラス  \n**新規作成時・ノード追加時必須**\n\n| プラン名      | サービスクラスパス          | \n|--------------|----------------------------|\n| 40GBプラン       |  cloud/nosql/plan/1        |\n| 100GBプラン       |  cloud/nosql/plan/2        |\n| 100GBプラン/ノード |  cloud/nosql/plan/2/node  |\n| 250GBプラン       |  cloud/nosql/plan/3        |\n| 250GBプラン/ノード |  cloud/nosql/plan/3/node  |\n"
-      example: cloud/nosql/plan/1
-    Success:
-      oneOf:
-      - type: boolean
-        example: true
-      - type: string
-        example: Accepted
-    NosqlCreateRequest:
-      type: object
-      properties:
-        Appliance:
-          type: object
-          allOf:
-          - $ref: '#/components/schemas/NosqlApplianceInput'
-          - type: object
-            properties:
-              ServiceClass:
-                $ref: '#/components/schemas/ServiceClass'
-              Plan:
-                $ref: '#/components/schemas/Plan'
-              Disk:
-                type:
-                - object
-                - 'null'
-                description: "ディスク情報  \nディスクの情報は暗号化する場合は EncryptionAlgorithm と EncryptionKey を指定する必要があります。\n"
-                properties:
-                  EncryptionKey:
-                    type:
-                    - object
-                    - 'null'
-                    description: 暗号化キー情報
-                    properties:
-                      KMSKeyID:
-                        type:
-                        - string
-                        - 'null'
-                        description: KMSキーID
-                        example: '113700349294'
-                  EncryptionAlgorithm:
-                    type: string
-                    description: 暗号化アルゴリズム
-                    example: aes256_xts
-              Settings:
-                $ref: '#/components/schemas/NosqlSettings'
-              Remark:
-                $ref: '#/components/schemas/NosqlRemark'
-              UserInterfaces:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    Switch:
-                      type: object
-                      description: スイッチ
-                      properties:
-                        ID:
-                          type: string
-                          description: "スイッチID  \n**新規作成時・ノード追加時必須**\n"
-                          example: '113600097295'
-                      required:
-                      - ID
-                    UserIPAddress1:
-                      type: string
-                      description: "ユーザIPアドレス1  \n**新規作成時・ノード追加時必須**\n"
-                      format: ipv4
-                      example: 192.168.100.11
-                    UserIPAddress2:
-                      type: string
-                      description: "ユーザIPアドレス2  \n**新規作成時・ノード追加時必須**  \n40GBプラン（ノード数1）の場合は設定不要です。\n"
-                      format: ipv4
-                      example: 192.168.100.12
-                    UserIPAddress3:
-                      type: string
-                      description: "ユーザIPアドレス3  \n**新規作成時必須**  \n40GBプラン（ノード数1）の場合は設定不要です。\n"
-                      format: ipv4
-                      example: 192.168.100.13
-                    UserSubnet:
-                      type: object
-                      properties:
-                        DefaultRoute:
-                          type: string
-                          example: 192.168.100.254
-                          description: "ゲートウェイのアドレス  \n**新規作成時・ノード追加時必須**\n"
-                        NetworkMaskLen:
-                          type: integer
-                          example: 24
-                          description: "ネットマスク  \n**新規作成時・ノード追加時必須**\n"
-                      required:
-                      - NetworkMaskLen
-                      - DefaultRoute
-                  required:
-                  - Switch
-                  - UserIPAddress1
-                  - UserSubnet
-            required:
-            - Class
-            - Name
-            - ServiceClass
-            - Plan
-            - Remark
-            - UserInterfaces
-            - Settings
-      required:
-      - Appliance
-    NosqlStatusResponse:
-      type: object
-      properties:
-        Appliance:
-          type: object
-          properties:
-            ID:
-              type: string
-              example: '113600097295'
-            SettingsResponse:
-              type: object
-              description: NoSQLのステータスレスポンス
-              properties:
-                Nosql:
-                  type: object
-                  properties:
-                    DatabaseVersion:
-                      type: string
-                      description: NoSQLの現在のバージョン
-                      example: 4.1.7
-                    UpgradeVersion:
-                      type: string
-                      description: NoSQLの更新可能な最新のバージョン
-                      example: 4.1.9
-                    Jobs:
-                      type: array
-                      description: ジョブ情報
-                      items:
-                        type: object
-                        properties:
-                          JobType:
-                            type: string
-                            description: ジョブタイプ
-                            example: Create
-                          JobStatus:
-                            type: string
-                            description: ジョブステータス
-                            example: Done
-                    PrimaryNodes:
-                      type: object
-                      description: プライマリノード情報
-                      properties:
-                        Appliance:
-                          $ref: '#/components/schemas/NosqlNodeAppliance'
-                    AddNodes:
-                      type: array
-                      description: 追加されたノードの情報
-                      items:
-                        type: object
-                        required:
-                        - Appliance
-                        properties:
-                          Appliance:
-                            $ref: '#/components/schemas/NosqlNodeAppliance'
-        is_ok:
-          $ref: '#/components/schemas/is_ok'
-    Availability:
-      type: string
-      description: 'NoSQLの利用可能状態
-
-        | 値        | 説明       |
-
-        |-----------|------------|
-
-        | migrating | 準備中     |
-
-        | available | 利用可能   |
-
-        | failed    | 利用不可   |
-
-        '
-      enum:
-      - migrating
-      - available
-      - failed
-      example: available
-    Tags:
-      type:
-      - array
-      - 'null'
-      description: タグ
-      maxItems: 10
-      items:
-        type: string
-        example: tag
-        maxLength: 32
-        pattern: ^[^\s\u3000]+$
-      example:
-      - tag1
-    is_ok:
-      type: boolean
-      description: 成功のレスポンス(true:成功)
-      example: true
-    NosqlSuccessResponse:
-      type: object
-      properties:
-        Appliance:
-          $ref: '#/components/schemas/NosqlAppliance'
-        Success:
-          $ref: '#/components/schemas/Success'
-        is_ok:
-          $ref: '#/components/schemas/is_ok'
-    NosqldbNodeStatus:
-      type: object
-      properties:
-        Index:
-          type: integer
-          description: ノードの通番
-          example: 0
-        UserIPAddress:
-          type: string
-          format: ipv4
-          description: ユーザ側スイッチに接続するIPアドレス
-          example: 192.168.100.11
-        NodeType:
-          type: string
-          description: 'ノードタイプ
-
-
-            | 値 | 説明         |
-
-            |----|--------------|
-
-            | 0  | 正常         |
-
-            | 1  | デッドノード |
-
-            | 2  | 予備IPサーバ |
-
-            '
-          enum:
-          - '0'
-          - '1'
-          - '2'
-          example: '0'
     NosqlRemark:
       type: object
       properties:
@@ -789,82 +940,258 @@ components:
       - Nosql
       - Servers
       - Network
-    NosqlCreateResponse:
+    NosqlListResponse:
       type: object
       properties:
-        Appliance:
-          $ref: '#/components/schemas/NosqlAppliance'
-        Class:
-          type: string
-          description: クラス
-          example: nosql
-        Name:
-          type: string
-          description: NoSQLの名前
-          example: CassandraName
-          minLength: 1
-          maxLength: 64
-        Description:
-          type: string
-          description: NoSQLの説明
-          example: 説明
-          minLength: 0
-          maxLength: 512
-        Plan:
-          $ref: '#/components/schemas/Plan'
-        Settings:
-          $ref: '#/components/schemas/NosqlSettings'
-        Remark:
-          $ref: '#/components/schemas/NosqlRemark'
-        ID:
-          type: string
-          example: '113600097295'
-        Account:
-          type: object
-          properties:
-            ID:
-              type: string
-        Tags:
-          $ref: '#/components/schemas/Tags'
-        Availability:
-          $ref: '#/components/schemas/Availability'
-        ServerCount:
+        From:
+          type: integer
+          example: 0
+        Count:
           type: integer
           example: 1
-        HiddenRemark:
-          type: object
-          properties:
-            PlanSpec:
-              type: object
-              properties:
-                Note:
-                  type: object
-                  properties:
-                    ID:
-                      type: string
-                ServiceClass:
-                  type: string
-                  example: cloud/nosql/plan/1
-            Encrypted:
-              type: object
-              properties:
-                Algorithm:
-                  type: string
-                IV:
-                  type: string
-                md5:
-                  type: string
-                Associative:
-                  type: boolean
-                Data:
-                  type: string
-        Success:
-          $ref: '#/components/schemas/Success'
+        Total:
+          type: integer
+          example: 1
+        Appliances:
+          type: array
+          items:
+            $ref: '#/components/schemas/NosqlApplianceResponse'
         is_ok:
           $ref: '#/components/schemas/is_ok'
       required:
+      - From
+      - Count
+      - Total
+      - Appliances
+    NosqlCreateRequest:
+      type: object
+      properties:
+        Appliance:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/NosqlApplianceInput'
+          - type: object
+            properties:
+              ServiceClass:
+                $ref: '#/components/schemas/ServiceClass'
+              Plan:
+                $ref: '#/components/schemas/Plan'
+              Disk:
+                type:
+                - object
+                - 'null'
+                description: "ディスク情報  \nディスクの情報は暗号化する場合は EncryptionAlgorithm と EncryptionKey を指定する必要があります。\n"
+                properties:
+                  EncryptionKey:
+                    type:
+                    - object
+                    - 'null'
+                    description: 暗号化キー情報
+                    properties:
+                      KMSKeyID:
+                        type:
+                        - string
+                        - 'null'
+                        description: KMSキーID
+                        example: '113700349294'
+                  EncryptionAlgorithm:
+                    type: string
+                    description: 暗号化アルゴリズム
+                    example: aes256_xts
+              Settings:
+                $ref: '#/components/schemas/NosqlSettings'
+              Remark:
+                $ref: '#/components/schemas/NosqlRemark'
+              UserInterfaces:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Switch:
+                      type: object
+                      description: スイッチ
+                      properties:
+                        ID:
+                          type: string
+                          description: "スイッチID  \n**新規作成時・ノード追加時必須**\n"
+                          example: '113600097295'
+                      required:
+                      - ID
+                    UserIPAddress1:
+                      type: string
+                      description: "ユーザIPアドレス1  \n**新規作成時・ノード追加時必須**\n"
+                      format: ipv4
+                      example: 192.168.100.11
+                    UserIPAddress2:
+                      type: string
+                      description: "ユーザIPアドレス2  \n**新規作成時・ノード追加時必須**  \n40GBプラン（ノード数1）の場合は設定不要です。\n"
+                      format: ipv4
+                      example: 192.168.100.12
+                    UserIPAddress3:
+                      type: string
+                      description: "ユーザIPアドレス3  \n**新規作成時必須**  \n40GBプラン（ノード数1）の場合は設定不要です。\n"
+                      format: ipv4
+                      example: 192.168.100.13
+                    UserSubnet:
+                      type: object
+                      properties:
+                        DefaultRoute:
+                          type: string
+                          example: 192.168.100.254
+                          description: "ゲートウェイのアドレス  \n**新規作成時・ノード追加時必須**\n"
+                        NetworkMaskLen:
+                          type: integer
+                          example: 24
+                          description: "ネットマスク  \n**新規作成時・ノード追加時必須**\n"
+                      required:
+                      - NetworkMaskLen
+                      - DefaultRoute
+                  required:
+                  - Switch
+                  - UserIPAddress1
+                  - UserSubnet
+            required:
+            - Class
+            - Name
+            - ServiceClass
+            - Plan
+            - Remark
+            - UserInterfaces
+            - Settings
+      required:
       - Appliance
-      - ID
+    NosqlIsOkResponse:
+      type: object
+      properties:
+        Nosql:
+          type: object
+          properties:
+            is_ok:
+              $ref: '#/components/schemas/is_ok'
+        is_ok:
+          $ref: '#/components/schemas/is_ok'
+    NosqlSettingsResponse:
+      type: object
+      properties:
+        Backup:
+          type:
+          - object
+          - 'null'
+          description: バックアップ情報
+          properties:
+            Connect:
+              type: string
+              description: バックアップ先（NFS URL形式）
+              example: nfs://192.168.100.250/export
+              pattern: ^(nfs://[0-9\.]+/[A-Za-z0-9_\-\/]+)$
+            DayOfWeek:
+              type:
+              - array
+              - 'null'
+              description: バックアップスケジュール
+              items:
+                type: string
+                enum:
+                - sun
+                - mon
+                - tue
+                - wed
+                - thu
+                - fri
+                - sat
+              example:
+              - sun
+              - mon
+            Time:
+              type:
+              - string
+              - 'null'
+              description: バックアップする時間
+              example: 00:00
+              pattern: ^(([0-1][0-9]|2[0-3]):(00|15|30|45))?$
+            Rotate:
+              type: integer
+              description: バックアップ数（1から8まで）
+              minimum: 1
+              maximum: 8
+              example: 3
+        SourceNetwork:
+          type: array
+          description: 送信元ネットワークアドレス
+          uniqueItems: true
+          items:
+            type: string
+            pattern: ^(?:[0-9]{1,3}\.){3}[0-9]{1,3}(?:/(?:[0-9]|[1-2][0-9]|3[0-2]))?$
+          example:
+          - 192.168.100.200
+          - 192.168.100.201
+          - 192.168.100.202
+        ReserveIPAddress:
+          description: "予備IPアドレス  \n※デッドノード発生時、ノード切替を行う際に使用する予備のIPアドレス\n"
+          type: string
+          format: ipv4
+          example: 192.168.100.203
+        Repair:
+          type:
+          - object
+          - 'null'
+          description: 定期リペア設定
+          properties:
+            Incremental:
+              type: object
+              description: 増分リペア設定
+              properties:
+                DaysOfWeek:
+                  type: array
+                  description: 実行曜日
+                  items:
+                    type: string
+                    enum:
+                    - sun
+                    - mon
+                    - tue
+                    - wed
+                    - thu
+                    - fri
+                    - sat
+                  example:
+                  - sun
+                  - mon
+                Time:
+                  type: string
+                  description: 実行時間
+                  pattern: ^(([0-1][0-9]|2[0-3]):(00|15|30|45))?$
+                  example: 00:00
+            Full:
+              type: object
+              description: 完全リペア設定
+              properties:
+                Interval:
+                  type: integer
+                  description: 7日ごとの実行間隔（日数）
+                  enum:
+                  - 7
+                  - 14
+                  - 21
+                  - 28
+                  example: 7
+                DayOfWeek:
+                  type: string
+                  description: 実行曜日
+                  enum:
+                  - sun
+                  - mon
+                  - tue
+                  - wed
+                  - thu
+                  - fri
+                  - sat
+                  example: sun
+                Time:
+                  type: string
+                  description: 実行時間
+                  pattern: ^(([0-1][0-9]|2[0-3]):(00|15|30|45))?$
+                  example: 00:00
     ConflictErrorResponse:
       type: object
       description: エラーレスポンス
@@ -889,29 +1216,117 @@ components:
           type: string
           description: エラーメッセージ
           example: 要求を受け付けできません。
-    NosqlListResponse:
+    NosqlServiceClass:
+      type: string
+      description: "サービスクラス\n\n| プラン名      | サービスクラスパス          | \n|--------------|----------------------------|\n| 40GBプラン       |  cloud/nosql/plan/1        |\n| 100GBプラン       |  cloud/nosql/plan/2        |\n| 100GBプラン/ノード |  cloud/nosql/plan/2/node  |\n| 250GBプラン       |  cloud/nosql/plan/3        |\n| 250GBプラン/ノード |  cloud/nosql/plan/3/node  |\n"
+      example: cloud/nosql/plan/1
+    Plan:
+      type: object
+      description: "プラン  \n**新規作成時・ノード追加時必須**\n"
+      properties:
+        ID:
+          type: integer
+          description: "プランID  \n**新規作成時・ノード追加時必須**\n\n利用可能なプランID:\n| プラン名      | プランID   | \n|--------------|------------|\n| 40GBプラン       |   51142    |\n| 100GBプラン       |   51143    |\n| 100GBプラン/ノード |   51145    |\n| 250GBプラン       |   51144    |\n| 250GBプラン/ノード |   51146    |\n"
+          example: 51142
+      required:
+      - ID
+    NosqlApplianceInput:
       type: object
       properties:
-        From:
+        Class:
+          type: string
+          description: "クラス  \n**新規作成時・ノード追加時必須**\n"
+          example: nosql
+        Name:
+          type: string
+          description: "NoSQLの名前  \n**新規作成時・ノード追加時必須**\n"
+          example: CassandraName
+          minLength: 1
+          maxLength: 64
+        Description:
+          type: string
+          description: NoSQLの説明
+          example: 説明
+          minLength: 0
+          maxLength: 512
+        Tags:
+          $ref: '#/components/schemas/Tags'
+    NosqldbNodeStatus:
+      type: object
+      properties:
+        Index:
           type: integer
+          description: ノードの通番
           example: 0
-        Count:
+        UserIPAddress:
+          type: string
+          format: ipv4
+          description: ユーザ側スイッチに接続するIPアドレス
+          example: 192.168.100.11
+        NodeType:
+          type: string
+          description: 'ノードタイプ
+
+
+            | 値 | 説明         |
+
+            |----|--------------|
+
+            | 0  | 正常         |
+
+            | 1  | デッドノード |
+
+            | 2  | 予備IPサーバ |
+
+            '
+          enum:
+          - '0'
+          - '1'
+          - '2'
+          example: '0'
+    NosqlPlan:
+      type: object
+      description: プラン
+      properties:
+        ID:
           type: integer
-          example: 1
-        Total:
-          type: integer
-          example: 1
-        Appliances:
-          type: array
-          items:
-            $ref: '#/components/schemas/NosqlApplianceResponse'
+          description: "プランID  \n\n| プラン名      | プランID   | \n|--------------|------------|\n| 40GBプラン       |   51142    |\n| 100GBプラン       |   51143    |\n| 100GBプラン/ノード |   51145    |\n| 250GBプラン       |   51144    |\n| 250GBプラン/ノード |   51146    |\n"
+          example: 51142
+    NosqlSuccessResponse:
+      type: object
+      properties:
+        Appliance:
+          $ref: '#/components/schemas/NosqlAppliance'
+        Success:
+          $ref: '#/components/schemas/Success'
         is_ok:
           $ref: '#/components/schemas/is_ok'
+    NosqlUpdateRequest:
+      type: object
+      properties:
+        Appliance:
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/NosqlApplianceInput'
+          - type: object
+            properties:
+              ID:
+                type: string
+                description: アプライアンスID
+                example: '113600097295'
+              Settings:
+                $ref: '#/components/schemas/NosqlSettings'
+            required:
+            - ID
+            - Settings
       required:
-      - From
-      - Count
-      - Total
-      - Appliances
+      - Appliance
+    Success:
+      oneOf:
+      - type: boolean
+        example: true
+      - type: string
+        example: Accepted
     NosqlAppliance:
       type: object
       allOf:
@@ -1060,172 +1475,18 @@ components:
                           type: integer
                           description: ネットマスク
                           example: 24
-    NosqlSettingsResponse:
-      type: object
-      properties:
-        Backup:
-          type:
-          - object
-          - 'null'
-          description: バックアップ情報
-          properties:
-            Connect:
-              type: string
-              description: バックアップ先（NFS URL形式）
-              example: nfs://192.168.100.250/export
-              pattern: ^(nfs://[0-9\.]+/[A-Za-z0-9_\-\/]+)$
-            DayOfWeek:
-              type:
-              - array
-              - 'null'
-              description: バックアップスケジュール
-              items:
-                type: string
-                enum:
-                - sun
-                - mon
-                - tue
-                - wed
-                - thu
-                - fri
-                - sat
-              example:
-              - sun
-              - mon
-            Time:
-              type:
-              - string
-              - 'null'
-              description: バックアップする時間
-              example: 00:00
-              pattern: ^(([0-1][0-9]|2[0-3]):(00|15|30|45))?$
-            Rotate:
-              type: integer
-              description: バックアップ数（1から8まで）
-              minimum: 1
-              maximum: 8
-              example: 3
-        SourceNetwork:
-          type: array
-          description: 送信元ネットワークアドレス
-          uniqueItems: true
-          items:
-            type: string
-            pattern: ^(?:[0-9]{1,3}\.){3}[0-9]{1,3}(?:/(?:[0-9]|[1-2][0-9]|3[0-2]))?$
-          example:
-          - 192.168.100.200
-          - 192.168.100.201
-          - 192.168.100.202
-        ReserveIPAddress:
-          description: "予備IPアドレス  \n※デッドノード発生時、ノード切替を行う際に使用する予備のIPアドレス\n"
-          type: string
-          format: ipv4
-          example: 192.168.100.203
-        Repair:
-          type:
-          - object
-          - 'null'
-          description: 定期リペア設定
-          properties:
-            Incremental:
-              type: object
-              description: 増分リペア設定
-              properties:
-                DaysOfWeek:
-                  type: array
-                  description: 実行曜日
-                  items:
-                    type: string
-                    enum:
-                    - sun
-                    - mon
-                    - tue
-                    - wed
-                    - thu
-                    - fri
-                    - sat
-                  example:
-                  - sun
-                  - mon
-                Time:
-                  type: string
-                  description: 実行時間
-                  pattern: ^(([0-1][0-9]|2[0-3]):(00|15|30|45))?$
-                  example: 00:00
-            Full:
-              type: object
-              description: 完全リペア設定
-              properties:
-                Interval:
-                  type: integer
-                  description: 7日ごとの実行間隔（日数）
-                  enum:
-                  - 7
-                  - 14
-                  - 21
-                  - 28
-                  example: 7
-                DayOfWeek:
-                  type: string
-                  description: 実行曜日
-                  enum:
-                  - sun
-                  - mon
-                  - tue
-                  - wed
-                  - thu
-                  - fri
-                  - sat
-                  example: sun
-                Time:
-                  type: string
-                  description: 実行時間
-                  pattern: ^(([0-1][0-9]|2[0-3]):(00|15|30|45))?$
-                  example: 00:00
-    Plan:
-      type: object
-      description: "プラン  \n**新規作成時・ノード追加時必須**\n"
-      properties:
-        ID:
-          type: integer
-          description: "プランID  \n**新規作成時・ノード追加時必須**\n\n利用可能なプランID:\n| プラン名      | プランID   | \n|--------------|------------|\n| 40GBプラン       |   51142    |\n| 100GBプラン       |   51143    |\n| 100GBプラン/ノード |   51145    |\n| 250GBプラン       |   51144    |\n| 250GBプラン/ノード |   51146    |\n"
-          example: 51142
-      required:
-      - ID
-    NosqlReadResponse:
+    NosqlCreateResponse:
       type: object
       properties:
         Appliance:
-          $ref: '#/components/schemas/NosqlApplianceResponse'
-        is_ok:
-          $ref: '#/components/schemas/is_ok'
-      required:
-      - Appliance
-    NosqlPlan:
-      type: object
-      description: プラン
-      properties:
-        ID:
-          type: integer
-          description: "プランID  \n\n| プラン名      | プランID   | \n|--------------|------------|\n| 40GBプラン       |   51142    |\n| 100GBプラン       |   51143    |\n| 100GBプラン/ノード |   51145    |\n| 250GBプラン       |   51144    |\n| 250GBプラン/ノード |   51146    |\n"
-          example: 51142
-    Password:
-      type: string
-      example: Default-Password01
-      description: "パスワード  \n**新規作成時必須**\n"
-      pattern: ^[a-zA-Z0-9-._]+$
-      minLength: 12
-      maxLength: 30
-    NosqlApplianceInput:
-      type: object
-      properties:
+          $ref: '#/components/schemas/NosqlAppliance'
         Class:
           type: string
-          description: "クラス  \n**新規作成時・ノード追加時必須**\n"
+          description: クラス
           example: nosql
         Name:
           type: string
-          description: "NoSQLの名前  \n**新規作成時・ノード追加時必須**\n"
+          description: NoSQLの名前
           example: CassandraName
           minLength: 1
           maxLength: 64
@@ -1235,8 +1496,68 @@ components:
           example: 説明
           minLength: 0
           maxLength: 512
+        Plan:
+          $ref: '#/components/schemas/Plan'
+        Settings:
+          $ref: '#/components/schemas/NosqlSettings'
+        Remark:
+          $ref: '#/components/schemas/NosqlRemark'
+        ID:
+          type: string
+          example: '113600097295'
+        Account:
+          type: object
+          properties:
+            ID:
+              type: string
         Tags:
           $ref: '#/components/schemas/Tags'
+        Availability:
+          $ref: '#/components/schemas/Availability'
+        ServerCount:
+          type: integer
+          example: 1
+        HiddenRemark:
+          type: object
+          properties:
+            PlanSpec:
+              type: object
+              properties:
+                Note:
+                  type: object
+                  properties:
+                    ID:
+                      type: string
+                ServiceClass:
+                  type: string
+                  example: cloud/nosql/plan/1
+            Encrypted:
+              type: object
+              properties:
+                Algorithm:
+                  type: string
+                IV:
+                  type: string
+                md5:
+                  type: string
+                Associative:
+                  type: boolean
+                Data:
+                  type: string
+        Success:
+          $ref: '#/components/schemas/Success'
+        is_ok:
+          $ref: '#/components/schemas/is_ok'
+      required:
+      - Appliance
+      - ID
+    Password:
+      type: string
+      example: Default-Password01
+      description: "パスワード  \n**新規作成時必須**\n"
+      pattern: ^[a-zA-Z0-9-._]+$
+      minLength: 12
+      maxLength: 30
     NosqlNodeAppliance:
       type: object
       description: ノードのアプライアンス情報
@@ -1263,317 +1584,6 @@ components:
           description: ノードの詳細情報
           items:
             $ref: '#/components/schemas/NosqldbNodeStatus'
-    NosqlUpdateRequest:
-      type: object
-      properties:
-        Appliance:
-          type: object
-          allOf:
-          - $ref: '#/components/schemas/NosqlApplianceInput'
-          - type: object
-            properties:
-              ID:
-                type: string
-                description: アプライアンスID
-                example: '113600097295'
-              Settings:
-                $ref: '#/components/schemas/NosqlSettings'
-            required:
-            - ID
-            - Settings
-      required:
-      - Appliance
-    NosqlServiceClass:
-      type: string
-      description: "サービスクラス\n\n| プラン名      | サービスクラスパス          | \n|--------------|----------------------------|\n| 40GBプラン       |  cloud/nosql/plan/1        |\n| 100GBプラン       |  cloud/nosql/plan/2        |\n| 100GBプラン/ノード |  cloud/nosql/plan/2/node  |\n| 250GBプラン       |  cloud/nosql/plan/3        |\n| 250GBプラン/ノード |  cloud/nosql/plan/3/node  |\n"
-      example: cloud/nosql/plan/1
-    NosqlRemarkResponse:
-      type: object
-      properties:
-        Nosql:
-          type: object
-          properties:
-            PrimaryNodes:
-              type: object
-              description: プライマリノード情報
-              properties:
-                Appliance:
-                  type: object
-                  description: 既存のNoSQLのアプライアンス情報
-                  properties:
-                    ID:
-                      type: string
-                      description: 既存のNoSQLのアプライアンスID
-                      example: '113700352689'
-                    Zone:
-                      type: object
-                      description: 既存のNoSQLのゾーン
-                      properties:
-                        Name:
-                          type: string
-                          description: 既存のNoSQLのゾーン情報
-                          example: tk1b
-            DatabaseEngine:
-              type: string
-              description: データベースに使用するエンジン
-              enum:
-              - Cassandra
-              example: Cassandra
-            DatabaseVersion:
-              type: string
-              description: データベースバージョン
-              pattern: ^\d+\.\d+\.\d+$
-              example: 4.1.9
-            DefaultUser:
-              type: string
-              description: デフォルトユーザ名
-              example: defaultuser01
-              minLength: 4
-              maxLength: 20
-              pattern: ^[a-z][a-z0-9_]{3,19}$
-            DiskSize:
-              type: integer
-              description: ディスクサイズ(MB)
-              example: 102400
-              enum:
-              - 40960
-              - 102400
-              - 256000
-            Memory:
-              type: integer
-              description: メモリ(MB)
-              example: 8192
-              enum:
-              - 4096
-              - 8192
-              - 16384
-            Nodes:
-              type: integer
-              description: ノード数
-              example: 3
-              minimum: 1
-              maximum: 3
-            Port:
-              type: integer
-              description: ポート
-              example: 9042
-              minimum: 1024
-              maximum: 65535
-            Storage:
-              type: string
-              description: ストレージ
-              example: SSD
-              enum:
-              - SSD
-            Virtualcore:
-              type: integer
-              description: 仮想コア
-              example: 3
-              enum:
-              - 2
-              - 3
-              - 6
-            Zone:
-              type: string
-              description: ゾーン
-              example: tk1b
-        Servers:
-          type: array
-          items:
-            type: object
-            properties:
-              UserIPAddress:
-                type: string
-                format: ipv4
-                description: "ユーザ側スイッチに接続するIPアドレス  \n"
-                example: 192.168.100.11
-        Network:
-          type: object
-          description: ネットワーク情報
-          properties:
-            DefaultRoute:
-              type: string
-              description: ゲートウェイのアドレス
-              example: 192.168.100.254
-            NetworkMaskLen:
-              type: integer
-              description: ネットマスク
-              example: 24
-    NosqlSettings:
-      type: object
-      properties:
-        Password:
-          $ref: '#/components/schemas/Password'
-        ReserveIPAddress:
-          description: "予備IPアドレス  \n**新規作成時・ノード追加時必須**  \n※デッドノード発生時、ノード切替を行う際に使用する予備のIPアドレス  \nただし、40GBプランの場合は必須ではありません。\n"
-          type: string
-          format: ipv4
-          example: 192.168.100.203
-        Backup:
-          type:
-          - object
-          - 'null'
-          description: バックアップ情報
-          properties:
-            Connect:
-              type: string
-              description: バックアップ先（NFS URL形式）
-              example: nfs://192.168.100.250/export
-              pattern: ^(nfs://[0-9\.]+/[A-Za-z0-9_\-\/]+)$
-            DayOfWeek:
-              type:
-              - array
-              - 'null'
-              description: バックアップスケジュール
-              items:
-                type: string
-                enum:
-                - sun
-                - mon
-                - tue
-                - wed
-                - thu
-                - fri
-                - sat
-              example:
-              - sun
-              - mon
-            Time:
-              type:
-              - string
-              - 'null'
-              description: バックアップする時間
-              example: 00:00
-              pattern: ^(([0-1][0-9]|2[0-3]):(00|15|30|45))?$
-            Rotate:
-              type: integer
-              description: バックアップ数（1から8まで）
-              minimum: 1
-              maximum: 8
-              example: 3
-          required:
-          - Connect
-          - Rotate
-        SourceNetwork:
-          type: array
-          description: 送信元ネットワークアドレス
-          uniqueItems: true
-          items:
-            type: string
-            pattern: ^(?:[0-9]{1,3}\.){3}[0-9]{1,3}(?:/(?:[0-9]|[1-2][0-9]|3[0-2]))?$
-          example:
-          - 192.168.100.200
-          - 192.168.100.201
-          - 192.168.100.202
-        Repair:
-          type:
-          - object
-          - 'null'
-          description: "定期リペア設定  \n※40GBプランはノード数が1のため、リペア設定を行うことはできません。 \n"
-          properties:
-            Incremental:
-              type: object
-              description: 増分リペア設定
-              properties:
-                DaysOfWeek:
-                  type: array
-                  description: 実行曜日
-                  items:
-                    type: string
-                    enum:
-                    - sun
-                    - mon
-                    - tue
-                    - wed
-                    - thu
-                    - fri
-                    - sat
-                  example:
-                  - sun
-                  - mon
-                Time:
-                  type: string
-                  description: 実行時間
-                  pattern: ^(([0-1][0-9]|2[0-3]):(00|15|30|45))?$
-                  example: 00:00
-              required:
-              - DaysOfWeek
-              - Time
-            Full:
-              type: object
-              description: 完全リペア設定
-              properties:
-                Interval:
-                  type: integer
-                  description: 7日ごとの実行間隔（日数）
-                  enum:
-                  - 7
-                  - 14
-                  - 21
-                  - 28
-                  example: 7
-                DayOfWeek:
-                  type: string
-                  description: 実行曜日
-                  enum:
-                  - sun
-                  - mon
-                  - tue
-                  - wed
-                  - thu
-                  - fri
-                  - sat
-                  example: sun
-                Time:
-                  type: string
-                  description: 実行時間
-                  pattern: ^(([0-1][0-9]|2[0-3]):(00|15|30|45))?$
-                  example: 00:00
-              required:
-              - Interval
-              - DayOfWeek
-              - Time
-    Instance:
-      type: object
-      properties:
-        Status:
-          type: string
-          example: up
-        StatusChangedAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          example: '2021-01-01T00:00:00Z'
-        Host:
-          type:
-          - object
-          - 'null'
-          properties:
-            Name:
-              type: string
-              example: host_name
-            InfoURL:
-              type: string
-              example: ''
-        Hosts:
-          type: array
-          items:
-            type: object
-            properties:
-              Name:
-                type: string
-              InfoURL:
-                type: string
-  parameters:
-    ApplianceID:
-      name: applianceID
-      in: path
-      description: アプライアンスID
-      required: true
-      schema:
-        type: string
-        example: '113600102549'
   responses:
     UnauthorizedResponse:
       description: 認証エラー
@@ -1603,62 +1613,6 @@ components:
                 type: string
                 description: エラーメッセージ
                 example: この操作は認証が必要です。
-    ServerErrorResponse:
-      description: サーバエラー
-      content:
-        application/json:
-          schema:
-            type: object
-            description: エラーレスポンス
-            properties:
-              is_fatal:
-                type: boolean
-                description: エラーのレスポンス(true:エラー)
-                example: true
-              serial:
-                type: string
-                description: 追跡コード
-                example: 3a5a51fdxxxxx5f6794e82cc8d00d3xx
-              status:
-                type: string
-                description: ステータス
-                example: 500 Internal Server Error
-              error_code:
-                type: string
-                description: エラーコード
-                example: internal_server_error
-              error_msg:
-                type: string
-                description: エラーメッセージ
-                example: サーバ内部エラーが発生しました。
-    BadRequestResponse:
-      description: Requestエラー
-      content:
-        application/json:
-          schema:
-            type: object
-            description: エラーレスポンス
-            properties:
-              is_fatal:
-                type: boolean
-                description: エラーのレスポンス(true:エラー)
-                example: true
-              serial:
-                type: string
-                description: 追跡コード
-                example: 3a5a51fdxxxxx5f6794e82cc8d00d3xx
-              status:
-                type: string
-                description: ステータス
-                example: 400 Bad Request
-              error_code:
-                type: string
-                description: エラーコード
-                example: bad_request
-              error_msg:
-                type: string
-                description: エラーメッセージ
-                example: 不適切な要求です。
     NotFoundResponse:
       description: リソースが存在しない
       content:
@@ -1687,12 +1641,74 @@ components:
                 type: string
                 description: エラーメッセージ
                 example: 対象が見つかりません。
+    BadRequestResponse:
+      description: Requestエラー
+      content:
+        application/json:
+          schema:
+            type: object
+            description: エラーレスポンス
+            properties:
+              is_fatal:
+                type: boolean
+                description: エラーのレスポンス(true:エラー)
+                example: true
+              serial:
+                type: string
+                description: 追跡コード
+                example: 3a5a51fdxxxxx5f6794e82cc8d00d3xx
+              status:
+                type: string
+                description: ステータス
+                example: 400 Bad Request
+              error_code:
+                type: string
+                description: エラーコード
+                example: bad_request
+              error_msg:
+                type: string
+                description: エラーメッセージ
+                example: 不適切な要求です。
     ConflictResponse:
       description: リソースが競合している
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ConflictErrorResponse'
-x-refined-from:
-- nosql-api.yaml
-- sakura-internet-nosql-openapi.yml
+    ServerErrorResponse:
+      description: サーバエラー
+      content:
+        application/json:
+          schema:
+            type: object
+            description: エラーレスポンス
+            properties:
+              is_fatal:
+                type: boolean
+                description: エラーのレスポンス(true:エラー)
+                example: true
+              serial:
+                type: string
+                description: 追跡コード
+                example: 3a5a51fdxxxxx5f6794e82cc8d00d3xx
+              status:
+                type: string
+                description: ステータス
+                example: 500 Internal Server Error
+              error_code:
+                type: string
+                description: エラーコード
+                example: internal_server_error
+              error_msg:
+                type: string
+                description: エラーメッセージ
+                example: サーバ内部エラーが発生しました。
+  parameters:
+    ApplianceID:
+      name: applianceID
+      in: path
+      description: アプライアンスID
+      required: true
+      schema:
+        type: string
+        example: '113600102549'

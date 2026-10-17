@@ -4,7 +4,7 @@ info:
   contact:
     url: https://help.sakura.ad.jp/contact/
   version: '1.0'
-  description: 'Operations tagged Commonserviceitem across 4 of this provider''s published API definitions: eventbus-api.yaml, simplemq-sacloud-api.yaml, sakura-internet-eventbus-openapi.yml, sakura-internet-simplemq-sacloud-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: 'Operations tagged Commonserviceitem across 2 of this provider''s published API definitions: eventbus-api.yaml, sakura-internet-simplemq-sacloud-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://secure.sakura.ad.jp/cloud/zone/is1a/api/cloud/1.1
   description: さくらのクラウドAPIエンドポイント
@@ -579,6 +579,110 @@ paths:
       description: さくらのクラウドAPIエンドポイント
 components:
   schemas:
+    TriggerConditionEq:
+      type: object
+      required:
+      - Key
+      - Op
+      - Values
+      properties:
+        Key:
+          type: string
+          pattern: ^(?!data$)[a-z0-9]{1,20}$
+        Op:
+          type: string
+          enum:
+          - eq
+        Values:
+          type: array
+          minItems: 1
+          maxItems: 1
+          items:
+            type: string
+    Icon:
+      type: object
+      nullable: true
+      properties:
+        ID:
+          type: string
+        URL:
+          type: string
+        Name:
+          type: string
+        Scope:
+          type: string
+        Tags:
+          type: array
+          items:
+            type: string
+    UpdateCommonServiceItemRequest:
+      type: object
+      required:
+      - CommonServiceItem
+      properties:
+        CommonServiceItem:
+          type: object
+          properties:
+            Name:
+              type: string
+              description: リソース名
+            Description:
+              type: string
+              nullable: true
+            Settings:
+              $ref: '#/components/schemas/Settings'
+            Provider:
+              $ref: '#/components/schemas/Provider'
+            Icon:
+              $ref: '#/components/schemas/Icon'
+            Tags:
+              type: array
+              items:
+                type: string
+    Error:
+      type: object
+      properties:
+        is_fatal:
+          type: boolean
+        serial:
+          type: string
+        status:
+          type: string
+        error_code:
+          type: string
+        error_msg:
+          type: string
+    Provider:
+      type: object
+      required:
+      - Class
+      properties:
+        ID:
+          type: integer
+        Class:
+          type: string
+          enum:
+          - eventbusprocessconfiguration
+          - eventbusschedule
+          - eventbustrigger
+        Name:
+          type: string
+        ServiceClass:
+          type: string
+    Settings:
+      oneOf:
+      - $ref: '#/components/schemas/ProcessConfigurationSettings'
+      - $ref: '#/components/schemas/ScheduleSettings'
+      - $ref: '#/components/schemas/TriggerSettings'
+      description: 実行設定(ProcessConfiguration)、トリガー(Trigger)またはスケジュール(Schedule)用設定
+    SimpleMQSecret:
+      type: object
+      required:
+      - APIKey
+      properties:
+        APIKey:
+          type: string
+          description: SimpleMQのキューのAPIキー
     ScheduleSettings:
       type: object
       required:
@@ -611,80 +715,6 @@ components:
             リクエスト時はintegerで指定する必要があります。
 
             レスポンスはstringで返却されます。'
-    Error:
-      type: object
-      properties:
-        is_fatal:
-          type: boolean
-        serial:
-          type: string
-        status:
-          type: string
-        error_code:
-          type: string
-        error_msg:
-          type: string
-    Provider:
-      type: object
-      required:
-      - Class
-      properties:
-        ID:
-          type: integer
-        Class:
-          type: string
-          enum:
-          - eventbusprocessconfiguration
-          - eventbusschedule
-          - eventbustrigger
-        Name:
-          type: string
-        ServiceClass:
-          type: string
-    ProcessConfigurationSettings:
-      type: object
-      required:
-      - Destination
-      - Parameters
-      properties:
-        Destination:
-          type: string
-          enum:
-          - simplenotification
-          - simplemq
-          - autoscale
-          description: ジョブの宛先（simplenotification/simplemq/autoscale）
-        Parameters:
-          type: string
-          description: Destinationごとのパラメータ（group_id, message, queue_name, content等）
-    CreateCommonServiceItemRequest:
-      type: object
-      required:
-      - CommonServiceItem
-      properties:
-        CommonServiceItem:
-          type: object
-          required:
-          - Name
-          - Settings
-          - Provider
-          properties:
-            Name:
-              type: string
-              description: リソース名
-            Description:
-              type: string
-              nullable: true
-            Settings:
-              $ref: '#/components/schemas/Settings'
-            Provider:
-              $ref: '#/components/schemas/Provider'
-            Icon:
-              $ref: '#/components/schemas/Icon'
-            Tags:
-              type: array
-              items:
-                type: string
     CommonServiceItem:
       type: object
       required:
@@ -732,94 +762,6 @@ components:
           type: array
           items:
             type: string
-    TriggerConditionEq:
-      type: object
-      required:
-      - Key
-      - Op
-      - Values
-      properties:
-        Key:
-          type: string
-          pattern: ^(?!data$)[a-z0-9]{1,20}$
-        Op:
-          type: string
-          enum:
-          - eq
-        Values:
-          type: array
-          minItems: 1
-          maxItems: 1
-          items:
-            type: string
-    TriggerConditionIn:
-      type: object
-      required:
-      - Key
-      - Op
-      - Values
-      properties:
-        Key:
-          type: string
-          pattern: ^(?!data$)[a-z0-9]{1,20}$
-        Op:
-          type: string
-          enum:
-          - in
-        Values:
-          type: array
-          minItems: 1
-          items:
-            type: string
-    SimpleMQSecret:
-      type: object
-      required:
-      - APIKey
-      properties:
-        APIKey:
-          type: string
-          description: SimpleMQのキューのAPIキー
-    Settings:
-      oneOf:
-      - $ref: '#/components/schemas/ProcessConfigurationSettings'
-      - $ref: '#/components/schemas/ScheduleSettings'
-      - $ref: '#/components/schemas/TriggerSettings'
-      description: 実行設定(ProcessConfiguration)、トリガー(Trigger)またはスケジュール(Schedule)用設定
-    SetSecretRequest:
-      type: object
-      required:
-      - Secret
-      properties:
-        Secret:
-          oneOf:
-          - $ref: '#/components/schemas/SacloudAPISecret'
-          - $ref: '#/components/schemas/SimpleMQSecret'
-          description: 設定するシークレット値
-    Status:
-      type: object
-      nullable: true
-      properties:
-        Success:
-          type: boolean
-        Message:
-          type: string
-        UpdatedAt:
-          type: string
-    SacloudAPISecret:
-      type: object
-      required:
-      - AccessToken
-      - AccessTokenSecret
-      properties:
-        AccessToken:
-          type: string
-          description: さくらのクラウドのアクセストークン
-        AccessTokenSecret:
-          type: string
-          description: さくらのクラウドのアクセストークンシークレット
-      example:
-        AccessToken: アクセストークン
-        AccessTokenSecret: アクセストークンシークレット
     TriggerSettings:
       type: object
       properties:
@@ -847,13 +789,46 @@ components:
       required:
       - Source
       - ProcessConfigurationID
-    UpdateCommonServiceItemRequest:
+    TriggerConditionIn:
+      type: object
+      required:
+      - Key
+      - Op
+      - Values
+      properties:
+        Key:
+          type: string
+          pattern: ^(?!data$)[a-z0-9]{1,20}$
+        Op:
+          type: string
+          enum:
+          - in
+        Values:
+          type: array
+          minItems: 1
+          items:
+            type: string
+    SetSecretRequest:
+      type: object
+      required:
+      - Secret
+      properties:
+        Secret:
+          oneOf:
+          - $ref: '#/components/schemas/SacloudAPISecret'
+          - $ref: '#/components/schemas/SimpleMQSecret'
+          description: 設定するシークレット値
+    CreateCommonServiceItemRequest:
       type: object
       required:
       - CommonServiceItem
       properties:
         CommonServiceItem:
           type: object
+          required:
+          - Name
+          - Settings
+          - Provider
           properties:
             Name:
               type: string
@@ -871,22 +846,72 @@ components:
               type: array
               items:
                 type: string
-    Icon:
+    SacloudAPISecret:
+      type: object
+      required:
+      - AccessToken
+      - AccessTokenSecret
+      properties:
+        AccessToken:
+          type: string
+          description: さくらのクラウドのアクセストークン
+        AccessTokenSecret:
+          type: string
+          description: さくらのクラウドのアクセストークンシークレット
+      example:
+        AccessToken: アクセストークン
+        AccessTokenSecret: アクセストークンシークレット
+    Status:
       type: object
       nullable: true
       properties:
-        ID:
+        Success:
+          type: boolean
+        Message:
           type: string
-        URL:
+        UpdatedAt:
           type: string
-        Name:
+    ProcessConfigurationSettings:
+      type: object
+      required:
+      - Destination
+      - Parameters
+      properties:
+        Destination:
           type: string
-        Scope:
+          enum:
+          - simplenotification
+          - simplemq
+          - autoscale
+          description: ジョブの宛先（simplenotification/simplemq/autoscale）
+        Parameters:
           type: string
-        Tags:
-          type: array
-          items:
+          description: Destinationごとのパラメータ（group_id, message, queue_name, content等）
+    Icon_2:
+      oneOf:
+      - type: 'null'
+      - type: object
+        properties:
+          ID:
+            oneOf:
+            - type: string
+              example: '113700153028'
+            - type: integer
+              example: 113700153028
+            description: 0を指定することでIconなしに設定することが出来ます
+          URL:
             type: string
+            example: https://secure.sakura.ad.jp/cloud/zone/is1b/api/cloud/1.1/icon/112901627751.png
+          Name:
+            type: string
+            example: Ubuntu
+          Scope:
+            type: string
+            example: shared
+          Tags:
+            type: array
+            items:
+              type: string
     Error_2:
       type: object
       properties:
@@ -901,13 +926,43 @@ components:
           type: string
         error_msg:
           type: string
-    QueueName:
-      description: キュー名 (アカウント内で一意の値)
-      type: string
-      minLength: 5
-      maxLength: 64
-      pattern: ^[0-9a-zA-Z]+(-[0-9a-zA-Z]+)*$
-      example: my-own-queue-00
+    Provider_2:
+      type: object
+      required:
+      - ID
+      - Class
+      - Name
+      - ServiceClass
+      properties:
+        ID:
+          type: integer
+          example: 5200001
+        Class:
+          type: string
+          enum:
+          - simplemq
+        Name:
+          type: string
+          example: SimpleMQ
+        ServiceClass:
+          type: string
+          example: cloud/simplemq
+    ExpireSeconds:
+      description: 未処理メッセージ保存期間 (秒)
+      type: integer
+      minimum: 60
+      maximum: 1209600
+      example: 345600
+    Settings_2:
+      type: object
+      required:
+      - VisibilityTimeoutSeconds
+      - ExpireSeconds
+      properties:
+        VisibilityTimeoutSeconds:
+          $ref: '#/components/schemas/VisibilityTimeoutSeconds'
+        ExpireSeconds:
+          $ref: '#/components/schemas/ExpireSeconds'
     ConfigQueueRequest:
       type: object
       required:
@@ -922,6 +977,36 @@ components:
               type: string
             Settings:
               $ref: '#/components/schemas/Settings_2'
+            Tags:
+              type: array
+              items:
+                type: string
+            Icon:
+              $ref: '#/components/schemas/Icon_2'
+    CreateQueueRequest:
+      type: object
+      required:
+      - CommonServiceItem
+      properties:
+        CommonServiceItem:
+          type: object
+          required:
+          - Name
+          - Provider
+          properties:
+            Name:
+              $ref: '#/components/schemas/QueueName'
+            Description:
+              type: string
+            Provider:
+              type: object
+              required:
+              - Class
+              properties:
+                Class:
+                  type: string
+                  enum:
+                  - simplemq
             Tags:
               type: array
               items:
@@ -983,52 +1068,19 @@ components:
           type: array
           items:
             type: string
-    CreateQueueRequest:
-      type: object
-      required:
-      - CommonServiceItem
-      properties:
-        CommonServiceItem:
-          type: object
-          required:
-          - Name
-          - Provider
-          properties:
-            Name:
-              $ref: '#/components/schemas/QueueName'
-            Description:
-              type: string
-            Provider:
-              type: object
-              required:
-              - Class
-              properties:
-                Class:
-                  type: string
-                  enum:
-                  - simplemq
-            Tags:
-              type: array
-              items:
-                type: string
-            Icon:
-              $ref: '#/components/schemas/Icon_2'
-    Settings_2:
-      type: object
-      required:
-      - VisibilityTimeoutSeconds
-      - ExpireSeconds
-      properties:
-        VisibilityTimeoutSeconds:
-          $ref: '#/components/schemas/VisibilityTimeoutSeconds'
-        ExpireSeconds:
-          $ref: '#/components/schemas/ExpireSeconds'
-    ExpireSeconds:
-      description: 未処理メッセージ保存期間 (秒)
+    QueueName:
+      description: キュー名 (アカウント内で一意の値)
+      type: string
+      minLength: 5
+      maxLength: 64
+      pattern: ^[0-9a-zA-Z]+(-[0-9a-zA-Z]+)*$
+      example: my-own-queue-00
+    VisibilityTimeoutSeconds:
+      description: 可視性タイムアウト (秒)
       type: integer
-      minimum: 60
-      maximum: 1209600
-      example: 345600
+      minimum: 5
+      maximum: 900
+      example: 30
     Status_2:
       type: object
       required:
@@ -1038,242 +1090,6 @@ components:
           type: string
           example: sample-queue-1
           description: キュー名
-    Provider_2:
-      type: object
-      required:
-      - ID
-      - Class
-      - Name
-      - ServiceClass
-      properties:
-        ID:
-          type: integer
-          example: 5200001
-        Class:
-          type: string
-          enum:
-          - simplemq
-        Name:
-          type: string
-          example: SimpleMQ
-        ServiceClass:
-          type: string
-          example: cloud/simplemq
-    VisibilityTimeoutSeconds:
-      description: 可視性タイムアウト (秒)
-      type: integer
-      minimum: 5
-      maximum: 900
-      example: 30
-    Icon_2:
-      oneOf:
-      - type: 'null'
-      - type: object
-        properties:
-          ID:
-            oneOf:
-            - type: string
-              example: '113700153028'
-            - type: integer
-              example: 113700153028
-            description: 0を指定することでIconなしに設定することが出来ます
-          URL:
-            type: string
-            example: https://secure.sakura.ad.jp/cloud/zone/is1b/api/cloud/1.1/icon/112901627751.png
-          Name:
-            type: string
-            example: Ubuntu
-          Scope:
-            type: string
-            example: shared
-          Tags:
-            type: array
-            items:
-              type: string
-    Error_3:
-      type: object
-      properties:
-        is_fatal:
-          type: boolean
-        serial:
-          type: string
-          example: 749ad39e1eea340c4d75bf5a4dd4bd11
-        status:
-          type: string
-        error_code:
-          type: string
-        error_msg:
-          type: string
-    ConfigQueueRequest_2:
-      type: object
-      required:
-      - CommonServiceItem
-      properties:
-        CommonServiceItem:
-          type: object
-          required:
-          - Settings
-          properties:
-            Description:
-              type: string
-            Settings:
-              $ref: '#/components/schemas/Settings_3'
-            Tags:
-              type: array
-              items:
-                type: string
-            Icon:
-              $ref: '#/components/schemas/Icon_3'
-    CommonServiceItem_3:
-      type: object
-      required:
-      - ID
-      - Name
-      - Settings
-      - SettingsHash
-      - Status
-      - ServiceClass
-      - Availability
-      - CreatedAt
-      - ModifiedAt
-      - Provider
-      - Tags
-      properties:
-        ID:
-          oneOf:
-          - type: string
-            example: '113700153028'
-          - type: integer
-            example: 113700153028
-        Name:
-          type: string
-          example: sample-queue-1
-          description: リソース名
-        Description:
-          oneOf:
-          - type: string
-          - type: 'null'
-        Settings:
-          $ref: '#/components/schemas/Settings_3'
-        SettingsHash:
-          type: string
-        Status:
-          $ref: '#/components/schemas/Status_3'
-        ServiceClass:
-          type: string
-          example: cloud/simplemq/1
-        Availability:
-          type: string
-          example: available
-        CreatedAt:
-          type: string
-          format: date-time
-        ModifiedAt:
-          type: string
-          format: date-time
-        Provider:
-          $ref: '#/components/schemas/Provider_3'
-        Icon:
-          $ref: '#/components/schemas/Icon_3'
-        Tags:
-          type: array
-          items:
-            type: string
-    CreateQueueRequest_2:
-      type: object
-      required:
-      - CommonServiceItem
-      properties:
-        CommonServiceItem:
-          type: object
-          required:
-          - Name
-          - Provider
-          properties:
-            Name:
-              $ref: '#/components/schemas/QueueName'
-            Description:
-              type: string
-            Provider:
-              type: object
-              required:
-              - Class
-              properties:
-                Class:
-                  type: string
-                  enum:
-                  - simplemq
-            Tags:
-              type: array
-              items:
-                type: string
-            Icon:
-              $ref: '#/components/schemas/Icon_3'
-    Settings_3:
-      type: object
-      required:
-      - VisibilityTimeoutSeconds
-      - ExpireSeconds
-      properties:
-        VisibilityTimeoutSeconds:
-          $ref: '#/components/schemas/VisibilityTimeoutSeconds'
-        ExpireSeconds:
-          $ref: '#/components/schemas/ExpireSeconds'
-    Status_3:
-      type: object
-      required:
-      - QueueName
-      properties:
-        QueueName:
-          type: string
-          example: sample-queue-1
-          description: キュー名
-    Provider_3:
-      type: object
-      required:
-      - ID
-      - Class
-      - Name
-      - ServiceClass
-      properties:
-        ID:
-          type: integer
-          example: 5200001
-        Class:
-          type: string
-          enum:
-          - simplemq
-        Name:
-          type: string
-          example: SimpleMQ
-        ServiceClass:
-          type: string
-          example: cloud/simplemq
-    Icon_3:
-      oneOf:
-      - type: 'null'
-      - type: object
-        properties:
-          ID:
-            oneOf:
-            - type: string
-              example: '113700153028'
-            - type: integer
-              example: 113700153028
-            description: 0を指定することでIconなしに設定することが出来ます
-          URL:
-            type: string
-            example: https://secure.sakura.ad.jp/cloud/zone/is1b/api/cloud/1.1/icon/112901627751.png
-          Name:
-            type: string
-            example: Ubuntu
-          Scope:
-            type: string
-            example: shared
-          Tags:
-            type: array
-            items:
-              type: string
   parameters:
     resourceIdPathParam:
       in: path
@@ -1289,13 +1105,6 @@ components:
       schema:
         type: string
       required: true
-    resourceIdPathParam_3:
-      in: path
-      name: id
-      description: キューのリソースID
-      schema:
-        type: string
-      required: true
   securitySchemes:
     ApiKeyAuth:
       type: http
@@ -1303,6 +1112,4 @@ components:
       description: APIキーを利用したBasic認証
 x-refined-from:
 - eventbus-api.yaml
-- simplemq-sacloud-api.yaml
-- sakura-internet-eventbus-openapi.yml
 - sakura-internet-simplemq-sacloud-openapi.yml

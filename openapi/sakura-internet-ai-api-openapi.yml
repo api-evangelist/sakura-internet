@@ -1,12 +1,44 @@
 openapi: 3.2.0
 info:
-  title: Sakura Internet AI API
   version: 1.1.1
+  title: Add-on APIドキュメント AI API
+  description: '---
+
+
+    「Add-on」が提供するAPIの利用方法とサンプルを公開しております。
+
+
+    # 基本的な使い方
+
+
+    ## APIキーの発行
+
+
+    APIを利用するためには、認証のための「APIキー」が必要です。事前にキーを発行しておきます。
+
+    APIキーは「ユーザーID」「パスワード」に相当する「トークン」と呼ばれる認証情報で構成されています。
+
+
+    | 項目名 | APIキー発行時の項目名 | このドキュメント内での例 |
+
+    |------------|------------------------------|--------------------------------------|
+
+    | ユーザーID | アクセストークン(UUID) | 01234567-89ab-cdef-0123-456789abcdef |
+
+    | パスワード | アクセストークンシークレット | SAMPLETOKENSAMPLETOKENSAMPLETOKENSAM |
+
+
+    操作マニュアル
+
+
+    APIキー | さくらのクラウド ドキュメント
+
+
+    ##…'
   contact:
     name: SAKURA internet Inc.
   license:
     name: Copyright(C) SAKURA internet Inc. all rights reserved.
-  description: 'Operations tagged AI across 2 of this provider''s published API definitions: addon-api.yaml, sakura-internet-addon-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://secure.sakura.ad.jp/cloud/api/addon/1.0/
 tags:
@@ -59,8 +91,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/addon/1.0/
   /ai/{resourceGroupName}:
     get:
       tags:
@@ -114,8 +144,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: AI機能リソースが見つかりませんでした。
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/addon/1.0/
   /ai/status/{resourceGroupName}/{deploymentName}:
     get:
       tags:
@@ -147,10 +175,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/addon/1.0/
 components:
   schemas:
+    ListResourcesResponse:
+      type: object
+      properties:
+        resources:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ResourceGroupResource'
+          description: リソースグループ一覧
+      additionalProperties: false
+    ErrorResponse:
+      type: object
+      properties:
+        errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ErrorInfo'
+          description: エラーリスト
+      additionalProperties: false
+      description: エラーレスポンス
     AiServiceSku:
       enum:
       - 1
@@ -159,23 +208,6 @@ components:
 
         - 1: S0'
       format: int32
-    CreatedByType:
-      type: object
-      additionalProperties: false
-    ResourceType:
-      type: object
-      properties:
-        namespace:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-        type:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-      additionalProperties: false
     DeploymentStatus:
       type: object
       properties:
@@ -198,64 +230,6 @@ components:
           $ref: '#/components/schemas/DeploymentStatusProperties'
       additionalProperties: false
       description: デプロイメントステータスのレスポンスを表します。
-    AiRequestBody:
-      required:
-      - location
-      - sku
-      type: object
-      properties:
-        location:
-          minLength: 1
-          enum:
-          - japaneast
-          type: string
-          description: デプロイ先のリージョン
-          example: japaneast
-        sku:
-          $ref: '#/components/schemas/AiServiceSku'
-      additionalProperties: false
-      description: 機械学習関連機能の作成APIで受信するリクエストボディを表します。
-    ResourceGroupResource:
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/ResourceIdentifier'
-        hasData:
-          type: boolean
-          readOnly: true
-        data:
-          $ref: '#/components/schemas/ResourceGroupData'
-      additionalProperties: false
-    SystemData:
-      type: object
-      properties:
-        createdBy:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-        createdByType:
-          $ref: '#/components/schemas/CreatedByType'
-        createdOn:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          readOnly: true
-        lastModifiedBy:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-        lastModifiedByType:
-          $ref: '#/components/schemas/CreatedByType'
-        lastModifiedOn:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          readOnly: true
-      additionalProperties: false
     ResourceIdentifier:
       type: object
       properties:
@@ -286,20 +260,18 @@ components:
           - 'null'
           readOnly: true
       additionalProperties: false
-    AzureLocation:
+    GetResourceResponse:
       type: object
       properties:
-        name:
+        data:
+          description: データ
+        url:
           type:
           - string
           - 'null'
-          readOnly: true
-        displayName:
-          type:
-          - string
-          - 'null'
-          readOnly: true
+          description: 管理ポータルのURL
       additionalProperties: false
+      description: リソース個別取得APIのレスポンス
     DeploymentStatusProperties:
       type: object
       properties:
@@ -329,16 +301,49 @@ components:
           description: エラーメッセージ
       additionalProperties: false
       description: エラー情報
-    ListResourcesResponse:
+    SystemData:
       type: object
       properties:
-        resources:
+        createdBy:
           type:
-          - array
+          - string
           - 'null'
-          items:
-            $ref: '#/components/schemas/ResourceGroupResource'
-          description: リソースグループ一覧
+          readOnly: true
+        createdByType:
+          $ref: '#/components/schemas/CreatedByType'
+        createdOn:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        lastModifiedBy:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        lastModifiedByType:
+          $ref: '#/components/schemas/CreatedByType'
+        lastModifiedOn:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+      additionalProperties: false
+    ResourceType:
+      type: object
+      properties:
+        namespace:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        type:
+          type:
+          - string
+          - 'null'
+          readOnly: true
       additionalProperties: false
     ResourceGroupData:
       type: object
@@ -375,6 +380,23 @@ components:
           - string
           - 'null'
       additionalProperties: false
+    AiRequestBody:
+      required:
+      - location
+      - sku
+      type: object
+      properties:
+        location:
+          minLength: 1
+          enum:
+          - japaneast
+          type: string
+          description: デプロイ先のリージョン
+          example: japaneast
+        sku:
+          $ref: '#/components/schemas/AiServiceSku'
+      additionalProperties: false
+      description: 機械学習関連機能の作成APIで受信するリクエストボディを表します。
     PostDeploymentResponse:
       type: object
       properties:
@@ -390,30 +412,31 @@ components:
           description: デプロイメント名を取得します。
       additionalProperties: false
       description: デプロイメントが投稿された後に受け取るレスポンスを表します。
-    GetResourceResponse:
+    CreatedByType:
+      type: object
+      additionalProperties: false
+    AzureLocation:
       type: object
       properties:
-        data:
-          description: データ
-        url:
+        name:
           type:
           - string
           - 'null'
-          description: 管理ポータルのURL
+          readOnly: true
+        displayName:
+          type:
+          - string
+          - 'null'
+          readOnly: true
       additionalProperties: false
-      description: リソース個別取得APIのレスポンス
-    ErrorResponse:
+    ResourceGroupResource:
       type: object
       properties:
-        errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ErrorInfo'
-          description: エラーリスト
+        id:
+          $ref: '#/components/schemas/ResourceIdentifier'
+        hasData:
+          type: boolean
+          readOnly: true
+        data:
+          $ref: '#/components/schemas/ResourceGroupData'
       additionalProperties: false
-      description: エラーレスポンス
-x-refined-from:
-- addon-api.yaml
-- sakura-internet-addon-openapi.yml

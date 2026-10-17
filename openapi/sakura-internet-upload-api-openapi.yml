@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Sakura Internet Upload API
+  title: Sakura AI Engine RAG Upload API
   version: '2026-06-29'
-  description: 'Operations tagged upload across 2 of this provider''s published API definitions: ai-engine-rag-api.yaml, sakura-internet-ai-engine-rag-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: さくらのAI Engine RAG API
 servers:
 - url: ' https://api.ai.sakura.ad.jp'
 tags:
@@ -33,10 +33,25 @@ paths:
           description: ''
       summary: Documents upload
       x-summary-source: derived
-    servers:
-    - url: ' https://api.ai.sakura.ad.jp'
 components:
   schemas:
+    StatusEnum:
+      enum:
+      - pending
+      - processing
+      - available
+      - deleted
+      - error
+      type: string
+      description: '* `pending` - Pending
+
+        * `processing` - Processing
+
+        * `available` - Available
+
+        * `deleted` - Deleted
+
+        * `error` - Error'
     DocumentUpload:
       type: object
       properties:
@@ -81,23 +96,6 @@ components:
       - file
       - id
       - status
-    StatusEnum:
-      enum:
-      - pending
-      - processing
-      - available
-      - deleted
-      - error
-      type: string
-      description: '* `pending` - Pending
-
-        * `processing` - Processing
-
-        * `available` - Available
-
-        * `deleted` - Deleted
-
-        * `error` - Error'
     ModelEnum:
       enum:
       - multilingual-e5-large
@@ -110,6 +108,3 @@ components:
     BearerAuth:
       type: http
       scheme: bearer
-x-refined-from:
-- ai-engine-rag-api.yaml
-- sakura-internet-ai-engine-rag-openapi.yml

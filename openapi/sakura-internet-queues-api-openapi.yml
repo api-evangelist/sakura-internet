@@ -1,10 +1,27 @@
 openapi: 3.2.0
 info:
-  title: Sakura Internet Queues API
   version: 1.1.4
+  title: シンプルMQ Queues API
+  description: '---
+
+    Copyright SAKURA internet Inc.
+
+
+    # はじめに
+
+
+    「シンプルMQ」は、ソフトウェア同士を非同期に連携するために、ソフトウェアコンポーネント間でのデータの送受信ができる、マネージド型のメッセージキューサービスです。
+
+    シンプルMQを使うには、さくらのクラウド コントロールパネルもしくは シンプルMQ さくらのクラウドAPI でシンプルMQのキューを作成します。
+
+    キューを作成するとAPIキーが発行されます。
+
+    APIリクエストは、そのキーを `Authorization header` の `Bearer token` に使用します。
+
+
+    APIエンドポイント：https://simplemq.tk1b.api.sacloud.jp'
   contact:
     url: https://help.sakura.ad.jp/contact/
-  description: 'Operations tagged Queues across 2 of this provider''s published API definitions: simplemq-api.yaml, sakura-internet-simplemq-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://simplemq.tk1b.api.sacloud.jp
 tags:
@@ -119,8 +136,6 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
       - Queues
-    servers:
-    - url: https://simplemq.tk1b.api.sacloud.jp
   /v1/queues/{queueName}/messages/{messageId}:
     put:
       summary: メッセージのタイムアウト延長
@@ -233,8 +248,6 @@ paths:
                 $ref: '#/components/schemas/Error'
       tags:
       - Queues
-    servers:
-    - url: https://simplemq.tk1b.api.sacloud.jp
 components:
   schemas:
     MessageContent:
@@ -251,43 +264,6 @@ components:
           format: int64
         message:
           type: string
-    QueueName:
-      description: キュー名
-      type: string
-      minLength: 5
-      maxLength: 64
-      pattern: ^[0-9a-zA-Z]+(-[0-9a-zA-Z]+)*$
-      example: my-own-queue-00
-    Message:
-      allOf:
-      - $ref: '#/components/schemas/NewMessage'
-      - type: object
-        required:
-        - acquired_at
-        - visibility_timeout_at
-        properties:
-          acquired_at:
-            description: 最新のメッセージ取得時刻 (Epochからのミリ秒)
-            type: integer
-            format: int64
-          visibility_timeout_at:
-            description: 可視性タイムアウトする時点 (Epochからのミリ秒)
-            type: integer
-            format: int64
-    SendRequest:
-      type: object
-      required:
-      - content
-      properties:
-        content:
-          $ref: '#/components/schemas/MessageContent'
-    MessageId:
-      description: メッセージID
-      type: string
-      minLength: 36
-      maxLength: 36
-      pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-      example: 0193b878-1b25-7775-87f5-9c698206a7e7
     NewMessage:
       type: object
       required:
@@ -314,24 +290,58 @@ components:
           description: 未処理メッセージ保存期間が過ぎる時点 (Epochからのミリ秒)
           type: integer
           format: int64
+    SendRequest:
+      type: object
+      required:
+      - content
+      properties:
+        content:
+          $ref: '#/components/schemas/MessageContent'
+    QueueName:
+      description: キュー名
+      type: string
+      minLength: 5
+      maxLength: 64
+      pattern: ^[0-9a-zA-Z]+(-[0-9a-zA-Z]+)*$
+      example: my-own-queue-00
+    Message:
+      allOf:
+      - $ref: '#/components/schemas/NewMessage'
+      - type: object
+        required:
+        - acquired_at
+        - visibility_timeout_at
+        properties:
+          acquired_at:
+            description: 最新のメッセージ取得時刻 (Epochからのミリ秒)
+            type: integer
+            format: int64
+          visibility_timeout_at:
+            description: 可視性タイムアウトする時点 (Epochからのミリ秒)
+            type: integer
+            format: int64
+    MessageId:
+      description: メッセージID
+      type: string
+      minLength: 36
+      maxLength: 36
+      pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+      example: 0193b878-1b25-7775-87f5-9c698206a7e7
   parameters:
-    queueNamePathParam:
-      in: path
-      name: queueName
-      schema:
-        $ref: '#/components/schemas/QueueName'
-      required: true
     messageIdPathParam:
       in: path
       name: messageId
       schema:
         $ref: '#/components/schemas/MessageId'
       required: true
+    queueNamePathParam:
+      in: path
+      name: queueName
+      schema:
+        $ref: '#/components/schemas/QueueName'
+      required: true
   securitySchemes:
     ApiKeyAuth:
       type: http
       scheme: bearer
       description: キュー認証用のAPIキー
-x-refined-from:
-- simplemq-api.yaml
-- sakura-internet-simplemq-openapi.yml

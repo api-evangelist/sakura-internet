@@ -1,10 +1,10 @@
 openapi: 3.2.0
 info:
-  title: Sakura Internet Service Principal API
+  title: さくらのクラウドIAM Service Principal API
   version: 2.1.0
   contact:
     name: SAKURA internet Inc.
-  description: 'Operations tagged service-principal across 2 of this provider''s published API definitions: iam-api.yaml, sakura-internet-iam-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: さくらのクラウドIAMのAPIドキュメントです
 servers:
 - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
 security:
@@ -142,8 +142,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Http429TooManyRequests'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
   /service-principals/{service_principal_id}:
     parameters:
     - $ref: '#/components/parameters/ServicePrincipalID'
@@ -280,8 +278,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Http429TooManyRequests'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
   /service-principals/oauth2/token:
     post:
       operationId: issueServicePrincipalToken
@@ -361,8 +357,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Http429TooManyRequests'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
   /service-principals/{service_principal_id}/keys:
     get:
       operationId: listServicePrincipalKeys
@@ -427,8 +421,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Http429TooManyRequests'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
   /service-principals/{service_principal_id}/upload-key:
     post:
       operationId: uploadServicePrincipalKey
@@ -484,8 +476,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Http429TooManyRequests'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
   /service-principals/{service_principal_id}/keys/{service_principal_key_id}/enable:
     post:
       operationId: enableServicePrincipalKey
@@ -534,8 +524,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Http429TooManyRequests'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
   /service-principals/{service_principal_id}/keys/{service_principal_key_id}/disable:
     post:
       operationId: disableServicePrincipalKey
@@ -584,8 +572,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Http429TooManyRequests'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
   /service-principals/{service_principal_id}/keys/{service_principal_key_id}:
     delete:
       operationId: deleteServicePrincipalKey
@@ -622,164 +608,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Http429TooManyRequests'
-    servers:
-    - url: https://secure.sakura.ad.jp/cloud/api/iam/1.0
 components:
+  parameters:
+    ServicePrincipalKeyID:
+      in: path
+      name: service_principal_key_id
+      description: サービスプリンシパルキーID
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: 00000000-0000-0000-0000-000000000000
+    PaginationPage:
+      in: query
+      name: page
+      schema:
+        type: integer
+    ServicePrincipalID:
+      in: path
+      name: service_principal_id
+      description: サービスプリンシパルID
+      required: true
+      schema:
+        type: integer
+        example: 123456789123
+    PaginationPerPage:
+      in: query
+      name: per_page
+      schema:
+        type: integer
   schemas:
-    ServiceprincipalKeyPublicKey:
-      type: string
-      description: 'PEM形式の公開鍵文字列
-
-        RSA鍵のみをサポート
-
-        鍵長は2048ビット以上かつ4096ビット以下をサポート
-
-        '
-      example: BEGIN PUBLIC KEY\n...\nEND PUBLIC KEY
-    Http404NotFound:
-      type: object
-      required:
-      - type
-      - status
-      - title
-      - detail
-      properties:
-        type:
-          type: string
-          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
-          example: about:blank
-        status:
-          type: integer
-          description: HTTPステータスコード
-          example: 404
-        title:
-          type: string
-          description: 問題を表す簡単な文字列
-          example: not_found
-        detail:
-          type: string
-          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
-          example: 見つかりませんでした。
-    Http429TooManyRequests:
-      type: object
-      required:
-      - type
-      - status
-      - title
-      - detail
-      properties:
-        type:
-          type: string
-          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
-          example: about:blank
-        status:
-          type: integer
-          description: HTTPステータスコード
-          example: 429
-        title:
-          type: string
-          description: 問題を表す簡単な文字列
-          example: throttled
-        detail:
-          type: string
-          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
-          example: リクエストの処理は絞られました。 60秒後に利用可能になります。
-    Http409Conflict:
-      type: object
-      required:
-      - type
-      - status
-      - title
-      - detail
-      properties:
-        type:
-          type: string
-          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
-          example: about:blank
-        status:
-          type: integer
-          description: HTTPステータスコード
-          example: 409
-        title:
-          type: string
-          description: 問題を表す簡単な文字列
-          example: conflict
-        detail:
-          type: string
-          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
-          example: 状態の競合によりリクエストを処理できません。
-    ServicePrincipalOAuth2AccessToken:
-      type: object
-      required:
-      - access_token
-      - token_expired_at
-      properties:
-        access_token:
-          type: string
-          description: アクセストークン
-          example: abcdefghijklmnopqrstuvwxyz0123456789-._~+/ABCDEFGHIJKLMN
-        token_type:
-          type: string
-          description: トークンの種類
-          example: Bearer
-        token_expired_at:
-          type: string
-          format: date-time
-          description: アクセストークンの有効期限 (ISO 8601形式)
-          example: '2021-01-01T00:00:01+09:00'
-        expires_in:
-          type: integer
-          description: アクセストークンの有効期限（秒単位）
-          example: 3600
-    ServicePrincipalJWTGrantRequest:
-      type: object
-      required:
-      - grant_type
-      - assertion
-      properties:
-        grant_type:
-          type: string
-          description: 固定値 JWT Bearer Grant Type
-          enum:
-          - urn:ietf:params:oauth:grant-type:jwt-bearer
-          example: urn:ietf:params:oauth:grant-type:jwt-bearer
-        assertion:
-          type: string
-          description: サービスプリンシパルキーで署名されたJWT
-          example: eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJqb2UiLCJleHAiOjEzMDA4MTkzODAsImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ.dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk
-    ServicePrincipal:
-      type: object
-      required:
-      - id
-      - project_id
-      - name
-      - description
-      properties:
-        id:
-          type: integer
-          description: サービスプリンシパルID
-          readOnly: true
-          example: 1
-        project_id:
-          type: integer
-          description: プロジェクトID
-          example: 1
-        name:
-          type: string
-          description: サービスプリンシパル名
-          example: Sakura Service Principal
-        description:
-          type: string
-          description: サービスプリンシパルの説明
-          example: サービスプリンシパルの説明
-        created_at:
-          type: string
-          description: 作成日時
-          example: 2024-05-01 14:30:00+00:00
-        updated_at:
-          type: string
-          description: 更新日時
-          example: 2024-05-02 14:30:00+00:00
     Http403Forbidden:
       type: object
       required:
@@ -804,6 +662,129 @@ components:
           type: string
           description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
           example: このアクションを実行する権限がありません。
+    ServicePrincipalJWTGrantRequest:
+      type: object
+      required:
+      - grant_type
+      - assertion
+      properties:
+        grant_type:
+          type: string
+          description: 固定値 JWT Bearer Grant Type
+          enum:
+          - urn:ietf:params:oauth:grant-type:jwt-bearer
+          example: urn:ietf:params:oauth:grant-type:jwt-bearer
+        assertion:
+          type: string
+          description: サービスプリンシパルキーで署名されたJWT
+          example: eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJqb2UiLCJleHAiOjEzMDA4MTkzODAsImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ.dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk
+    Http409Conflict:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 409
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: conflict
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 状態の競合によりリクエストを処理できません。
+    Pagination:
+      type: object
+      required:
+      - count
+      - next
+      - previous
+      properties:
+        count:
+          type: integer
+          description: データ総数
+          example: 100
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          description: 次のページへのURL
+          example: https://api.example.com/?page=3&per_page=10
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          description: 前のページへのURL
+          example: https://api.example.com/?per_page=10
+    Http401Unauthorized:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 401
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: authentication_failed
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 認証情報が含まれていません。
+    Http429TooManyRequests:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 429
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: throttled
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: リクエストの処理は絞られました。 60秒後に利用可能になります。
+    ServiceprincipalKeyPublicKey:
+      type: string
+      description: 'PEM形式の公開鍵文字列
+
+        RSA鍵のみをサポート
+
+        鍵長は2048ビット以上かつ4096ビット以下をサポート
+
+        '
+      example: BEGIN PUBLIC KEY\n...\nEND PUBLIC KEY
     ServicePrincipalKey:
       type: object
       required:
@@ -859,6 +840,53 @@ components:
           - 'null'
           description: 有効期限
           example: 2024-05-01 14:30:00+00:00
+    ServicePrincipalOAuth2AccessToken:
+      type: object
+      required:
+      - access_token
+      - token_expired_at
+      properties:
+        access_token:
+          type: string
+          description: アクセストークン
+          example: abcdefghijklmnopqrstuvwxyz0123456789-._~+/ABCDEFGHIJKLMN
+        token_type:
+          type: string
+          description: トークンの種類
+          example: Bearer
+        token_expired_at:
+          type: string
+          format: date-time
+          description: アクセストークンの有効期限 (ISO 8601形式)
+          example: '2021-01-01T00:00:01+09:00'
+        expires_in:
+          type: integer
+          description: アクセストークンの有効期限（秒単位）
+          example: 3600
+    Http404NotFound:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      - detail
+      properties:
+        type:
+          type: string
+          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
+          example: about:blank
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 404
+        title:
+          type: string
+          description: 問題を表す簡単な文字列
+          example: not_found
+        detail:
+          type: string
+          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
+          example: 見つかりませんでした。
     Http400BadRequest:
       type: object
       required:
@@ -930,83 +958,39 @@ components:
             key4:
             - message: この項目が*文字より長くならないようにしてください。
               code: max_length
-    Pagination:
+    ServicePrincipal:
       type: object
       required:
-      - count
-      - next
-      - previous
+      - id
+      - project_id
+      - name
+      - description
       properties:
-        count:
+        id:
           type: integer
-          description: データ総数
-          example: 100
-        next:
-          type:
-          - string
-          - 'null'
-          format: uri
-          description: 次のページへのURL
-          example: https://api.example.com/?page=3&per_page=10
-        previous:
-          type:
-          - string
-          - 'null'
-          format: uri
-          description: 前のページへのURL
-          example: https://api.example.com/?per_page=10
-    Http401Unauthorized:
-      type: object
-      required:
-      - type
-      - status
-      - title
-      - detail
-      properties:
-        type:
-          type: string
-          description: 問題を説明するドキュメントへのURI（基本的にはabout:blank）
-          example: about:blank
-        status:
+          description: サービスプリンシパルID
+          readOnly: true
+          example: 1
+        project_id:
           type: integer
-          description: HTTPステータスコード
-          example: 401
-        title:
+          description: プロジェクトID
+          example: 1
+        name:
           type: string
-          description: 問題を表す簡単な文字列
-          example: authentication_failed
-        detail:
+          description: サービスプリンシパル名
+          example: Sakura Service Principal
+        description:
           type: string
-          description: 問題の詳細を説明した文字列（人が読んで問題解決に繋がるような説明）
-          example: 認証情報が含まれていません。
-  parameters:
-    PaginationPage:
-      in: query
-      name: page
-      schema:
-        type: integer
-    ServicePrincipalID:
-      in: path
-      name: service_principal_id
-      description: サービスプリンシパルID
-      required: true
-      schema:
-        type: integer
-        example: 123456789123
-    PaginationPerPage:
-      in: query
-      name: per_page
-      schema:
-        type: integer
-    ServicePrincipalKeyID:
-      in: path
-      name: service_principal_key_id
-      description: サービスプリンシパルキーID
-      required: true
-      schema:
-        type: string
-        format: uuid
-        example: 00000000-0000-0000-0000-000000000000
+          description: サービスプリンシパルの説明
+          example: サービスプリンシパルの説明
+        created_at:
+          type: string
+          description: 作成日時
+          example: 2024-05-01 14:30:00+00:00
+        updated_at:
+          type: string
+          description: 更新日時
+          example: 2024-05-02 14:30:00+00:00
   securitySchemes:
     ServicePrincipalAuth:
       description: 'サービスプリンシパル認証
@@ -1026,6 +1010,3 @@ components:
         '
       type: http
       scheme: basic
-x-refined-from:
-- iam-api.yaml
-- sakura-internet-iam-openapi.yml

@@ -1,8 +1,27 @@
 openapi: 3.2.0
 info:
-  title: Sakura Internet Messages API
+  title: さくらの AI Engine Inference Messages API
   version: 1.0.1
-  description: 'Operations tagged Messages across 2 of this provider''s published API definitions: ai-engine-inference-api.yaml, sakura-internet-ai-engine-inference-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: '---
+
+    Copyright SAKURA internet Inc.
+
+
+    # さくらの AI Engine チャット生成 / 音声文字起こし / 音声合成 エンドポイント
+
+
+    ### 基本的な使い方
+
+
+    さくらのAI Engine 利用手順 | さくらのクラウド マニュアル
+
+
+    ### APIエンドポイント
+
+    https://api.ai.sakura.ad.jp
+
+
+    ---'
 servers:
 - url: https://api.ai.sakura.ad.jp
 security:
@@ -179,13 +198,8 @@ paths:
           description: Server error
       tags:
       - Messages
-    servers:
-    - url: https://api.ai.sakura.ad.jp
 components:
   securitySchemes:
     BearerAuth:
       type: http
       scheme: bearer
-x-refined-from:
-- ai-engine-inference-api.yaml
-- sakura-internet-ai-engine-inference-openapi.yml
