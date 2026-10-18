@@ -15,6 +15,15 @@ modified: '2026-10-09'
 tags:
 - Company
 - Cloud Computing
+- Infrastructure-as-a-Service
+- Hosting
+- Data Center
+- Japan
+- Object Storage
+- GPU
+tags_raw:
+- Company
+- Cloud Computing
 - Infrastructure as a Service
 - Hosting
 - Data Centers
@@ -126,6 +135,9 @@ apis:
   baseURL: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1/
   tags:
   - SAKURA Cloud
+  - Infrastructure-as-a-Service
+  tags_raw:
+  - SAKURA Cloud
   - IaaS
   properties:
   - type: Documentation
@@ -137,6 +149,8 @@ apis:
   humanURL: https://manual.sakura.ad.jp/cloud-api/1.1/
   baseURL: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1/
   tags:
+  - Artificial Intelligence
+  tags_raw:
   - AI
   properties:
   - type: OpenAPI
@@ -392,6 +406,8 @@ apis:
   humanURL: https://manual.sakura.ad.jp/cloud-api/1.1/
   baseURL: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1/
   tags:
+  - Application
+  tags_raw:
   - application
   properties:
   - type: OpenAPI
@@ -647,7 +663,8 @@ apis:
     The application_version API from SAKURA internet — 2 operation(s) for application_version.
   humanURL: https://manual.sakura.ad.jp/cloud-api/1.1/
   baseURL: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1/
-  tags:
+  tags: []
+  tags_raw:
   - application_version
   properties:
   - type: OpenAPI
@@ -1158,6 +1175,8 @@ apis:
   humanURL: https://manual.sakura.ad.jp/cloud-api/1.1/
   baseURL: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1/
   tags:
+  - Authentication
+  tags_raw:
   - auth
   properties:
   - type: OpenAPI
@@ -1668,6 +1687,8 @@ apis:
   humanURL: https://manual.sakura.ad.jp/cloud-api/1.1/
   baseURL: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1/
   tags:
+  - Certificate
+  tags_raw:
   - certificate
   properties:
   - type: OpenAPI
@@ -2178,6 +2199,8 @@ apis:
   humanURL: https://manual.sakura.ad.jp/cloud-api/1.1/
   baseURL: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1/
   tags:
+  - Chunks
+  tags_raw:
   - chunks
   properties:
   - type: OpenAPI
@@ -2433,6 +2456,8 @@ apis:
   humanURL: https://manual.sakura.ad.jp/cloud-api/1.1/
   baseURL: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1/
   tags:
+  - CloudHSM
+  tags_raw:
   - cloudhsm
   properties:
   - type: OpenAPI
@@ -2688,6 +2713,8 @@ apis:
   humanURL: https://manual.sakura.ad.jp/cloud-api/1.1/
   baseURL: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1/
   tags:
+  - Cluster
+  tags_raw:
   - cluster
   properties:
   - type: OpenAPI
@@ -3197,7 +3224,8 @@ apis:
   description: The セキュリティ API from SAKURA internet — 185 operation(s) for セキュリティ.
   humanURL: https://manual.sakura.ad.jp/cloud-api/1.1/
   baseURL: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1/
-  tags:
+  tags: []
+  tags_raw:
   - セキュリティ
   properties:
   - type: OpenAPI
@@ -3963,6 +3991,8 @@ apis:
   humanURL: https://manual.sakura.ad.jp/cloud-api/1.1/
   baseURL: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1/
   tags:
+  - Folder
+  tags_raw:
   - folder
   properties:
   - type: OpenAPI
@@ -4218,6 +4248,8 @@ apis:
   humanURL: https://manual.sakura.ad.jp/cloud-api/1.1/
   baseURL: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1/
   tags:
+  - Group
+  tags_raw:
   - group
   properties:
   - type: OpenAPI
@@ -5748,6 +5780,8 @@ apis:
   humanURL: https://manual.sakura.ad.jp/cloud-api/1.1/
   baseURL: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1/
   tags:
+  - Limit
+  tags_raw:
   - limit
   properties:
   - type: OpenAPI
@@ -6003,6 +6037,8 @@ apis:
   humanURL: https://manual.sakura.ad.jp/cloud-api/1.1/
   baseURL: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1/
   tags:
+  - Message
+  tags_raw:
   - Messages
   properties:
   - type: OpenAPI
@@ -6513,6 +6549,8 @@ apis:
   humanURL: https://manual.sakura.ad.jp/cloud-api/1.1/
   baseURL: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1/
   tags:
+  - OpenID Connect
+  tags_raw:
   - OIDC認証
   properties:
   - type: OpenAPI
@@ -6768,6 +6806,8 @@ apis:
   humanURL: https://manual.sakura.ad.jp/cloud-api/1.1/
   baseURL: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1/
   tags:
+  - Organization
+  tags_raw:
   - organization
   properties:
   - type: OpenAPI
@@ -7023,6 +7063,8 @@ apis:
   humanURL: https://manual.sakura.ad.jp/cloud-api/1.1/
   baseURL: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1/
   tags:
+  - Project
+  tags_raw:
   - project
   properties:
   - type: OpenAPI
@@ -7533,6 +7575,8 @@ apis:
   humanURL: https://manual.sakura.ad.jp/cloud-api/1.1/
   baseURL: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1/
   tags:
+  - Query
+  tags_raw:
   - query
   properties:
   - type: OpenAPI
@@ -8298,6 +8342,8 @@ apis:
   humanURL: https://manual.sakura.ad.jp/cloud-api/1.1/
   baseURL: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1/
   tags:
+  - SCIM
+  tags_raw:
   - scim
   properties:
   - type: OpenAPI
@@ -8809,6 +8855,8 @@ apis:
   humanURL: https://manual.sakura.ad.jp/cloud-api/1.1/
   baseURL: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1/
   tags:
+  - ServiceClass
+  tags_raw:
   - service_class
   properties:
   - type: OpenAPI
@@ -9319,6 +9367,8 @@ apis:
   humanURL: https://manual.sakura.ad.jp/cloud-api/1.1/
   baseURL: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1/
   tags:
+  - ServicePrincipal
+  tags_raw:
   - service-principal
   properties:
   - type: OpenAPI
@@ -9829,6 +9879,8 @@ apis:
   humanURL: https://manual.sakura.ad.jp/cloud-api/1.1/
   baseURL: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1/
   tags:
+  - SSO
+  tags_raw:
   - sso
   properties:
   - type: OpenAPI
@@ -10084,6 +10136,8 @@ apis:
   humanURL: https://manual.sakura.ad.jp/cloud-api/1.1/
   baseURL: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1/
   tags:
+  - TTS
+  tags_raw:
   - Tts
   properties:
   - type: OpenAPI
@@ -10339,6 +10393,8 @@ apis:
   humanURL: https://manual.sakura.ad.jp/cloud-api/1.1/
   baseURL: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1/
   tags:
+  - Upload
+  tags_raw:
   - upload
   properties:
   - type: OpenAPI
@@ -10849,6 +10905,8 @@ apis:
   humanURL: https://manual.sakura.ad.jp/cloud-api/1.1/
   baseURL: https://secure.sakura.ad.jp/cloud/zone/tk1a/api/cloud/1.1/
   tags:
+  - User
+  tags_raw:
   - user
   properties:
   - type: OpenAPI
