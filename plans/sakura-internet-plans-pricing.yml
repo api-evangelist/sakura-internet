@@ -20,3 +20,17 @@ plans:
   - データ転送量による従量課金がないため、想定外の出費となることがありません。
   - 割引パスポート (long-term discount)
   limits: []
+x-canonical:
+  generated: '2026-10-18'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - subscription
+  units: []
+  plans:
+  - name: さくらのクラウド (利用時間課金)
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods:
+    - hour
