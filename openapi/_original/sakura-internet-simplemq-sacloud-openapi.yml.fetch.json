@@ -1,0 +1,12 @@
+{
+ "url": "https://manual.sakura.ad.jp/api/cloud/portal/openapis/simplemq-sacloud-api.yaml",
+ "requested_url": "https://manual.sakura.ad.jp/api/cloud/portal/openapis/simplemq-sacloud-api.yaml",
+ "status": 200,
+ "content_type": "",
+ "bytes": 26825,
+ "sha256": "189a09591e6dc69991bc6ee7a70320795681a206c7fda7a8f69b5a52c4fb63e6",
+ "fetched_at": "2026-10-19",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 1.0), but the bytes differ, so the archive is an earlier or reformatted copy."
+}

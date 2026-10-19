@@ -1,0 +1,12 @@
+{
+ "url": "https://manual.sakura.ad.jp/api/cloud/portal/openapis/monitoring-suite-api.yaml",
+ "requested_url": "https://manual.sakura.ad.jp/api/cloud/portal/openapis/monitoring-suite-api.yaml",
+ "status": 200,
+ "content_type": "",
+ "bytes": 175886,
+ "sha256": "5b0dc6eae145e0108d2fc39b528e2e4c39236035a8bf50baf5a5841bb1d21386",
+ "fetched_at": "2026-10-19",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the archived file is byte-identical to what the provider serves."
+}
