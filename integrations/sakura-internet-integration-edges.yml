@@ -1,0 +1,325 @@
+edges:
+- partner_name: ICANN (gTLD registry operator)
+  partner: null
+  partner_match: register
+  type: contract
+  channel: regulator-register
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://www.icann.org/resources/registries/gtlds/v2/gtlds.json
+  category: ICANN gTLD registry operator
+  contract_reference:
+    register: ICANN gTLD registry agreements (icann.org/resources/registries/gtlds/v2/gtlds.json)
+    standard: ICANN Registry Agreement
+    spec_file: null
+    role: icann-gtld-registry-operator
+    registered_name: SAKURA Internet Inc.
+    register_id: sakura
+    matched_domain: sakura.ad.jp
+    matched_by: domain
+    identity: wikidata Q11267769 'Sakura Internet' P856 https://www.sakura.ad.jp/
+    identity_source: wikidata P856 (labelled provenance step; Kin 2026-10-15 decision 1)
+    gtlds:
+    - sakura
+    gtld_count_context: 1
+    signal_note: 'participation only: a registry agreement is a contract, not a conformance result; the number of
+      TLDs is breadth, context only, never counted; .BRAND (Specification 13) TLDs excluded'
+    detected_by: sweep-domains-dns.py
+    detected: '2026-10-19'
+  detected_by: sweep-domains-dns.py
+  first_seen: '2026-10-19'
+- partner_name: WordPress (own)
+  partner: wordpress
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://wordpress.org/plugins/sakura-rs-wp-ssl/
+  mirror_of: wordpress/integrations/wordpress-integration-edges.yml
+  apps:
+  - Easy SSL Plugin for SAKURA Rental Server
+  listing_count: 1
+  detected: '2026-10-19'
+  detected_by: mirror-platform-listings.py
+  category: WordPress plugin
+- partner_name: Slack (own)
+  partner: slack
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://slack.com/marketplace/A04HJTXLYUE-
+  mirror_of: slack/integrations/slack-integration-edges.yml
+  apps:
+  - \u5b85\u6025\u4fbf
+  listing_count: 1
+  detected: '2026-10-20'
+  detected_by: mirror-platform-listings.py
+  category: Slack app
+- partner_name: Go module proxy
+  partner: null
+  partner_match: null
+  type: register
+  direction: provider-built
+  category: official SDK (Go)
+  evidence: https://pkg.go.dev/github.com/sacloud/addon-api-go
+  channel: package-registry
+  relationship: distribution-channel
+  contract_reference:
+    register: Go module proxy (public registry JSON)
+    spec_file: null
+    language: Go
+    packages:
+    - name: github.com/sacloud/addon-api-go
+      version: v0.1.1
+      released: '2026-08-03'
+      released_field: Time
+      lapsed: false
+      page: https://pkg.go.dev/github.com/sacloud/addon-api-go
+      repo_leg: github-org:sacloud
+      publisher_leg: org:sacloud
+      matched_by: github-org
+    - name: github.com/sacloud/api-client-go
+      version: v0.3.6
+      released: '2026-08-03'
+      released_field: Time
+      lapsed: false
+      page: https://pkg.go.dev/github.com/sacloud/api-client-go
+      repo_leg: github-org:sacloud
+      publisher_leg: org:sacloud
+      matched_by: github-org
+    - name: github.com/sacloud/apigw-api-go
+      version: v0.3.1
+      released: '2026-08-03'
+      released_field: Time
+      lapsed: false
+      page: https://pkg.go.dev/github.com/sacloud/apigw-api-go
+      repo_leg: github-org:sacloud
+      publisher_leg: org:sacloud
+      matched_by: github-org
+    - name: github.com/sacloud/apprun-api-go
+      version: v0.8.3
+      released: '2026-08-03'
+      released_field: Time
+      lapsed: false
+      page: https://pkg.go.dev/github.com/sacloud/apprun-api-go
+      repo_leg: github-org:sacloud
+      publisher_leg: org:sacloud
+      matched_by: github-org
+    - name: github.com/sacloud/apprun-dedicated-api-go
+      version: v0.2.2
+      released: '2026-08-03'
+      released_field: Time
+      lapsed: false
+      page: https://pkg.go.dev/github.com/sacloud/apprun-dedicated-api-go
+      repo_leg: github-org:sacloud
+      publisher_leg: org:sacloud
+      matched_by: github-org
+    - name: github.com/sacloud/eventbus-api-go
+      version: v0.6.2
+      released: '2026-08-03'
+      released_field: Time
+      lapsed: false
+      page: https://pkg.go.dev/github.com/sacloud/eventbus-api-go
+      repo_leg: github-org:sacloud
+      publisher_leg: org:sacloud
+      matched_by: github-org
+    - name: github.com/sacloud/iaas-api-go
+      version: v1.29.3
+      released: '2026-08-03'
+      released_field: Time
+      lapsed: false
+      page: https://pkg.go.dev/github.com/sacloud/iaas-api-go
+      repo_leg: github-org:sacloud
+      publisher_leg: org:sacloud
+      matched_by: github-org
+    - name: github.com/sacloud/iam-api-go
+      version: v0.3.1
+      released: '2026-08-03'
+      released_field: Time
+      lapsed: false
+      page: https://pkg.go.dev/github.com/sacloud/iam-api-go
+      repo_leg: github-org:sacloud
+      publisher_leg: org:sacloud
+      matched_by: github-org
+    - name: github.com/sacloud/kms-api-go
+      version: v0.4.1
+      released: '2026-08-03'
+      released_field: Time
+      lapsed: false
+      page: https://pkg.go.dev/github.com/sacloud/kms-api-go
+      repo_leg: github-org:sacloud
+      publisher_leg: org:sacloud
+      matched_by: github-org
+    - name: github.com/sacloud/libsacloud/v2
+      version: v2.32.3
+      released: '2022-03-22'
+      released_field: Time
+      lapsed: true
+      page: https://pkg.go.dev/github.com/sacloud/libsacloud/v2
+      repo_leg: github-org:sacloud
+      publisher_leg: org:sacloud
+      matched_by: github-org
+    - name: github.com/sacloud/monitoring-suite-api-go
+      version: v0.2.3
+      released: '2026-08-03'
+      released_field: Time
+      lapsed: false
+      page: https://pkg.go.dev/github.com/sacloud/monitoring-suite-api-go
+      repo_leg: github-org:sacloud
+      publisher_leg: org:sacloud
+      matched_by: github-org
+    - name: github.com/sacloud/nosql-api-go
+      version: v0.3.1
+      released: '2026-08-03'
+      released_field: Time
+      lapsed: false
+      page: https://pkg.go.dev/github.com/sacloud/nosql-api-go
+      repo_leg: github-org:sacloud
+      publisher_leg: org:sacloud
+      matched_by: github-org
+    - name: github.com/sacloud/object-storage-api-go
+      version: v0.2.1
+      released: '2026-08-03'
+      released_field: Time
+      lapsed: false
+      page: https://pkg.go.dev/github.com/sacloud/object-storage-api-go
+      repo_leg: github-org:sacloud
+      publisher_leg: org:sacloud
+      matched_by: github-org
+    - name: github.com/sacloud/phy-api-go
+      version: v0.1.3
+      released: '2023-12-08'
+      released_field: Time
+      lapsed: true
+      page: https://pkg.go.dev/github.com/sacloud/phy-api-go
+      repo_leg: github-org:sacloud
+      publisher_leg: org:sacloud
+      matched_by: github-org
+    - name: github.com/sacloud/saclient-go
+      version: v0.4.1
+      released: '2026-08-03'
+      released_field: Time
+      lapsed: false
+      page: https://pkg.go.dev/github.com/sacloud/saclient-go
+      repo_leg: github-org:sacloud
+      publisher_leg: org:sacloud
+      matched_by: github-org
+    - name: github.com/sacloud/secretmanager-api-go
+      version: v0.4.2
+      released: '2026-08-03'
+      released_field: Time
+      lapsed: false
+      page: https://pkg.go.dev/github.com/sacloud/secretmanager-api-go
+      repo_leg: github-org:sacloud
+      publisher_leg: org:sacloud
+      matched_by: github-org
+    - name: github.com/sacloud/simple-notification-api-go
+      version: v0.3.2
+      released: '2026-08-03'
+      released_field: Time
+      lapsed: false
+      page: https://pkg.go.dev/github.com/sacloud/simple-notification-api-go
+      repo_leg: github-org:sacloud
+      publisher_leg: org:sacloud
+      matched_by: github-org
+    - name: github.com/sacloud/simplemq-api-go
+      version: v0.5.2
+      released: '2026-08-03'
+      released_field: Time
+      lapsed: false
+      page: https://pkg.go.dev/github.com/sacloud/simplemq-api-go
+      repo_leg: github-org:sacloud
+      publisher_leg: org:sacloud
+      matched_by: github-org
+    - name: github.com/sacloud/usacloud
+      version: v1.22.8
+      released: '2026-07-24'
+      released_field: Time
+      lapsed: false
+      page: https://pkg.go.dev/github.com/sacloud/usacloud
+      repo_leg: github-org:sacloud
+      publisher_leg: org:sacloud
+      matched_by: github-org
+    - name: github.com/sacloud/webaccel-api-go
+      version: v1.5.1
+      released: '2026-08-03'
+      released_field: Time
+      lapsed: false
+      page: https://pkg.go.dev/github.com/sacloud/webaccel-api-go
+      repo_leg: github-org:sacloud
+      publisher_leg: org:sacloud
+      matched_by: github-org
+    - name: github.com/sacloud/workflows-api-go
+      version: v0.4.1
+      released: '2026-08-03'
+      released_field: Time
+      lapsed: false
+      page: https://pkg.go.dev/github.com/sacloud/workflows-api-go
+      repo_leg: github-org:sacloud
+      publisher_leg: org:sacloud
+      matched_by: github-org
+    current: true
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-official-sdks.py
+    detected: '2026-10-20'
+  detected_by: sweep-official-sdks.py
+  first_seen: '2026-10-20'
+- partner_name: PyPI
+  partner: pypi
+  partner_match: register
+  type: register
+  direction: provider-built
+  category: official SDK (Python)
+  evidence: https://pypi.org/project/saklient/
+  channel: package-registry
+  relationship: distribution-channel
+  contract_reference:
+    register: PyPI (public registry JSON)
+    spec_file: null
+    language: Python
+    packages:
+    - name: saklient
+      version: 0.0.6
+      released: '2016-04-07'
+      released_field: upload_time
+      lapsed: true
+      page: https://pypi.org/project/saklient/
+      repo_leg: domain:sakura.ad.jp
+      publisher_leg: email:sakura.ad.jp
+      matched_by: domain
+    current: false
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-official-sdks.py
+    detected: '2026-10-20'
+  detected_by: sweep-official-sdks.py
+  first_seen: '2026-10-20'
+generated: '2026-10-19'
+method: searched
+source:
+- https://www.icann.org/en/contracted-parties/accredited-registrars/list-of-accredited-registrars
+- https://www.icann.org/resources/registries/gtlds/v2/gtlds.json
+- https://data.iana.org/rdap/dns.json
+- https://www.iana.org/assignments/registrar-ids/registrar-ids.xml
+checked:
+- https://api.nuget.org/v3
+- https://crates.io/api/v1
+- https://data.iana.org/rdap/dns.json
+- https://proxy.golang.org
+- https://pypi.org/pypi
+- https://registry.npmjs.org
+- https://repo1.maven.org/maven2
+- https://rubygems.org/api/v1
+- https://www.iana.org/assignments/registrar-ids/registrar-ids.xml
+- https://www.icann.org/en/contracted-parties/accredited-registrars/list-of-accredited-registrars
+- https://www.icann.org/resources/registries/gtlds/v2/gtlds.json
+- slack/integrations/slack-integration-edges.yml
+- wordpress/integrations/wordpress-integration-edges.yml
