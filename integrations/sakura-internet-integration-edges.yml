@@ -368,6 +368,43 @@ edges:
     identity_source: peeringdb net website by the participant's ASN (labelled provenance step)
   detected_by: sweep-network-edge.py
   first_seen: '2026-10-20'
+- partner_name: ISMAP
+  partner: null
+  partner_match: register
+  type: contract
+  channel: regulator-register
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://www.ismap.go.jp/csm?id=cloud_service_list
+  category: Japan government cloud security assessment (ISMAP)
+  contract_reference:
+    register: ISMAP / ISMAP-LIU cloud service lists (www.ismap.go.jp)
+    standard: ISMAP
+    spec_file: null
+    role: ismap-registered
+    registrations:
+    - register_number: C21-0030-2
+      registration_type: ISMAP
+      service: さくらのクラウド
+      registered_name: さくらインターネット株式会社
+      service_url: https://cloud.sakura.ad.jp/
+      matched_domain: sakura.ad.jp
+      matched_by: domain+local-verified
+      evidence_url: https://www.ismap.go.jp/csm?id=cloud_service_list
+      scope_of_statement: https://www.ismap.go.jp/sys_attachment.do?sys_id=7f980e478387bed0aa68c6a8beaad39e
+      hand_verified: さくらインターネット株式会社 is SAKURA internet (sakura.ad.jp, held by all/sakura-internet)
+    signal_note: certified_products = one entry per ISMAP registration TYPE (ISMAP, ISMAP-LIU), never per service;
+      services are context, never counted. The lists carry current registrations only (a filed renewal keeps a registration
+      valid), so lapsed is always false
+    certified_products:
+    - product: ISMAP
+      standard: ISMAP
+      registration_type: ISMAP
+      lapsed: false
+    detected_by: sweep-japan-ismap-tisax-assessments.py
+    detected: '2026-10-22'
+  detected_by: sweep-japan-ismap-tisax-assessments.py
+  first_seen: '2026-10-22'
 generated: '2026-10-19'
 method: searched
 source:
@@ -393,3 +430,5 @@ checked:
 - https://www.peeringdb.com/api/fac
 - https://www.peeringdb.com/api/ix
 - https://www.peeringdb.com/api/net
+- https://www.ismap.go.jp/csm?id=cloud_service_list
+- https://www.ismap.go.jp/csm?id=cloud_service_list_liu
