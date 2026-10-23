@@ -369,3 +369,9 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorSchema'
+x-provenance:
+  method: harvested
+  publisher: SAKURA internet
+  source: https://manual.sakura.ad.jp/api/cloud/portal/openapis/apigw-api.yaml
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)

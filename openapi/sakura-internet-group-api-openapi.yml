@@ -718,3 +718,9 @@ components:
         '
       type: http
       scheme: basic
+x-provenance:
+  method: harvested
+  publisher: SAKURA internet
+  source: https://manual.sakura.ad.jp/api/cloud/portal/openapis/iam-api.json
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
